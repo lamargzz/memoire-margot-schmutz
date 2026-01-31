@@ -2,6 +2,6 @@
 
 Bienvenue sur ce dépôt qui vise à vous donner accès en direct à mon mémoire et ces modifications. Vous trouverez ici le document de mon mémoire sur la génération de portefeuilles et l'agrégation en model points.
 
-**Téléchargez le Mémoire IA en PDF :** [Télécharger le Mémoire IA](https://github.com/GaylordLegrisAcc/memoire-ia-gaylord-legris/raw/main/code_latex/pdf/main.pdf)
+**Téléchargez le Mémoire IA en PDF :** [Télécharger le Mémoire IA](https://github.com/lamargzz/memoire-margot-schmutz/raw/main/code_latex/pdf/main.pdf)
 
-**Lire le Mémoire IA en ligne (via GitHub) :** [Lire le Mémoire IA](https://github.com/GaylordLegrisAcc/memoire-ia-gaylord-legris/blob/main/code_latex/pdf/main.pdf)
+**Lire le Mémoire IA en ligne (via GitHub) :** [Lire le Mémoire IA](https://github.com/lamargzz/memoire-margot-schmutz/blob/main/code_latex/pdf/main.pdf)
