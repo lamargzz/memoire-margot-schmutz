@@ -1,14 +1,14 @@
 \babel@toc {french}{}\relax 
-\contentsline {chapter}{Résumé}{iii}{chapter*.2}%
-\contentsline {chapter}{Abstract}{iv}{chapter*.3}%
-\contentsline {chapter}{Remerciements}{v}{chapter*.4}%
-\contentsline {chapter}{Synthèse}{vi}{chapter*.5}%
-\contentsline {chapter}{Synthesis}{vii}{chapter*.6}%
+\contentsline {chapter}{Résumé}{4}{chapter*.2}%
+\contentsline {chapter}{Abstract}{5}{chapter*.3}%
+\contentsline {chapter}{Remerciements}{6}{chapter*.4}%
+\contentsline {chapter}{Synthèse}{7}{chapter*.5}%
+\contentsline {chapter}{Synthesis}{8}{chapter*.6}%
 \contentsline {chapter}{Introduction}{1}{chapter*.7}%
 \contentsline {chapter}{\numberline {1}Cadre théorique et réglementaire du régime Solvabilité II}{3}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Solvabilité II : principes et objectifs}{4}{section.1.1}%
 \contentsline {subsection}{\numberline {1.1.1}Historique de la directive européenne}{4}{subsection.1.1.1}%
-\contentsline {subsection}{\numberline {1.1.2}Les trois piliers de S2 : exigences de capital, gouvernance, et transparence}{4}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.2}Les trois piliers de S2: exigences de capital, gouvernance, et transparence}{4}{subsection.1.1.2}%
 \contentsline {section}{\numberline {1.2}Définition et calcul du ratio de solvabilité S2}{4}{section.1.2}%
 \contentsline {subsection}{\numberline {1.2.1}Une mesure synthétique de la solidité financière d'un assureur}{5}{subsection.1.2.1}%
 \contentsline {subsection}{\numberline {1.2.2}Le Solvency Capital Requirement (SCR) : estimation des riques extrêmes}{5}{subsection.1.2.2}%
@@ -17,10 +17,63 @@
 \contentsline {section}{\numberline {1.3}Enjeux de pilotage de la solvabilité}{5}{section.1.3}%
 \contentsline {subsection}{\numberline {1.3.1}Rôle de l'anticipation du ratio dans la gestion stratégique}{6}{subsection.1.3.1}%
 \contentsline {subsubsection}{\numberline {1.3.1.1}Limites opérationnelles des modèles actuels}{6}{subsubsection.1.3.1.1}%
-\contentsline {chapter}{\numberline {2}Super chapitre 2 de Margot !}{7}{chapter.2}%
-\contentsline {chapter}{\numberline {3}Super chapitre 3 de Margot !}{8}{chapter.3}%
-\contentsline {chapter}{\numberline {4}Super chapitre 4 de Margot !}{9}{chapter.4}%
-\contentsline {chapter}{\numberline {5}Super chapitre 5 de Margot !}{10}{chapter.5}%
-\contentsline {chapter}{\numberline {6}Conclusion}{11}{chapter.6}%
-\contentsline {chapter}{Annexes}{12}{chapter*.8}%
-\contentsline {chapter}{Bibliographie}{13}{chapter*.8}%
+\contentsline {chapter}{\numberline {2}Modèle ALM interne et construction de la base de données}{7}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Le modèle ALM interne}{8}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Générateur de scénarios économiques}{8}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Fonctionnement de SALLTO}{8}{subsection.2.1.2}%
+\contentsline {section}{\numberline {2.2}Description du portfeuille étudié}{8}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}}{9}{subsection.2.2.1}%
+\contentsline {section}{\numberline {2.3}Méthodologie de la construction de la base de données}{9}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Définition de la variable cible et des variables explicatives retenues}{10}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Construction de la base de données}{10}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Justification des variables retenues}{12}{subsection.2.3.3}%
+\contentsline {chapter}{\numberline {3}Apports du machine learning pour la rationalisation des écrats}{13}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Problématique de régression dans le cadre du BE}{14}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Formulation du problème}{14}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Pourquoi le machine learning est adapté à ce contexte}{14}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Positionnement par rapport aux approche traditionnelles}{14}{subsection.3.1.3}%
+\contentsline {section}{\numberline {3.2}Présentation des modèles de machine learning utilisés}{14}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Modèles de référence}{15}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Modèles non linéaires}{15}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Avantages et limites de chaque modèles dans le cadre d'étude}{15}{subsection.3.2.3}%
+\contentsline {section}{\numberline {3.3}Méthodologie d'apprentissage}{15}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Séparation des données}{16}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Choix des hyperparamètres}{16}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Prévention de surapprentissage}{16}{subsection.3.3.3}%
+\contentsline {section}{\numberline {3.4}Critère de performance}{16}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Indices retenus}{17}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Comparaison des modèles}{17}{subsection.3.4.2}%
+\contentsline {subsection}{\numberline {3.4.3}Lecture des performances}{17}{subsection.3.4.3}%
+\contentsline {chapter}{\numberline {4}Analyse des résultats et rationnalisation des écarts}{18}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Qualité de la podélisation du BE stochastique}{19}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Capacité des modèles à reproduire le BE stochastique}{19}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Comparaison avec le BE déterministe seul}{19}{subsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.1.3}Apports du machine learning}{19}{subsection.4.1.3}%
+\contentsline {section}{\numberline {4.2}Analyse des variables explicatives majeurs}{19}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Variables dominantes dans l'explication du BE stochastique}{20}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Rôle du BE déterministe}{20}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Impact des caractéristiques du passif}{20}{subsection.4.2.3}%
+\contentsline {section}{\numberline {4.3}Lecture des écarts BE déterministe/BE stochastique}{20}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Identification des principaux facteurs d'écarts}{21}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Analyse par classification}{21}{subsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.3.3}Mise en évidence des effets non linéaires}{21}{subsection.4.3.3}%
+\contentsline {section}{\numberline {4.4}Apports pour le traçabilité et la compréhension des résultats}{21}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Amélioration de la lisibilité des écarts}{22}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Comtribution à la documentation des modèles}{22}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.3}Intérêts pour la gouvernance}{22}{subsection.4.4.3}%
+\contentsline {chapter}{\numberline {5}Limites, approts et perspectives}{23}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Limites de l'approche}{24}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Limites liées aux données}{24}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Limites des modèles de machine learning}{24}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}Dépendance au modèle ALM utilisé}{24}{subsection.5.1.3}%
+\contentsline {section}{\numberline {5.2}Apports opérationnels et réglementaires}{24}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Aide à l'analyse des résultats}{25}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Outils de compréhension complémentaire}{25}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Contribution à la transparence}{25}{subsection.5.2.3}%
+\contentsline {section}{\numberline {5.3}Perspectives d'amélioration}{25}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Extension à d'autres portefeuilles}{26}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Intégration d'autres variables}{26}{subsection.5.3.2}%
+\contentsline {subsection}{\numberline {5.3.3}Approfondissement des méthodes d'explicabilité}{26}{subsection.5.3.3}%
+\contentsline {chapter}{\numberline {6}Conclusion}{27}{chapter.6}%
+\contentsline {chapter}{Annexes}{28}{chapter*.8}%
+\contentsline {chapter}{Bibliographie}{29}{chapter*.8}%
