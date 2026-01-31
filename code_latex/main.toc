@@ -1,0 +1,26 @@
+\babel@toc {french}{}\relax 
+\contentsline {chapter}{Résumé}{iii}{chapter*.2}%
+\contentsline {chapter}{Abstract}{iv}{chapter*.3}%
+\contentsline {chapter}{Remerciements}{v}{chapter*.4}%
+\contentsline {chapter}{Synthèse}{vi}{chapter*.5}%
+\contentsline {chapter}{Synthesis}{vii}{chapter*.6}%
+\contentsline {chapter}{Introduction}{1}{chapter*.7}%
+\contentsline {chapter}{\numberline {1}Cadre théorique et réglementaire du régime Solvabilité II}{3}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Solvabilité II : principes et objectifs}{4}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}Historique de la directive européenne}{4}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.2}Les trois piliers de S2 : exigences de capital, gouvernance, et transparence}{4}{subsection.1.1.2}%
+\contentsline {section}{\numberline {1.2}Définition et calcul du ratio de solvabilité S2}{4}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Une mesure synthétique de la solidité financière d'un assureur}{5}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Le Solvency Capital Requirement (SCR) : estimation des riques extrêmes}{5}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}Les fonds propres éligibles : capacité à couvrir les pertes}{5}{subsection.1.2.3}%
+\contentsline {subsection}{\numberline {1.2.4}Un indicateur sensible aux chocs économiques et aux arbitrages de gestion}{5}{subsection.1.2.4}%
+\contentsline {section}{\numberline {1.3}Enjeux de pilotage de la solvabilité}{5}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}Rôle de l'anticipation du ratio dans la gestion stratégique}{6}{subsection.1.3.1}%
+\contentsline {subsubsection}{\numberline {1.3.1.1}Limites opérationnelles des modèles actuels}{6}{subsubsection.1.3.1.1}%
+\contentsline {chapter}{\numberline {2}Super chapitre 2 de Margot !}{7}{chapter.2}%
+\contentsline {chapter}{\numberline {3}Super chapitre 3 de Margot !}{8}{chapter.3}%
+\contentsline {chapter}{\numberline {4}Super chapitre 4 de Margot !}{9}{chapter.4}%
+\contentsline {chapter}{\numberline {5}Super chapitre 5 de Margot !}{10}{chapter.5}%
+\contentsline {chapter}{\numberline {6}Conclusion}{11}{chapter.6}%
+\contentsline {chapter}{Annexes}{12}{chapter*.8}%
+\contentsline {chapter}{Bibliographie}{13}{chapter*.8}%
