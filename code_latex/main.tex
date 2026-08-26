@@ -24,8 +24,10 @@
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{enumitem}
-\usepackage{xcolor}
+\usepackage[table]{xcolor}
 \definecolor{forsides}{HTML}{A100FF}
+\definecolor{rougeEntreprise}{HTML}{C00000}
+\definecolor{rosePale}{HTML}{F7E4E4}
 \usetikzlibrary{positioning, shapes.geometric, arrows.meta, shapes.misc, backgrounds, fit, shadows}
 \usetikzlibrary{shapes, arrows, positioning}
 \setlist[itemize]{itemsep=8pt, topsep=2pt} % Applique ces réglages à toutes les listes itemize
@@ -46,7 +48,7 @@
   {\Huge} % Taille de la police pour le titre du chapitre
 
 \titleformat{\section}
-  {\cleardoublepage\normalfont\LARGE\bfseries} % Police grande et en gras
+  {\normalfont\LARGE\bfseries} % Police grande et en gras
   {\thesection}
   {1em}
   {}
@@ -145,13 +147,6 @@
 
 \include{1_preambule/5_introduction}
 
-\titleformat{\chapter}[display]
-  {\normalfont\Huge\bfseries} % Apparence générale : gras et centré
-  {\vspace*{50pt}\chaptertitlename\ \thechapter} % Espace au-dessus + Texte "Chapitre X"
-  {25pt} % Espace vertical entre "Chapitre X" et le titre du chapitre
-  {\Huge} % Taille de la police pour le titre du chapitre
-  [\vfill\newpage] % Reste de la page vide et saut de page
-
 \include{2_chapitres/chapitre1}
 \include{2_chapitres/chapitre2}
 \include{2_chapitres/chapitre3}
@@ -159,12 +154,6 @@
 \include{2_chapitres/chapitre5}
 \include{2_chapitres/conclusion}
 
-\titleformat{\chapter}[display]
-  {\normalfont\Huge\bfseries} % Apparence générale : gras et centré
-  {\vspace*{50pt}\chaptertitlename\ \thechapter} % Espace au-dessus + Texte "Chapitre X"
-  {25pt} % Espace vertical entre "Chapitre X" et le titre du chapitre
-  {\Huge} % Taille de la police pour le titre du chapitre
-  
 \include{3_epilogue/annexes}
 \include{3_epilogue/bibliographie}
 
