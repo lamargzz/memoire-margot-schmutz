@@ -6,11 +6,15 @@
 
 Le cadre Solvabilité~II est organisé autour de trois piliers complémentaires mais seul le pilier 1 sera abordé dans ce mémoire.
 
-
-Schéma : Architecture de Solvabilité~II
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]
+    {images/2_chapitres/chapitre1/architecture_solvabilite_2_pilier_1.png}
+    \caption{Architecture de Solvabilité~II et place du Best Estimate dans le pilier 1}
+\end{figure}
 
 Le \textbf{pilier 1} regroupe les exigences quantitatives. Il définit les règles
-de valorisation des actifs et des passifs, le calcul des provisions techniques,
+de valorisation de l'actif et du passif, le calcul des provisions techniques,
 la détermination des fonds propres ainsi que les exigences de capital. Deux
 niveaux de capital sont notamment distingués : le \textit{Solvency Capital
 Requirement} (SCR) et le \textit{Minimum Capital Requirement} (MCR). Le
@@ -19,7 +23,7 @@ pilier.
 
 \subsection{Le ratio de solvabilité et la place du Best Estimate}
 
-Les organismes d'assurancedoivent détenir des fonds propres éligibles suffisants pour
+Les organismes d'assurance doivent détenir des fonds propres éligibles suffisants pour
 couvrir leur SCR. Le ratio de couverture du SCR,
 couramment appelé ratio de solvabilité, s'écrit :
 \[
@@ -43,7 +47,15 @@ de son niveau et de sa sensibilité constitue donc un enjeu de pilotage
 prudentiel, même lorsque l'objet de l'étude n'est pas directement la prédiction
 du ratio de solvabilité.
 
-Schéma explicatif
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]
+    {images/2_chapitres/chapitre1/bilan_avant_apres_choc_scr.png}
+    \caption{Effet d'un choc de souscription sur le bilan économique}
+\end{figure}
+
+Le schéma illustre le mécanisme par lequel le Best Estimate agit sur les exigences de capital. Le total du bilan étant fixé par la valeur de marché de l'actif, les fonds propres de base en constituent le solde. Lorsqu'un choc réglementaire fait augmenter le Best Estimate sans affecter l'actif, les fonds propres diminuent d'un montant équivalent : cette variation correspond au SCR du module considéré. Le niveau du Best Estimate, mais aussi sa sensibilité aux hypothèses, conditionnent donc directement l'exigence de capital.
+A noté que la marge de risque n'est pas représentée, et l'hypothèse d'un actif inchangé ne vaut que pour les chocs de souscription.
 
 \section{La valorisation des provisions techniques}
 
@@ -55,15 +67,19 @@ d'assurance devrait payer si elle transférait immédiatement ses engagements à
 une autre entreprise. Leur calcul doit être cohérent avec les informations
 fournies par les marchés financiers, prudent, fiable et objectif.
 
-Lorsque les flux associés aux engagements ne peuvent pas être répliqués de
-manière fiable à l'aide d'instruments financiers disposant d'une valeur de
-marché observable, les provisions techniques sont calculées comme la somme du
-\textit{Best Estimate} et de la marge de risque :
+La valeur des provisions techniques est égale à la somme du \textit{Best
+Estimate} et de la marge de risque :
 \[
     PT = BE + RM,
 \]
-où \(PT\) désigne les provisions techniques, \(BE\) le
-\textit{Best Estimate} et \(RM\) la marge de risque.
+où $PT$ désigne les provisions techniques, $BE$ le \textit{Best Estimate} et
+$RM$ la marge de risque. Ces deux composantes font en principe l'objet d'une
+évaluation séparée. Cette séparation n'est toutefois pas requise lorsque les
+flux de trésorerie futurs associés aux engagements peuvent être répliqués de
+manière fiable au moyen d'instruments financiers pour lesquels il existe une
+valeur de marché fiable et observable ; la valeur des provisions techniques
+est alors déterminée directement à partir de la valeur de marché de ces
+instruments.
 
 Le \textit{Best Estimate} représente la valeur actualisée moyenne des flux
 futurs nécessaires au règlement des engagements. La marge de risque correspond
@@ -72,20 +88,20 @@ reprendre et honorer ces engagements jusqu'à leur extinction.
 
 \subsection{Définition réglementaire du Best Estimate}
 
-L'article~77 de la directive définit le \textit{Best Estimate} comme la moyenne
-pondérée par leur probabilité des flux de trésorerie futurs, compte tenu de la
-valeur temporelle de l'argent et de la courbe des taux sans risque pertinente. Il peut être représenté
-par :
+L'article 77, paragraphe 2, de la directive définit le \textit{Best Estimate}
+comme la moyenne pondérée par leur probabilité des flux de trésorerie futurs,
+compte tenu de la valeur temporelle de l'argent, estimée sur la base de la
+courbe des taux sans risque pertinents. Il peut être représenté par :
 \[
-    BE =
-    \mathbb{E}\left[
-        \sum_{t=1}^{T}
-        D(0,t)\,CF_t
-    \right],
+    BE = \mathbb{E}\left[\sum_{t=1}^{T} D(0,t)\, CF_t\right],
 \]
-où \(CF_t\) désigne le flux net associé aux engagements à la date \(t\),
-\(D(0,t)\) le facteur d'actualisation entre la date de valorisation et la date
-\(t\), et \(T\) l'horizon d'extinction du portefeuille.
+où $CF_t$ désigne le flux net associé aux engagements à la date $t$, $D(0,t)$
+le facteur d'actualisation entre la date de valorisation et la date $t$, et
+$T$ l'horizon d'extinction du portefeuille. Le facteur d'actualisation est
+déterminé à partir de la courbe des taux sans risque pertinents. Dans une
+projection déterministe, il s'écrit $D(0,t) = (1+r_t)^{-t}$, où $r_t$ désigne
+le taux zéro-coupon de maturité $t$. Dans une projection stochastique, il
+dépend de la trajectoire des taux courts propre à chaque scénario.
 
 Cette écriture met en évidence trois dimensions essentielles. Le calcul est
 prospectif, puisqu'il repose sur les flux futurs et non uniquement sur
@@ -94,12 +110,14 @@ valeur temporelle de l'argent. Enfin, il est probabilisé, car il doit
 intégrer la distribution des résultats futurs et pas seulement une trajectoire
 centrale lorsque celle-ci ne suffit pas à représenter les risques.
 
-Le calcul doit reposer sur des informations actualisées et crédibles, des
-hypothèses réalistes ainsi que des méthodes actuarielles et statistiques pertinentes. La projection doit prendre en compte
-l'ensemble des entrées et sorties de trésorerie nécessaires au règlement des
-engagements pendant toute leur durée. Le \textit{Best Estimate} est calculé
-brut de réassurance, les montants recouvrables au titre des contrats de
-réassurance étant évalués séparément.
+La directive encadre également les conditions de ce calcul. Celui-ci s'appuie
+sur des informations actualisées et crédibles, sur des hypothèses réalistes et
+sur des méthodes actuarielles et statistiques pertinentes. Son périmètre est
+étendu : la projection intègre l'ensemble des encaissements et des
+décaissements nécessaires au règlement des engagements sur toute leur durée.
+Enfin, le \textit{Best Estimate} est déterminé brut de réassurance : les
+montants recouvrables au titre des traités sont évalués séparément, à l'actif
+du bilan, conformément à l'article 81 de la directive.
 
 \subsection{Flux projetés et hypothèses de calcul}
 
@@ -113,7 +131,7 @@ Les hypothèses utilisées doivent représenter de manière cohérente les facte
 susceptibles d'affecter les flux futurs. Dans le cas d'un portefeuille
 d'assurance vie, elles portent notamment sur :
 
-\begin{itemize}
+\begin{itemize}[label=\textemdash, nosep, leftmargin=2.5em]
     \item la mortalité et la longévité ;
     \item les rachats et les autres comportements des assurés ;
     \item les frais futurs ;
@@ -132,33 +150,37 @@ Les hypothèses de comportement des assurés doivent également intégrer les
 rachats conjoncturels, qui traduisent notamment leur réaction à l'écart entre 
 le taux servi par le contrat et les rendements proposés par d'autres placements.
 
-La frontière des contrats détermine les flux futurs qui appartiennent aux
-engagements existants à la date de valorisation. Cette délimitation est
-essentielle, car elle conditionne les primes, prestations et frais intégrés dans
-le calcul. Enfin, les données doivent être appropriées.
-Le recours à des approximations est possible lorsque les données sont
-insuffisantes, mais il doit être justifié et ne pas résulter de défaillances des
-processus internes de collecte ou de validation.
+Enfin, l'article 82 de la directive impose que les données utilisées soient
+appropriées, complètes et exactes. Le recours à des approximations demeure
+possible lorsque les données sont insuffisantes, mais il doit être justifié et
+ne pas résulter de défaillances des processus internes de collecte ou de
+validation.
 
 \section{Approches déterministe et stochastique}
 
 \subsection{Deux méthodes au service d'un même objectif prudentiel}
 
 La réglementation impose le calcul d'une meilleure estimation probabilisée ;
-elle n'érige pas le \textit{Best Estimate} déterministe et le
-\textit{Best Estimate} stochastique en deux mesures prudentielles concurrentes.
-Le choix de la méthode doit être adapté à la nature des engagements et aux
-risques affectant les flux. Le règlement délégué exige que le calcul soit
-réalisé de manière transparente, que la méthode et ses résultats puissent être
-revus par un expert qualifié et que les dépendances des flux à l'égard
-d'événements futurs soient correctement reflétées.
+elle n'érige pas le \textit{Best Estimate} déterministe et le \textit{Best
+Estimate} stochastique en deux mesures prudentielles concurrentes. Le choix de
+la méthode relève du principe de proportionnalité : il doit être adapté à la
+nature, à l'ampleur et à la complexité des risques affectant les flux. Le
+règlement délégué impose en outre que le calcul, la méthodologie et les
+hypothèses retenues soient documentés de manière transparente et suffisamment
+détaillée pour qu'un expert qualifié puisse reproduire le calcul et en
+apprécier la conformité.
 
-Une méthode déterministe peut être pertinente lorsque les flux sont peu
-sensibles à la dispersion des variables économiques ou lorsque les relations
-sont suffisamment linéaires. À l'inverse, une méthode stochastique devient
-nécessaire lorsque la valeur des flux dépend de manière importante de
-l'ensemble des trajectoires possibles, en particulier en présence d'options,
-de garanties ou d'actions de gestion dynamiques.
+Une méthode déterministe peut être pertinente lorsque les flux dépendent de
+manière approximativement linéaire des variables économiques. Dans ce cas, la
+projection du scénario central fournit une approximation acceptable de la
+moyenne des scénarios. Dès qu'une convexité apparaît, en présence d'un taux
+minimum garanti, d'une participation aux bénéfices ou d'options de rachat, la
+valeur moyenne des flux diffère de leur valeur dans le scénario moyen et une
+méthode stochastique devient nécessaire. Il en va de même lorsque les actions
+de gestion dépendent de la trajectoire suivie par les marchés. En épargne
+euro, l'approche déterministe ne constitue donc pas une valorisation
+prudentielle acceptable ; elle est utilisée comme outil d'analyse et comme
+point de comparaison, ce qui correspond à l'usage retenu dans ce mémoire.
 
 \subsection{Le Best Estimate déterministe}
 
@@ -211,6 +233,15 @@ favorables. Elle permet également de modéliser les politiques de participation
 aux bénéfices, les réalisations de plus-values, les arbitrages d'allocation et
 les rachats dynamiques.
 
+Ces mécanismes sont également représentés dans une projection déterministe,
+puisque le modèle applique les mêmes règles de gestion le long du scénario
+central. L'apport de l'approche stochastique tient à la valorisation de leur
+effet sur l'ensemble des trajectoires : la politique de participation aux
+bénéfices, la réalisation de plus-values latentes, les arbitrages d'allocation
+et les rachats dynamiques s'activent de manière asymétrique selon
+l'environnement financier simulé. Un scénario unique n'en restitue que la
+valeur intrinsèque, tandis que la moyenne des scénarios intègre en outre leur
+valeur temps.
 
 Le calcul est donc plus complexe, mais également plus coûteux et plus difficile à
 analyser qu'une projection déterministe.
@@ -222,12 +253,12 @@ financières et options contractuelles incluses dans les contrats, ainsi que les
 facteurs susceptibles d'influencer leur exercice par les assurés. Pour un portefeuille d'assurance vie, il peut
 notamment s'agir :
 
-\begin{itemize}
+\begin{itemize}[label=\textemdash, nosep, leftmargin=2.5em]
     \item d'un taux minimum garanti ;
     \item d'un mécanisme de participation aux bénéfices ;
     \item d'une garantie en capital ;
     \item d'une option de rachat ;
-    \item d'une arbitrage entre supports ;
+    \item d'un arbitrage entre supports ;
     \item d'une option de conversion ou de prorogation.
 \end{itemize}
 
@@ -249,13 +280,10 @@ modélisées. L'écart ne constitue donc pas une constante propre au portefeuill
 il varie avec l'environnement économique, les caractéristiques des contrats et
 la politique de gestion de l'assureur.
 
-Les facteurs étudiés dans la base de données reflètent précisément ces
-mécanismes. Une courbe de taux basse peut accroître le coût des garanties et
-réduire les marges financières disponibles. Une augmentation de la volatilité
-peut renforcer la valeur temps d'une option en élargissant la distribution des
-résultats futurs. Le niveau des spreads, les plus-values latentes, la duration
-du passif, les rachats et le taux minimum garanti modifient également la
-capacité de l'assureur à servir ses engagements dans les différents scénarios.
-L'analyse de leur effet conjoint nécessite donc des méthodes capables de
-représenter des relations non linéaires et des interactions.
-
+La valeur temps des options et garanties ne constitue donc pas une
+caractéristique fixe du portefeuille. Elle dépend de l'environnement
+financier, des caractéristiques des contrats et de la politique de gestion de
+l'assureur, autant de facteurs dont les effets se combinent de manière non
+linéaire. Comprendre l'écart entre les deux valorisations suppose dès lors de
+disposer d'un outil permettant de faire varier ces facteurs de manière
+contrôlée et d'en observer les effets conjoints.

@@ -1,9 +1,511 @@
 \chapter{Analyse des résultats et rationnalisation des écarts}
 
+\section{Statistiques descriptives des données}
+
+\subsection{Statistiques descriptives de la variable cible}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]
+    {images/2_chapitres/chapitre4/fig_distribution_cible.png}
+    \caption{Distribution de la variable cible (écart relatif entre valorisation déterministe et stochastique)}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Distribution de la variable cible sur les 51\,840 configurations}
+\label{tab:desccible}
+\begin{tabular}{lccc}
+\filetHaut
+\rowcolor{ForsidesRose}
+\enTete{Statistique} & \enTete{Écart relatif} & \enTete{Points de PM} & \enTete{Équivalent (k€)} \\
+\filetMilieu
+Moyenne        & 2,84~\%    & 2,840    & 4\,118  \\
+Écart-type     & 4,19~\%    & 4,188    & 6\,072  \\
+Minimum        & $-$17,74~\% & $-$17,742 & $-$25\,726 \\
+1\textsuperscript{er} quartile & 0,79~\% & 0,790 & 1\,146 \\
+Médiane        & 1,78~\%    & 1,782    & 2\,584  \\
+3\textsuperscript{e} quartile  & 3,87~\% & 3,870 & 5\,611 \\
+Maximum        & 24,92~\%   & 24,918   & 36\,131 \\
+\filetBas
+\end{tabular}
+\end{table}
+
+Trois enseignements se dégagent de cette distribution.
+
+La médiane, égale à \(1{,}78~\%\), est très proche de l'écart relatif du
+portefeuille central non stressé, établi à \(1{,}89~\%\) à l'équation~(2.7).
+La grille de sensibilités est donc bien centrée sur la configuration de
+référence, ce qui confirme la cohérence du plan d'expérience construit au
+chapitre~2.
+
+La moyenne, égale à \(2{,}84~\%\), dépasse nettement la médiane : la
+distribution est asymétrique à droite. Les configurations les plus coûteuses
+en valeur temps des options et garanties, associant taux bas, TMG élevé et
+duration longue, produisent des écarts très supérieurs à la tendance
+centrale, alors que les configurations favorables sont bornées par le bas.
+Cette asymétrie est la traduction directe de la nature optionnelle des
+garanties évaluées.
+
+L'étendue enfin est considérable, de \(-17{,}74~\%\) à \(+24{,}92~\%\), soit
+plus de 42 points de PM ou \(61\) millions d'euros. Les valeurs négatives
+correspondent aux environnements dans lesquels la valorisation stochastique
+ressort en deçà de la valorisation déterministe. L'écart-type de
+\(4{,}19\) points de PM constitue par ailleurs la référence naïve mentionnée
+à la section~3.4.3 : un modèle prédisant systématiquement la moyenne obtient
+une RMSE égale à cette valeur.
+
+\subsection{Statistiques descriptives des variables explicatives}
+
+\begin{table}[H]
+\centering
+\caption{Statistiques descriptives des neuf variables explicatives}
+\label{tab:descvar}
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lccccc}
+\filetHaut
+\rowcolor{ForsidesRose}
+\enTete{Variable} & \enTete{Moyenne} & \enTete{Écart-type} & \enTete{Minimum} & \enTete{Médiane} & \enTete{Maximum} \\
+\filetMilieu
+Courbe des taux (ordinal)     & 3,00     & 1,414    & 1          & 3        & 5 \\
+Spread                        & 1,09~\%  & 0,75~\%  & 0,00~\%    & 1,18~\%  & 2,00~\% \\
+Volatilité des taux           & 0,60~\%  & 0,25~\%  & 0,30~\%    & 0,60~\%  & 0,90~\% \\
+Volatilité des actions        & 15,00~\% & 4,08~\%  & 10,00~\%   & 15,00~\% & 20,00~\% \\
+Garantie de taux (binaire)    & 0,50     & 0,500    & 0          & ---      & 1 \\
+PMVL actions                  & 17,50~\% & 25,86~\% & $-$20,00~\% & 20,00~\% & 50,00~\% \\
+Rachats conjoncturels (ordinal) & 2,00   & 0,817    & 1          & 2        & 3 \\
+Duration du passif (années)   & 10,00    & 2,450    & 7          & 10       & 13 \\
+TMG                           & 0,88~\%  & 0,74~\%  & 0,00~\%    & 0,75~\%  & 2,00~\% \\
+\filetBas
+\end{tabular}
+\end{table}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]
+    {images/2_chapitres/chapitre4/fig_matrices_correlation.png}
+    \caption{Matrices de corrélation entre les variables explicatives}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]
+    {images/2_chapitres/chapitre4/fig_correlations_cible.png}
+    \caption{Corrélation entre la variable cible et les variables explicatives}
+\end{figure}
+
+Les corrélations croisées entre variables explicatives sont toutes nulles, en
+Pearson comme en Spearman, conséquence directe du plan factoriel complet déjà
+commentée à la section~3.3.2.2. Seule la dernière ligne des matrices de la
+figure~4.2 porte donc une information.
+
+Aucune corrélation linéaire avec la variable cible ne dépasse \(0{,}26\) en
+valeur absolue. Prises isolément, les neuf variables rendent ainsi très peu
+compte de la variabilité de l'écart entre les deux valorisations. Ce constat
+préfigure directement le coefficient de détermination de \(0{,}14\) obtenu par
+le GLM à la section suivante.
+
+La comparaison des deux coefficients apporte un élément supplémentaire.
+L'écart entre le coefficient de Spearman et celui de Pearson est
+systématiquement positif pour les sept variables les plus influentes, et
+particulièrement marqué pour la courbe des taux, dont la corrélation passe de
+\(-0{,}171\) à \(-0{,}356\). La relation entre le niveau des taux et l'écart
+de valorisation est donc monotone mais fortement non linéaire. Obtenu avant
+toute modélisation, ce résultat constitue le premier indice de l'insuffisance
+d'une spécification linéaire.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]
+    {images/2_chapitres/chapitre4/configurations extremes.png}
+    \caption{Configurations extrêmes de la variable cible (écart relatif entre valorisation déterministe et stochastique)}
+\end{figure}
 
 \section{Performance des modèles (test, comparaison GLM / RF / XGBoost, stabilité sur les répétitions)}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]
+    {images/2_chapitres/chapitre4/fig_comparaison_modeles.png}
+    \caption{Comparaison des performances des modèles}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Performances des modèles sur l'échantillon de test
+(15\,552 configurations, indicateurs en points de PM sauf $R^2$)}
+\label{tab:perf}
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lcccccc}
+\filetHaut
+\rowcolor{ForsidesRose}
+\enTete{Modèle} & \enTete{RMSE} & \enTete{MAE} & \enTete{$R^2$} & \enTete{Biais} & \enTete{ErrCV} & \enTete{Erreur (k€)} \\
+\filetMilieu
+Modèle naïf   & 4,237 & 2,991 & 0,000 & $-$0,003 & ---   & 6\,143 \\
+GLM           & 3,922 & 2,453 & 0,143 & $+$0,009 & 3,853 & 5\,688 \\
+\ligneRetenue \vRetenue{Random Forest} & \vRetenue{1,551} & \vRetenue{0,759} & \vRetenue{0,866} & \vRetenue{$+$0,003} & \vRetenue{1,710} & \vRetenue{2\,249} \\
+XGBoost       & 2,074 & 1,417 & 0,760 & $-$0,005 & 2,124 & 3\,007 \\
+\filetBas
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Gains apportés par les modèles non linéaires}
+\label{tab:gains}
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lcccc}
+\filetHaut
+\rowcolor{ForsidesRose}
+\enTete{Modèle} & \enTete{Gain vs. modèle naïf} & \enTete{Gain vs. GLM} & \enTete{Gain (pts de PM)} & \enTete{Gain (k€)} \\
+\filetMilieu
+GLM           & 7,4~\%  & référence & ---   & ---     \\
+Random Forest & 63,4~\% & \vRetenue{60,5~\%} & 2,372 & 3\,439 \\
+XGBoost       & 51,0~\% & \vRetenue{47,1~\%} & 1,848 & 2\,680 \\
+\filetBas
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]
+    {images/2_chapitres/chapitre4/fig_predictions_residus.png}
+    \caption{Comparaison des prédictions et des résidus des modèles}
+\end{figure}
+
+\subsection{Stabilité sur les 10 répétitions}
+
+\begin{table}[H]
+\centering
+\caption{Stabilité des performances sur les dix répétitions de tirage
+(RMSE en points de PM)}
+\label{tab:stabilite}
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lccccc}
+\filetHaut
+\rowcolor{ForsidesRose}
+\enTete{Modèle} & \enTete{RMSE moyenne} & \enTete{Écart-type} & \enTete{Étendue} & \enTete{Coef. de variation} & \enTete{$R^2$ moyen} \\
+\filetMilieu
+GLM           & 3,872 & 0,034 & [3,826 ; 3,935] & 0,89~\% & 0,145 \\
+Random Forest & 1,550 & 0,020 & [1,518 ; 1,576] & 1,30~\% & 0,863 \\
+XGBoost       & 2,066 & 0,020 & [2,033 ; 2,088] & 0,98~\% & 0,757 \\
+\filetBas
+\end{tabular}
+\end{table}
+
+\subsection{Significativité du gain}
+
+Le critère de significativité posé à la section~3.4.2 exige que le gain
+observé dépasse la variabilité induite par le seul choix de la répartition
+des données. Sur la moyenne des dix répétitions, le gain du Random Forest
+par rapport au GLM s'établit à \(2{,}322\) points de PM, à comparer à un
+écart-type combiné des deux modèles de \(0{,}040\) point. Le gain représente
+donc environ soixante fois la variabilité de tirage ; le rapport s'établit à
+quarante-cinq pour le XGBoost.
+
+Les intervalles observés sur les dix répétitions ne se recoupent d'ailleurs à
+aucun endroit : la RMSE maximale du Random Forest, égale à \(1{,}576\), reste
+très inférieure à la RMSE minimale du XGBoost, égale à \(2{,}033\),
+elle-même très inférieure à la RMSE minimale du GLM, égale à \(3{,}826\). La
+hiérarchie des trois modèles se reproduit donc à l'identique sur chacune des
+répétitions.
+
+\subsection{Lecture des indicateurs}
+
+Le GLM ne reproduit que \(14{,}3~\%\) de la variance de la variable cible et
+n'améliore le modèle naïf que de \(7{,}4~\%\). Une spécification linéaire et
+additive des neuf sensibilités ne rend donc pratiquement pas compte du
+comportement de SALLTO. Conformément à la lecture proposée à la
+section~3.4.3, ce résultat apporte un élément déterminant en faveur de
+l'existence de non-linéarités et d'interactions dans la formation de l'écart
+entre les deux valorisations.
+
+Le rapport entre RMSE et MAE renseigne sur la concentration de l'erreur. Il
+s'établit à \(1{,}60\) pour le GLM, à \(1{,}46\) pour le XGBoost et à
+\(2{,}04\) pour le Random Forest. L'erreur de ce dernier est donc la plus
+concentrée : le modèle prédit très précisément la majorité des configurations,
+avec une erreur absolue moyenne de \(0{,}759\) point de PM soit environ
+\(1{,}1\) million d'euros, mais s'écarte plus nettement sur un nombre
+restreint d'entre elles. Cette situation, anticipée à la section~3.4.1,
+correspond aux configurations extrêmes du domaine étudié.
+
+Les trois modèles sont enfin pratiquement non biaisés, le biais moyen restant
+inférieur à \(0{,}01\) point de PM en valeur absolue, soit moins de
+\(15\) milliers d'euros sur un portefeuille de \(145\) millions. Aucun ne
+sur-estime ni ne sous-estime systématiquement le Best Estimate stochastique,
+ce qui satisfait la condition posée à la section~3.4.1 pour un usage
+opérationnel du métamodèle.
+
+Une dernière remarque porte sur l'écart entre l'erreur de validation croisée
+et la RMSE de test. Pour le Random Forest, l'ErrCV s'établit à \(1{,}710\)
+point de PM contre \(1{,}551\) point en test, et le même ordonnancement
+s'observe pour le XGBoost. Cet écart n'a rien d'anormal : en validation
+croisée, chaque modèle n'est estimé que sur quatre cinquièmes de l'échantillon
+d'apprentissage, soit environ \(29\,000\) observations contre \(36\,288\) pour
+le modèle final. L'ErrCV constitue donc une estimation légèrement pessimiste
+de la performance du modèle réestimé sur l'intégralité de l'échantillon.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]
+    {images/2_chapitres/chapitre4/fig_hierarchie_facteurs.png}
+    \caption{Hiérarchisation des facteurs d'écart selon les modèles (coefficients du GLM, importances, SHAP)}
+\end{figure}
+
+\subsection{Sensibilité au mode de découpage}
+\begin{table}[htbp]
+\centering
+\caption{Sensibilité des performances au mode de constitution des échantillons
+(points de PM)}
+\label{tab:decoupage}
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lccccc}
+\filetHaut
+\rowcolor{ForsidesRose}
+\enTete{Modèle} & \enTete{RMSE} & \enTete{MAE} & \enTete{$R^2$} & \enTete{Biais} & \enTete{Écart vs. tirage ligne à ligne} \\
+\filetMilieu
+GLM           & 3,894 & 2,433 & 0,131 & $+$0,005 & $-$0,7~\% \\
+Random Forest & 1,653 & 0,751 & 0,842 & $+$0,044 & $+$6,6~\% \\
+XGBoost       & 1,944 & 1,324 & 0,783 & $+$0,025 & $-$6,2~\% \\
+\filetBas
+\end{tabular}
+\end{table}
+
+La hiérarchie des trois modèles est strictement conservée et les écarts
+demeurent inférieurs à \(7~\%\). Les conclusions de cette section ne dépendent
+donc pas du mode de constitution des échantillons. Le Random Forest se
+dégrade légèrement tandis que le XGBoost s'améliore, ce qui resserre l'écart
+entre les deux méthodes sans en inverser l'ordre.
+
+
+
+
 \section{Explicabilité et hiérarchisation des facteurs d'écart (coefficients du GLM, importances, SHAP, effets non linéaires et interactions)}
+
+\begin{table}[H]
+\centering
+\caption{Coefficients standardisés du GLM : effet d'une variation d'un
+écart-type de la variable, en points de PM}
+\label{tab:coefglm}
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lccccc}
+\filetHaut
+\rowcolor{ForsidesRose}
+\enTete{Variable} & \enTete{Coefficient} & \enTete{Erreur-type} & \enTete{Statistique $z$} & \enTete{$p$-valeur} & \enTete{IC à 95~\%} \\
+\filetMilieu
+Volatilité des taux    & $+$1,0605 & 0,0202 & $+$52,44 & $<10^{-3}$ & [$+$1,021 ; $+$1,100] \\
+Courbe des taux        & $-$0,7155 & 0,0202 & $-$35,38 & $<10^{-3}$ & [$-$0,755 ; $-$0,676] \\
+Duration du passif     & $+$0,5655 & 0,0202 & $+$27,96 & $<10^{-3}$ & [$+$0,526 ; $+$0,605] \\
+TMG                    & $+$0,5649 & 0,0202 & $+$27,94 & $<10^{-3}$ & [$+$0,525 ; $+$0,605] \\
+PMVL actions           & $+$0,2899 & 0,0202 & $+$14,33 & $<10^{-3}$ & [$+$0,250 ; $+$0,329] \\
+Garantie de taux       & $-$0,2867 & 0,0202 & $-$14,18 & $<10^{-3}$ & [$-$0,326 ; $-$0,247] \\
+Volatilité des actions & $+$0,2389 & 0,0202 & $+$11,81 & $<10^{-3}$ & [$+$0,199 ; $+$0,279] \\
+Rachats conjoncturels  & $+$0,1446 & 0,0202 & $+$7,15  & $<10^{-3}$ & [$+$0,105 ; $+$0,184] \\
+Spread                 & $-$0,0703 & 0,0202 & $-$3,47  & $<10^{-3}$ & [$-$0,110 ; $-$0,031] \\
+\filetBas
+\end{tabular}
+\end{table}
+
+
+Le signe de chacun des neuf coefficients est conforme à l'intuition
+actuarielle. La volatilité des taux, la duration du passif et le taux minimum
+garanti renchérissent le coût des garanties, tandis qu'un niveau de courbe des
+taux plus élevé le réduit.
+
+Les neuf coefficients sont significatifs à tous les seuils usuels, mais cette
+significativité doit être relativisée. Avec \(36\,288\) observations et un
+plan orthogonal, un effet même très faible ressort comme statistiquement
+significatif : l'amplitude du coefficient constitue ici une information plus
+utile que la \(p\)-valeur. L'erreur-type, identique pour les neuf variables et
+égale à \(0{,}0202\) point de PM, est par ailleurs une conséquence directe de
+l'orthogonalité du plan factoriel établie à la section~3.3.2.2.
+
+
+% ---------------------------------------------------------------------
+%  K.3 Tableau — importance par permutation
+% ---------------------------------------------------------------------
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]
+    {images/2_chapitres/chapitre4/fig_importance_permutation.png}
+    \caption{Importance des variables selon la permutation (Random Forest et XGBoost)}
+\end{figure}
+
+
+\begin{table}[H]
+\centering
+\caption{Importance par permutation : dégradation de la RMSE de test,
+en points de PM}
+\label{tab:permutation}
+\begin{tabular}{lccc}
+\filetHaut
+\rowcolor{ForsidesRose}
+\enTete{Variable} & \enTete{GLM} & \enTete{Random Forest} & \enTete{XGBoost} \\
+\filetMilieu
+Courbe des taux        & 0,127 & \vRetenue{3,364} & \vRetenue{2,664} \\
+TMG                    & 0,080 & 2,529 & 1,849 \\
+PMVL actions           & 0,015 & 2,372 & 1,683 \\
+Duration du passif     & 0,081 & 2,164 & 1,510 \\
+Spread                 & 0,001 & 1,957 & 1,265 \\
+Volatilité des taux    & \vRetenue{0,286} & 1,703 & 1,170 \\
+Rachats conjoncturels  & 0,004 & 1,471 & 0,884 \\
+Garantie de taux       & 0,021 & 0,656 & 0,326 \\
+Volatilité des actions & 0,016 & 0,101 & 0,015 \\
+\filetMilieu
+\textbf{Total}         & \textbf{0,631} & \textbf{16,317} & \textbf{11,366} \\
+\filetBas
+\end{tabular}
+\end{table}
+
+La somme des dégradations constitue le premier enseignement de ce tableau.
+Elle s'établit à \(0{,}63\) point de PM pour le GLM contre \(16{,}32\) pour le
+Random Forest, soit un rapport de vingt-six. Le modèle linéaire n'exploite
+qu'une fraction marginale de l'information contenue dans les neuf variables.
+
+Deux désaccords entre le GLM et les méthodes non linéaires méritent d'être
+relevés. Le spread est la variable la moins utilisée par le GLM, avec une
+dégradation de \(0{,}001\) point de PM, mais la cinquième du Random Forest
+avec \(1{,}957\) point. Son effet passe donc presque intégralement par des
+non-linéarités ou des interactions, ce que confirmera l'analyse des valeurs de
+Shapley. À l'inverse, la volatilité des taux occupe le premier rang chez le
+GLM et seulement le sixième chez les méthodes fondées sur les arbres : son
+effet est le plus proprement linéaire des neuf, ce qui explique qu'il soit le
+seul correctement capté par une spécification additive.
+
+\subsection{Importance SHAP}
+
+\begin{table}[H]
+\centering
+\caption{Importance moyenne des variables au sens des valeurs de Shapley
+(modèle XGBoost)}
+\label{tab:shap}
+\begin{tabular}{lcc}
+\filetHaut
+\rowcolor{ForsidesRose}
+\enTete{Variable} & \enTete{SHAP moyen (pts de PM)} & \enTete{Part relative} \\
+\filetMilieu
+Courbe des taux        & \vRetenue{1,238} & \vRetenue{22,8~\%} \\
+Volatilité des taux    & 0,913 & 16,8~\% \\
+TMG                    & 0,686 & 12,7~\% \\
+PMVL actions           & 0,635 & 11,7~\% \\
+Duration du passif     & 0,622 & 11,5~\% \\
+Spread                 & 0,464 & 8,6~\%  \\
+Rachats conjoncturels  & 0,353 & 6,5~\%  \\
+Garantie de taux       & 0,294 & 5,4~\%  \\
+Volatilité des actions & 0,217 & 4,0~\%  \\
+\filetMilieu
+\textbf{Total}         & \textbf{5,423} & \textbf{100~\%} \\
+\filetBas
+\end{tabular}
+\end{table}
+
+\subsection{Interactions SHAP}
+
+\begin{table}[H]
+\centering
+\caption{Dix interactions les plus marquées au sens des valeurs de Shapley
+(points de PM)}
+\label{tab:interactions}
+\begin{tabular}{clc}
+\filetHaut
+\rowcolor{ForsidesRose}
+\enTete{Rang} & \enTete{Couple de variables} & \enTete{Interaction} \\
+\filetMilieu
+1  & Courbe des taux $\times$ TMG                   & \vRetenue{0,872} \\
+2  & Spread $\times$ PMVL actions                   & 0,686 \\
+3  & Courbe des taux $\times$ PMVL actions          & 0,650 \\
+4  & Courbe des taux $\times$ Duration du passif    & 0,565 \\
+5  & Courbe des taux $\times$ Rachats conjoncturels & 0,491 \\
+6  & Courbe des taux $\times$ Spread                & 0,484 \\
+7  & Duration du passif $\times$ TMG                & 0,483 \\
+8  & Courbe des taux $\times$ Volatilité des taux   & 0,472 \\
+9  & PMVL actions $\times$ TMG                      & 0,429 \\
+10 & PMVL actions $\times$ Rachats conjoncturels    & 0,300 \\
+\filetBas
+\end{tabular}
+\end{table}
+
+L'interaction dominante associe la courbe des taux et le taux minimum
+garanti, pour une contribution de \(0{,}872\) point de PM. Elle traduit
+directement le mécanisme optionnel étudié : le coût de la garantie de taux ne
+se matérialise que dans les environnements où le rendement de l'actif passe
+sous le taux garanti. L'effet du TMG dépend donc du niveau des taux, ce qu'une
+spécification additive ne peut par construction représenter.
+
+L'interaction entre le spread et les plus-values latentes actions, deuxième du
+classement avec \(0{,}686\) point de PM, est la seule interaction majeure ne
+faisant pas intervenir la courbe des taux. Elle relève du mécanisme de
+participation aux bénéfices : la capacité de l'assureur à servir un rendement
+suffisant repose conjointement sur les produits obligataires et sur la
+réalisation de plus-values latentes.
+
+La courbe des taux apparaît enfin dans six des huit interactions les plus
+fortes, alors qu'elle n'occupe que le troisième rang en effet marginal chez le
+GLM. Son influence sur l'écart entre les deux valorisations passe donc
+massivement par le conditionnement de l'effet des autres variables. Ce
+résultat éclaire à la fois l'écart entre corrélations de Pearson et de
+Spearman relevé à la section~4.1 et l'écart de performance entre le GLM et les
+méthodes non linéaires établi à la section~4.2.
+
+
+
+\subsection{Hiérarchie consolidée des facteurs d'écart}
+
+\begin{table}[H]
+\centering
+\caption{Hiérarchie consolidée des facteurs d'écart. Les rangs figurent entre
+parenthèses ; la dernière colonne donne le rang moyen sur les cinq critères}
+\label{tab:hierarchie}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccccc}
+\filetHaut
+\rowcolor{ForsidesRose}
+\enTete{Variable} & \enTete{$|\beta|$ GLM} & \enTete{Imp. RF} & \enTete{Imp. XGB} & \enTete{Perm. XGB} & \enTete{SHAP} & \enTete{Rang moyen} \\
+\filetMilieu
+Courbe des taux        & 0,715 (2) & 0,201 (1) & 0,195 (1) & 2,664 (1) & 1,238 (1) & \vRetenue{1,2} \\
+TMG                    & 0,565 (4) & 0,141 (4) & 0,134 (3) & 1,849 (2) & 0,686 (3) & 3,2 \\
+Volatilité des taux    & 1,061 (1) & 0,086 (7) & 0,152 (2) & 1,170 (6) & 0,913 (2) & 3,6 \\
+PMVL actions           & 0,290 (5) & 0,149 (2) & 0,109 (5) & 1,683 (3) & 0,635 (4) & 3,8 \\
+Duration du passif     & 0,566 (3) & 0,113 (5) & 0,121 (4) & 1,510 (4) & 0,622 (5) & 4,2 \\
+Spread                 & 0,070 (9) & 0,147 (3) & 0,105 (6) & 1,265 (5) & 0,464 (6) & 5,8 \\
+Rachats conjoncturels  & 0,145 (8) & 0,089 (6) & 0,082 (7) & 0,884 (7) & 0,353 (7) & 7,0 \\
+Garantie de taux       & 0,287 (6) & 0,042 (8) & 0,069 (8) & 0,326 (8) & 0,294 (8) & 7,6 \\
+Volatilité des actions & 0,239 (7) & 0,031 (9) & 0,033 (9) & 0,015 (9) & 0,217 (9) & 8,6 \\
+\filetBas
+\end{tabular}
+\end{table}
+
+
+La courbe des taux occupe le premier rang sur quatre des cinq critères et
+obtient le rang moyen le plus favorable. Elle constitue le facteur dominant de
+l'écart entre valorisation déterministe et stochastique, quelle que soit la
+méthode d'évaluation retenue. À l'opposé, la volatilité des actions occupe le
+dernier rang sur quatre critères, ce qui est cohérent avec la structure d'un
+portefeuille euro majoritairement obligataire.
+
+Les trois mesures issues des méthodes non linéaires s'accordent très largement
+entre elles, ce qui confère à cette hiérarchie une robustesse méthodologique
+que ne procurerait pas un indicateur isolé. Les deux seuls désaccords notables
+proviennent du GLM et ont déjà été identifiés : la volatilité des taux, de
+premier rang chez le GLM et de sixième rang en importance par permutation, et
+le spread, de neuvième rang chez le GLM et de troisième chez le Random Forest.
+Ces deux inversions résument le résultat central du chapitre : le modèle
+linéaire ne classe correctement que les facteurs dont l'effet est additif.
+
+
+
 
 \section{Validation externe sur le second portefeuille central}
 

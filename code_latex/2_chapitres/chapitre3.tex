@@ -2,11 +2,11 @@
 
 Le chapitre précédent a permis de construire une base de données à partir de projections déterministes et stochastiques réalisées avec SALLTO. Chaque observation correspond à une configuration particulière du portefeuille, obtenue en faisant varier de manière contrôlée différentes hypothèses économiques, financières et contractuelles.
 
-L'objectif est désormais d'exploiter cette base afin d'étudier la relation entre les caractéristiques du portefeuille et l'écart observé entre les deux méthodes de valorisation du \textit{Best Estimate}. Cette problématique peut être formulée comme un problème d'apprentissage supervisé : à partir d'un ensemble de variables explicatives connues, il s'agit de construire une fonction capable d'estimer une variable cible observée lors des simulations.
+L'objectif est désormais d'exploiter cette base afin d'étudier la relation entre les caractéristiques du portefeuille et l'écart observé entre les deux méthodes de valorisation du Best Estimate. Cette problématique peut être formulée comme un problème d'apprentissage supervisé : à partir d'un ensemble de variables explicatives connues, il s'agit de construire une fonction capable d'estimer une variable cible observée lors des simulations.
 
-Le recours au machine learning poursuit ici un double objectif. Le premier est prédictif : il s'agit d'évaluer dans quelle mesure l'écart entre le \textit{Best Estimate} déterministe et le \textit{Best Estimate} stochastique peut être reproduit à partir d'un nombre limité de caractéristiques du portefeuille. Le second, qui constitue un enjeu central de ce mémoire, est explicatif : les modèles doivent permettre d'identifier les variables qui contribuent le plus aux écarts observés et de mieux comprendre les mécanismes à l'origine de ces différences de valorisation.
+Le recours au machine learning poursuit ici un double objectif. Le premier est prédictif : il s'agit d'évaluer dans quelle mesure l'écart entre le Best Estimate déterministe et le Best Estimate stochastique peut être reproduit à partir d'un nombre limité de caractéristiques du portefeuille. Le second, qui constitue un enjeu central de ce mémoire, est explicatif : les modèles doivent permettre d'identifier les variables qui contribuent le plus aux écarts observés et de mieux comprendre les mécanismes à l'origine de ces différences de valorisation.
 
-Dans cette perspective, plusieurs familles de modèles sont étudiées. Un modèle linéaire généralisé est tout d'abord utilisé comme modèle de référence. Deux méthodes fondées sur les arbres de décision, le \textit{Random Forest} et le \textit{XGBoost}, sont ensuite introduites afin de représenter des relations potentiellement non linéaires et des interactions plus complexes entre les variables.
+Dans cette perspective, plusieurs familles de modèles sont étudiées. Un modèle linéaire généralisé est tout d'abord utilisé comme modèle de référence. Deux méthodes fondées sur les arbres de décision, le Random Forest et le XGBoost, sont ensuite introduites afin de représenter des relations potentiellement non linéaires et des interactions plus complexes entre les variables.
 
 \section{Problématique de régression dans le cadre du Best Estimate}
 
@@ -14,7 +14,7 @@ Dans cette perspective, plusieurs familles de modèles sont étudiées. Un modè
 
 La problématique étudiée dans ce mémoire s'inscrit dans le cadre d'une régression supervisée. Pour chaque configuration $i$ du portefeuille, un ensemble de variables explicatives $\mathbf{x}_i$ est connu et associé à une valeur cible $y_i$ obtenue à partir des projections réalisées dans SALLTO.
 
-La variable cible retenue est l'écart entre le \textit{Best Estimate} stochastique et le \textit{Best Estimate} déterministe, rapporté au montant total des provisions mathématiques du portefeuille :
+La variable cible retenue est l'écart entre le Best Estimate stochastique et le Best Estimate déterministe, rapporté au montant total des provisions mathématiques du portefeuille :
 
 \begin{equation}
     Y_i =
@@ -40,7 +40,7 @@ x_{i,9}
 \right),
 \end{equation}
 
-où les neuf composantes correspondent respectivement à la courbe des taux, au spread, à la volatilité des taux, à la volatilité des actions, à la garantie de taux, au taux de plus-values latentes sur les actions, aux rachats conjoncturels, à la duration du passif et au taux minimum garanti.
+où les neuf composantes correspondent respectivement à la courbe des taux, au spread, à la volatilité moyenne pondéréedes taux, à la volatilité des actions, à la garantie de taux, au taux de plus-values latentes sur les actions, aux rachats conjoncturels, à la duration du passif et au taux minimum garanti.
 
 Le problème revient alors à rechercher une fonction $f$ reliant ces caractéristiques à la variable cible :
 
@@ -92,18 +92,18 @@ La nature de la famille $\mathcal{F}$ constitue précisément l'une des différe
 
 Le Best Estimate déterministe n'est volontairement pas retenu comme variable explicative, alors qu'il en constituerait a priori le meilleur prédicteur.
 
-Il intervient directement dans le calcul de la variable cible Yi (équation 3.1) : il ne s'agit donc pas d'une caractéristique indépendante du portefeuille, au même titre que les neuf variables retenues, mais d'un terme de la définition même de la cible. L'inclure reviendrait à expliquer Yi en partie par lui-même. Dans un modèle linéaire, il capterait mécaniquement l'essentiel de la variance de Yi. Dans les modèles fondés sur les arbres, il dominerait de la même façon l'importance des variables et les contributions SHAP calculées par la suite, non pas parce qu'il révèle un facteur pertinent, mais du seul fait de ce lien de construction. Les effets propres aux autres variables se retrouveraient alors masqués derrière cette corrélation, à l'opposé de l'objectif du mémoire.
+Il intervient directement dans le calcul de la variable cible Yi : il ne s'agit donc pas d'une caractéristique indépendante du portefeuille, au même titre que les neuf variables retenues, mais d'un terme de la définition même de la cible. L'inclure reviendrait à expliquer Yi en partie par lui-même. Dans un modèle linéaire, il capterait mécaniquement l'essentiel de la variance de Yi. Dans les modèles fondés sur les arbres, il dominerait de la même façon l'importance des variables et les contributions SHAP calculées par la suite, non pas parce qu'il révèle un facteur pertinent, mais du seul fait de ce lien de construction. Les effets propres aux autres variables se retrouveraient alors masqués derrière cette corrélation, à l'opposé de l'objectif du mémoire.
 
 Le modèle est donc volontairement restreint aux neuf variables primitives du portefeuille : une contrainte plus exigeante, mais seule à même de révéler les facteurs réellement à l'origine de l'écart.
 
 La base complète contient 51\,840 configurations issues d'un même portefeuille central. La structure du portefeuille initial est donc maintenue, tandis que les différentes hypothèses sélectionnées dans le chapitre précédent sont combinées afin de couvrir un ensemble suffisamment large de situations.
 
-Le modèle appris dans ce cadre doit ainsi être interprété comme une approximation du comportement de SALLTO sur le domaine couvert par les sensibilités réalisées. Il ne s'agit pas d'établir une relation actuarielle universelle entre les neuf variables et le \textit{Best Estimate}, mais de modéliser les relations produites par le modèle ALM pour le portefeuille et les hypothèses considérés.
+Le modèle appris dans ce cadre doit ainsi être interprété comme une approximation du comportement de SALLTO sur le domaine couvert par les sensibilités réalisées. Il ne s'agit pas d'établir une relation actuarielle universelle entre les neuf variables et le Best Estimate, mais de modéliser les relations produites par le modèle ALM pour le portefeuille et les hypothèses considérés.
 
 
 \subsection{Pourquoi le machine learning est adapté à ce contexte}
 
-Le choix de méthodes de machine learning est principalement motivé par la nature de la relation que l'on cherche à représenter. Le \textit{Best Estimate} stochastique résulte d'une succession de mécanismes dépendant à la fois de l'environnement économique, des caractéristiques des contrats, du comportement des assurés et des décisions prises par l'assureur.
+Le choix de méthodes de machine learning est principalement motivé par la nature de la relation que l'on cherche à représenter. Le Best Estimate stochastique résulte d'une succession de mécanismes dépendant à la fois de l'environnement économique, des caractéristiques des contrats, du comportement des assurés et des décisions prises par l'assureur.
 
 Dans SALLTO, ces mécanismes interviennent de manière successive au cours de la projection. L'évolution des marchés modifie la valeur et le rendement des actifs. La situation financière obtenue influence ensuite les possibilités de participation aux bénéfices, les réalisations éventuelles de plus-values ou encore les réallocations d'actifs. Ces décisions peuvent à leur tour modifier le comportement des assurés, notamment les rachats, et donc les flux futurs du portefeuille.
 
@@ -122,9 +122,7 @@ Il n'existe donc pas nécessairement de relation analytique simple permettant d'
 
 Le machine learning présente l'intérêt de ne pas imposer a priori une forme fonctionnelle unique à cette relation. Le modèle apprend directement, à partir des simulations disponibles, la structure permettant de relier les variables explicatives à l'écart de valorisation.
 
-Cette propriété est particulièrement intéressante dans le cadre de l'assurance vie, où les effets de certaines variables peuvent dépendre du niveau pris par d'autres variables. Par exemple, l'impact d'une garantie financière peut dépendre de l'environnement de taux dans lequel se trouve le portefeuille. De même, la volatilité d'un actif ne produit pas nécessairement les mêmes effets selon le niveau de richesse disponible ou les caractéristiques du passif.
-
-Ces mécanismes peuvent conduire à des \textbf{interactions} entre variables. Dans un modèle purement additif, l'effet d'une variable $X_j$ est supposé indépendant des autres variables. Une telle structure peut être représentée par :
+Ces mécanismes peuvent conduire à des interactions entre variables. Dans un modèle purement additif, l'effet d'une variable $X_j$ est supposé indépendant des autres variables. Une telle structure peut être représentée par :
 
 \begin{equation}
     f(\mathbf{x})
@@ -168,13 +166,13 @@ Le machine learning présente enfin un intérêt particulier au regard du deuxi�
 Cette exigence conduit à distinguer deux dimensions de la qualité d'un modèle :
 
 \begin{itemize}[noitemsep,topsep=2pt]
-    \item sa \textbf{performance prédictive}, c'est-à-dire sa capacité à reproduire les valeurs obtenues avec SALLTO sur des observations non utilisées pour son apprentissage ;
-    \item son \textbf{explicabilité}, c'est-à-dire la capacité à comprendre les facteurs conduisant aux prédictions obtenues.
+    \item sa performance prédictive, c'est-à-dire sa capacité à reproduire les valeurs obtenues avec SALLTO sur des observations non utilisées pour son apprentissage ;
+    \item son explicabilité, c'est-à-dire la capacité à comprendre les facteurs conduisant aux prédictions obtenues.
 \end{itemize}
 
 Les deux ne sont pas nécessairement équivalentes. Un modèle simple peut être très facilement interprétable mais manquer de flexibilité. À l'inverse, un modèle plus complexe peut présenter une excellente capacité prédictive tout en rendant plus difficile la compréhension directe de son fonctionnement.
 
-Cette problématique est particulièrement importante dans le cadre du présent mémoire puisque l'objectif principal est précisément de rationaliser les différences entre les deux méthodes de calcul du \textit{Best Estimate}. Un modèle performant mais totalement inexploitable pour comprendre l'origine de ces différences ne répondrait donc que partiellement à la problématique.
+Cette problématique est particulièrement importante dans le cadre du présent mémoire puisque l'objectif principal est précisément de rationaliser les différences entre les deux méthodes de calcul du Best Estimate. Un modèle performant mais totalement inexploitable pour comprendre l'origine de ces différences ne répondrait donc que partiellement à la problématique.
 
 Les méthodes d'explicabilité, et notamment la méthode SHAP utilisée ultérieurement, permettront de compléter l'analyse des modèles non linéaires afin de mesurer la contribution des différentes variables aux prédictions obtenues.
 
@@ -183,9 +181,9 @@ Les méthodes d'explicabilité, et notamment la méthode SHAP utilisée ultérie
 
 Le recours au machine learning ne doit pas être interprété comme une volonté de remplacer les modèles ALM ou les projections stochastiques utilisées dans le cadre de Solvabilité~II.
 
-Dans cette étude, SALLTO constitue au contraire le \textbf{modèle de référence}. Les valeurs utilisées pour entraîner les modèles de machine learning sont directement issues de ses projections. Le modèle statistique apprend donc à reproduire certaines relations générées par SALLTO ; il ne se substitue pas aux mécanismes actuariels, financiers et comptables qu'il contient.
+Dans cette étude, SALLTO constitue au contraire le modèle de référence. Les valeurs utilisées pour entraîner les modèles de machine learning sont directement issues de ses projections. Le modèle statistique apprend donc à reproduire certaines relations générées par SALLTO ; il ne se substitue pas aux mécanismes actuariels, financiers et comptables qu'il contient.
 
-Cette distinction est fondamentale. La projection stochastique demeure nécessaire pour obtenir une valorisation complète intégrant explicitement les différents scénarios économiques ainsi que les interactions entre l'actif et le passif. Le machine learning constitue ici un \textbf{outil complémentaire}, construit à partir des résultats du modèle ALM.
+Cette distinction est fondamentale. La projection stochastique demeure nécessaire pour obtenir une valorisation complète intégrant explicitement les différents scénarios économiques ainsi que les interactions entre l'actif et le passif. Le machine learning constitue ici un outil complémentaire, construit à partir des résultats du modèle ALM.
 
 Il est ainsi possible de distinguer trois niveaux d'analyse.
 
@@ -195,25 +193,11 @@ Le deuxième repose sur un modèle statistique paramétrique classique. Dans le 
 
 Le troisième repose sur des méthodes de machine learning non linéaires. Leur objectif est d'apporter davantage de flexibilité lorsque la structure du problème ne peut pas être correctement représentée par une relation paramétrique simple.
 
-Cette hiérarchie permet d'éviter de recourir directement à un modèle complexe sans disposer d'un point de comparaison. Le GLM joue ainsi un rôle de \textit{benchmark}. Si un modèle linéaire permettait déjà d'expliquer correctement les écarts, l'utilisation d'algorithmes plus complexes serait difficile à justifier. À l'inverse, une amélioration significative obtenue par les méthodes non linéaires apporterait des éléments en faveur de l'existence de relations plus complexes dans les résultats produits par le modèle ALM.
+Cette hiérarchie permet d'éviter de recourir directement à un modèle complexe sans disposer d'un point de comparaison. Le GLM joue ainsi un rôle de benchmark. Si un modèle linéaire permettait déjà d'expliquer correctement les écarts, l'utilisation d'algorithmes plus complexes serait difficile à justifier. À l'inverse, une amélioration significative obtenue par les méthodes non linéaires apporterait des éléments en faveur de l'existence de relations plus complexes dans les résultats produits par le modèle ALM.
 
 La comparaison entre ces modèles ne portera donc pas uniquement sur leur précision. Elle permettra également d'étudier le compromis entre simplicité, performance et capacité d'explication.
 
-Le positionnement retenu peut être résumé par la chaîne suivante :
-
-\begin{equation}
-\boxed{
-\text{SALLTO}
-\longrightarrow
-\text{Base de simulations}
-\longrightarrow
-\text{Apprentissage d'un proxy}
-\longrightarrow
-\text{Analyse des facteurs d'écart}
-}
-\end{equation}
-
-Le modèle de machine learning peut ainsi être assimilé à un \textbf{métamodèle} ou à un \textbf{modèle proxy} : il apprend à approximer une sortie d'un modèle numérique plus complexe à partir d'un ensemble réduit de variables explicatives.
+Le modèle de machine learning peut ainsi être assimilé à un métamodèle ou à un modèle proxy : il apprend à approximer une sortie d'un modèle numérique plus complexe à partir d'un ensemble réduit de variables explicatives.
 
 Une fois entraîné, un tel proxy présente l'avantage de fournir une estimation pratiquement instantanée de la variable cible pour une configuration appartenant au domaine étudié. Il pourrait donc, dans un contexte opérationnel, être utilisé pour réaliser rapidement des analyses exploratoires ou identifier les configurations méritant ensuite une analyse complète avec le modèle ALM.
 
@@ -226,9 +210,18 @@ Il ne peut par conséquent pas être supposé valide pour un portefeuille prése
 
 Afin de déterminer le niveau de complexité nécessaire pour reproduire et expliquer la variable cible, trois modèles sont étudiés. Ils ont été retenus de manière à couvrir différents niveaux de flexibilité.
 
-Le modèle linéaire généralisé constitue une référence simple et directement interprétable. Le \textit{Random Forest} introduit ensuite des relations non linéaires et des interactions à partir d'un ensemble d'arbres de décision construits indépendamment. Enfin, le \textit{XGBoost} repose sur une construction séquentielle des arbres et cherche progressivement à corriger les erreurs commises par les modèles précédents.
+Le modèle linéaire généralisé constitue une référence simple et directement interprétable. Le Random Forest introduit ensuite des relations non linéaires et des interactions à partir d'un ensemble d'arbres de décision construits indépendamment. Enfin, le XGBoost repose sur une construction séquentielle des arbres et cherche progressivement à corriger les erreurs commises par les modèles précédents.
 
 Ces trois modèles permettront ainsi d'étudier si l'augmentation de la complexité du modèle apporte effectivement une amélioration dans la représentation de l'écart entre valorisations déterministe et stochastique.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]
+    {images/2_chapitres/chapitre3/schema_architectures.png}
+    \caption{Schéma récapitulatif des trois architectures étudiées}
+\end{figure}
+
+Le schéma ci dessus représente ces trois constructions à partir d'un même vecteur d'entrée. Les variables mobilisées sont identiques dans les trois cas : ce qui distingue les modèles tient uniquement à la manière dont ces variables sont combinées pour produire l'estimation. Les sections suivantes détaillent successivement chacune de ces architectures.
 
 
 \subsection{Modèles de référence}
@@ -304,7 +297,7 @@ Le GLM constitue néanmoins un benchmark essentiel. Il permet de déterminer si 
 
 \subsubsection{Le Random Forest}
 
-Le \textit{Random Forest}, ou forêt aléatoire, est une méthode d'apprentissage supervisé reposant sur l'agrégation d'un grand nombre d'arbres de décision.
+Le Random Forest, ou forêt aléatoire, est une méthode d'apprentissage supervisé reposant sur l'agrégation d'un grand nombre d'arbres de décision.
 
 Un arbre de décision construit progressivement une partition de l'espace des variables explicatives. À chaque nœud, une variable et un seuil sont sélectionnés afin de diviser les observations en deux groupes aussi homogènes que possible vis-à-vis de la variable cible.
 
@@ -330,7 +323,7 @@ Ce mécanisme est ensuite reproduit récursivement sur chacune des sous-régions
 
 Un arbre individuel possède une grande flexibilité mais peut être fortement dépendant de l'échantillon ayant servi à sa construction. Il présente donc un risque de variance élevée et de surapprentissage.
 
-Le \textit{Random Forest} cherche à réduire cette instabilité en combinant plusieurs arbres.
+Le Random Forest cherche à réduire cette instabilité en combinant plusieurs arbres.
 
 Deux mécanismes principaux sont utilisés.
 
@@ -351,9 +344,9 @@ Pour une forêt composée de $B$ arbres $T_b$, la prédiction finale s'écrit :
 
 La moyenne des prédictions permet ainsi de réduire la variance associée à un arbre individuel.
 
-Dans le cadre de ce mémoire, le \textit{Random Forest} présente plusieurs propriétés intéressantes. Il ne nécessite pas de spécifier à l'avance la forme de la relation entre les variables explicatives et la cible. Il peut également faire apparaître naturellement des interactions entre variables puisque les différentes séparations d'un arbre sont conditionnelles aux séparations effectuées précédemment.
+Dans le cadre de ce mémoire, le Random Forest présente plusieurs propriétés intéressantes. Il ne nécessite pas de spécifier à l'avance la forme de la relation entre les variables explicatives et la cible. Il peut également faire apparaître naturellement des interactions entre variables puisque les différentes séparations d'un arbre sont conditionnelles aux séparations effectuées précédemment.
 
-Il constitue ainsi une première méthode permettant de tester si l'écart entre les deux \textit{Best Estimate} présente une structure plus complexe que celle représentable par un GLM.
+Il constitue ainsi une première méthode permettant de tester si l'écart entre les deux Best Estimate présente une structure plus complexe que celle représentable par un GLM.
 
 En contrepartie, l'interprétation du modèle devient moins immédiate. Contrairement au GLM, il n'existe pas un coefficient directement associé à chaque variable. Des méthodes spécifiques doivent être mobilisées pour mesurer l'importance et l'effet des caractéristiques sur les prédictions.
 
@@ -362,9 +355,9 @@ En contrepartie, l'interprétation du modèle devient moins immédiate. Contrair
 
 Le deuxième modèle non linéaire retenu est l'\textit{Extreme Gradient Boosting}, généralement appelé XGBoost.
 
-Comme le \textit{Random Forest}, XGBoost repose sur des arbres de décision. La logique de construction est toutefois fondamentalement différente.
+Comme le Random Forest, XGBoost repose sur des arbres de décision. La logique de construction est toutefois fondamentalement différente.
 
-Dans une forêt aléatoire, les arbres sont construits de manière largement indépendante avant que leurs prédictions soient moyennées. Dans une méthode de \textit{boosting}, les arbres sont au contraire construits successivement. Chaque nouvel arbre vise à améliorer les erreurs commises par l'ensemble des arbres précédents.
+Dans une forêt aléatoire, les arbres sont construits de manière largement indépendante avant que leurs prédictions soient moyennées. Dans une méthode boosting, les arbres sont au contraire construits successivement. Chaque nouvel arbre vise à améliorer les erreurs commises par l'ensemble des arbres précédents.
 
 La prédiction d'un modèle composé de $K$ arbres peut s'écrire :
 
@@ -427,7 +420,7 @@ où $T$ correspond au nombre de feuilles de l'arbre et $w_j$ à la valeur associ
 
 Le paramètre $\gamma$ pénalise donc l'ajout de feuilles supplémentaires, tandis que $\lambda$ limite l'amplitude des valeurs attribuées aux feuilles. Ce mécanisme permet de rechercher un compromis entre amélioration de la prédiction et complexité du modèle.
 
-Une autre caractéristique importante du boosting est le \textit{learning rate}. Plutôt que d'ajouter intégralement chaque nouvel arbre à la prédiction, sa contribution peut être réduite par un paramètre $\eta$ :
+Une autre caractéristique importante du boosting est le learning rate. Plutôt que d'ajouter intégralement chaque nouvel arbre à la prédiction, sa contribution peut être réduite par un paramètre $\eta$ :
 
 \begin{equation}
     \widehat{y}_i^{(t)}
@@ -456,74 +449,61 @@ Le GLM présente l'avantage majeur de sa transparence. La relation entre les var
 
 Sa principale faiblesse réside dans les hypothèses imposées à la relation entre les variables. Si les mécanismes issus du modèle ALM présentent des non-linéarités, des seuils ou des interactions importantes, une structure linéaire peut ne pas être suffisamment flexible.
 
-Le \textit{Random Forest} permet de lever une grande partie de ces contraintes. Sa construction à partir d'arbres lui permet de représenter des comportements non linéaires sans nécessiter de transformation préalable des variables. Le mécanisme de bootstrap et l'agrégation d'un grand nombre d'arbres limitent par ailleurs l'instabilité d'un arbre de décision individuel.
+Le Random Forest permet de lever une grande partie de ces contraintes. Sa construction à partir d'arbres lui permet de représenter des comportements non linéaires sans nécessiter de transformation préalable des variables. Le mécanisme de bootstrap et l'agrégation d'un grand nombre d'arbres limitent par ailleurs l'instabilité d'un arbre de décision individuel.
 
 Son fonctionnement devient toutefois moins directement interprétable. De plus, les prédictions des arbres reposent sur des partitions de valeurs observées lors de l'apprentissage. Leur capacité à extrapoler en dehors du domaine de données couvert par la base est donc limitée.
 
 XGBoost possède généralement une flexibilité encore plus importante. La construction séquentielle permet de concentrer progressivement l'apprentissage sur les observations les plus difficiles à reproduire. Les nombreux paramètres de régularisation permettent également de contrôler finement la complexité du modèle.
 
-Cette flexibilité augmente toutefois le nombre d'hyperparamètres à déterminer et donc le risque de surapprentissage lorsque leur calibration est insuffisante. Elle accentue également l'effet ``boîte noire'' du modèle, ce qui rend nécessaire l'utilisation d'outils d'explicabilité complémentaires.
+Cette flexibilité augmente toutefois le nombre d'hyperparamètres à déterminer et donc le risque de surapprentissage lorsque leur calibration est insuffisante. Elle accentue également l'effet "boîte noire" du modèle, ce qui rend nécessaire l'utilisation d'outils d'explicabilité complémentaires.
 
-Le tableau \ref{tab:comparaison_modeles} synthétise les principales caractéristiques des trois modèles dans le contexte de l'étude.
+Le tableau suivant synthétise les principales caractéristiques des trois modèles dans le contexte de l'étude.
 
-\begin{table}[htbp]
-\centering
-\small
-\caption{Comparaison des modèles retenus dans le cadre de l'étude}
-\label{tab:comparaison_modeles}
-\renewcommand{\arraystretch}{1.4}
-\begin{tabular}{p{2.3cm} p{3cm} p{3cm} p{3cm} p{3cm}}
-\hline
-\textbf{Modèle}
-&
-\textbf{Principaux avantages}
-&
-\textbf{Principales limites}
-&
-\textbf{Interprétabilité}
-&
-\textbf{Rôle dans l'étude}
-\\
-\hline
+% Colonne X alignée à gauche, avec largeur relative ajustable
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash\hsize=#1\hsize}X}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
 
-GLM
-&
-Simplicité, rapidité, coefficients directement exploitables
-&
-Relations principalement linéaires et additives, interactions à spécifier
-&
-Élevée
-&
-Modèle de référence permettant d'évaluer l'intérêt d'une complexité supplémentaire
-\\
+\begin{table}[H]
+  \centering
+  \caption{Comparaison des modèles retenus dans le cadre de l'étude}
+  \label{tab:comparaison-modeles}
+  \footnotesize
+  \renewcommand{\arraystretch}{1.35}
+  \setlength{\tabcolsep}{6pt}
+  \begin{tabularx}{\textwidth}{@{}>{\bfseries}p{1.7cm} L{0.98} L{0.92} C{1.9cm} L{1.10}@{}}
+    \toprule
+    \rowcolor{rougeEnt}
+    \textcolor{white}{Modèle} &
+    \textcolor{white}{\textbf{Principaux avantages}} &
+    \textcolor{white}{\textbf{Principales limites}} &
+    \textcolor{white}{\textbf{Interprétabilité}} &
+    \textcolor{white}{\textbf{Rôle dans l'étude}} \\
+    \midrule
 
-Random Forest
-&
-Non-linéarités, interactions automatiques, réduction de la variance par agrégation
-&
-Extrapolation limitée, perte d'interprétabilité par rapport au GLM
-&
-Intermédiaire
-&
-Premier modèle non linéaire permettant de représenter des relations complexes
-\\
+    GLM &
+    Simplicité, rapidité, coefficients directement exploitables &
+    Relations principalement linéaires et additives, interactions à spécifier &
+    Élevée &
+    Modèle de référence permettant d'évaluer l'intérêt d'une complexité supplémentaire \\
 
-XGBoost
-&
-Grande flexibilité, interactions, apprentissage séquentiel et régularisation
-&
-Nombreux hyperparamètres, risque de surapprentissage, fonctionnement moins transparent
-&
-Faible directement, améliorée par SHAP
-&
-Modèle flexible destiné à rechercher une forte capacité de reproduction tout en permettant une analyse a posteriori
-\\
+    \rowcolor{rosePale}
+    Random Forest &
+    Non-linéarités, interactions automatiques, réduction de la variance par agrégation &
+    Extrapolation limitée, perte d'interprétabilité par rapport au GLM &
+    Intermédiaire &
+    Premier modèle non linéaire permettant de représenter des relations complexes \\
 
-\hline
-\end{tabular}
+    XGBoost &
+    Grande flexibilité, interactions, apprentissage séquentiel et régularisation &
+    Nombreux hyper\-paramètres, risque de surapprentissage, fonctionnement moins transparent &
+    Faible directement, améliorée par SHAP &
+    Modèle flexible destiné à rechercher une forte capacité de reproduction tout en permettant une analyse a posteriori \\
+
+    \bottomrule
+  \end{tabularx}
 \end{table}
 
-Une attention particulière doit enfin être portée à la notion de \textbf{domaine de validité}. Les données utilisées dans ce mémoire ne constituent pas un échantillon aléatoire représentatif de l'ensemble des portefeuilles d'assurance vie. Elles proviennent d'un portefeuille central auquel ont été appliquées différentes sensibilités.
+Une attention particulière doit enfin être portée à la notion de domaine de validité. Les données utilisées dans ce mémoire ne constituent pas un échantillon aléatoire représentatif de l'ensemble des portefeuilles d'assurance vie. Elles proviennent d'un portefeuille central auquel ont été appliquées différentes sensibilités.
 
 Les modèles appris doivent donc avant tout être considérés comme valides à l'intérieur du domaine couvert par ces sensibilités. Ce point est particulièrement important pour les méthodes fondées sur les arbres, dont la capacité d'extrapolation en dehors des valeurs rencontrées pendant l'apprentissage est faible.
 
@@ -538,24 +518,11 @@ Dans les sections suivantes, les différents modèles seront entraînés dans de
 
 \subsection{Séparation des données}
 
-L'apprentissage d'un modèle statistique nécessite de distinguer les observations 
-utilisées pour son estimation de celles servant à évaluer sa qualité. Un modèle évalué 
-sur les données ayant servi à sa construction produit en effet une mesure de performance 
-optimiste : il ne s'agit plus alors d'apprécier sa capacité à prédire de nouvelles 
-observations, mais uniquement sa capacité à reproduire celles qu'il a déjà rencontrées.
+L'apprentissage d'un modèle statistique nécessite de distinguer les observations utilisées pour son estimation de celles servant à évaluer sa qualité. Un modèle évalué sur les données ayant servi à sa construction produit en effet une mesure de performance optimiste : il ne s'agit plus alors d'apprécier sa capacité à prédire de nouvelles observations, mais uniquement sa capacité à reproduire celles qu'il a déjà rencontrées.
 
-Cette distinction revêt une importance particulière dans le cadre de cette étude. Les 
-trois modèles retenus présentent des niveaux de flexibilité très différents 
-(cf. section~3.2.3), et l'un des objectifs de la comparaison consiste précisément à 
-déterminer si la complexité supplémentaire introduite par les méthodes non linéaires 
-apporte un gain réel. Or les modèles les plus flexibles sont également ceux dont la 
-performance mesurée en apprentissage s'éloigne le plus de la performance réellement 
-obtenue sur de nouvelles observations. Une évaluation menée sur les seules données 
-d'apprentissage favoriserait donc mécaniquement le Random Forest et XGBoost, 
-indépendamment de leur véritable apport.
+Cette distinction revêt une importance particulière dans le cadre de cette étude. Les trois modèles retenus présentent des niveaux de flexibilité très différents, et l'un des objectifs de la comparaison consiste précisément à déterminer si la complexité supplémentaire introduite par les méthodes non linéaires apporte un gain réel. Or les modèles les plus flexibles sont également ceux dont la performance mesurée en apprentissage s'éloigne le plus de la performance réellement obtenue sur de nouvelles observations. Une évaluation menée sur les seules données d'apprentissage favoriserait donc mécaniquement le Random Forest et XGBoost, indépendamment de leur véritable apport.
 
-Formellement, l'échantillon complet $\mathcal{D} = \{(x_i, y_i)\}_{i=1}^{n}$ introduit à 
-l'équation~(3.4) est partitionné en deux sous-ensembles disjoints :
+Formellement, l'échantillon complet $\mathcal{D} = \{(x_i, y_i)\}_{i=1}^{n}$ introduit à l'équation~(3.4) est partitionné en deux sous-ensembles disjoints :
 
 \begin{equation}
 \mathcal{D} = \mathcal{D}_{\text{train}} \cup \mathcal{D}_{\text{test}}, 
@@ -564,80 +531,35 @@ l'équation~(3.4) est partitionné en deux sous-ensembles disjoints :
 \label{eq:partition-base}
 \end{equation}
 
-L'estimation de la fonction $\hat{f}$ définie à l'équation~(3.6) est réalisée uniquement 
-à partir de $\mathcal{D}_{\text{train}}$. L'échantillon $\mathcal{D}_{\text{test}}$ 
-n'intervient qu'au moment de l'évaluation finale des modèles, présentée à la 
-section~3.4.
+L'estimation de la fonction $\hat{f}$ définie à l'équation~(3.6) est réalisée uniquement à partir de $\mathcal{D}_{\text{train}}$. L'échantillon $\mathcal{D}_{\text{test}}$ n'intervient qu'au moment de l'évaluation finale des modèles.
 
 \subsubsection{Répartition retenue}
 
-La base est répartie entre un échantillon d'apprentissage représentant $70\,\%$ des 
-observations et un échantillon de test représentant les $30\,\%$ restants. Compte tenu 
-des $51\,840$ configurations disponibles (cf. section~2.3.8), cette répartition conduit à 
-$36\,288$ observations pour l'apprentissage et $15\,552$ observations pour le test.
+La base est répartie entre un échantillon d'apprentissage représentant $70\,\%$ des observations et un échantillon de test représentant les $30\,\%$ restants. Compte tenu des $51\,840$ configurations disponibles, cette répartition conduit à $36\,288$ observations pour l'apprentissage et $15\,552$ observations pour le test.
 
-Ce choix résulte d'un arbitrage entre deux exigences. L'échantillon d'apprentissage doit 
-être suffisamment fourni pour permettre l'estimation de modèles flexibles, en particulier 
-les méthodes fondées sur les arbres, dont la capacité à représenter des relations 
-complexes dépend directement du nombre d'observations disponibles dans chaque région de 
-l'espace des variables explicatives. L'échantillon de test doit pour sa part conserver un 
-effectif suffisant pour que les indicateurs de performance calculés à la section~3.4 
-soient estimés avec une précision satisfaisante.
+Ce choix résulte d'un arbitrage entre deux exigences. L'échantillon d'apprentissage doit être suffisamment fourni pour permettre l'estimation de modèles flexibles, en particulier les méthodes fondées sur les arbres, dont la capacité à représenter des relations complexes dépend directement du nombre d'observations disponibles dans chaque région de l'espace des variables explicatives. L'échantillon de test doit pour sa part conserver un effectif suffisant pour que les indicateurs de performance calculés à la section~3.4 soient estimés avec une précision satisfaisante.
 
-La taille de la base rend cet arbitrage relativement peu contraignant. Avec plus de 
-quinze mille observations, l'échantillon de test permet une évaluation stable des 
-indicateurs retenus. Un ratio plus favorable à l'apprentissage n'apporterait par ailleurs 
-qu'un gain marginal, le nombre d'observations disponibles étant déjà très élevé au regard 
-des neuf variables explicatives du modèle.
+La taille de la base rend cet arbitrage relativement peu contraignant. Avec plus de quinze mille observations, l'échantillon de test permet une évaluation stable des indicateurs retenus. Un ratio plus favorable à l'apprentissage n'apporterait par ailleurs qu'un gain marginal, le nombre d'observations disponibles étant déjà très élevé au regard des neuf variables explicatives du modèle.
 
 \subsubsection{Modalités du tirage}
 
-La répartition est effectuée par tirage aléatoire simple, ligne à ligne, parmi les 
-$51\,840$ configurations de la base. Chaque observation dispose ainsi de la même 
-probabilité d'être affectée à l'échantillon d'apprentissage, indépendamment des valeurs 
-prises par ses variables explicatives.
+La répartition est effectuée par tirage aléatoire simple, ligne à ligne, parmi les $51\,840$ configurations de la base. Chaque observation dispose ainsi de la même probabilité d'être affectée à l'échantillon d'apprentissage, indépendamment des valeurs prises par ses variables explicatives.
 
-Cette modalité de tirage appelle une précision quant à la nature de l'évaluation qu'elle 
-permet. La base ne résulte pas d'un échantillonnage aléatoire mais du croisement complet 
-des modalités retenues pour les neuf variables explicatives (cf. section~2.3.8). Deux 
-configurations peuvent donc y être très proches l'une de l'autre, ne différant que par la 
-modalité d'une seule variable, l'ensemble des autres hypothèses demeurant identiques.
+Cette modalité de tirage appelle une précision quant à la nature de l'évaluation qu'elle permet. La base ne résulte pas d'un échantillonnage aléatoire mais du croisement complet des modalités retenues pour les neuf variables explicatives. Deux configurations peuvent donc y être très proches l'une de l'autre, ne différant que par la modalité d'une seule variable, l'ensemble des autres hypothèses demeurant identiques.
 
-Un tirage aléatoire ligne à ligne conduit par conséquent à ce que des configurations 
-voisines dans la grille se répartissent de part et d'autre de la séparation. Une 
-observation de l'échantillon de test possède ainsi, avec une probabilité élevée, plusieurs 
-configurations directement adjacentes au sein de l'échantillon d'apprentissage.
+Un tirage aléatoire ligne à ligne conduit par conséquent à ce que des configurations voisines dans la grille se répartissent de part et d'autre de la séparation. Une observation de l'échantillon de test possède ainsi, avec une probabilité élevée, plusieurs configurations directement adjacentes au sein de l'échantillon d'apprentissage.
 
-L'échantillon de test mesure donc la capacité des modèles à interpoler à l'intérieur de la 
-grille des sensibilités réalisées, plutôt que leur capacité à extrapoler vers des 
-configurations réellement inédites. Cette portée doit être gardée à l'esprit lors de la 
-lecture des indicateurs présentés à la section~3.4, en particulier pour les méthodes 
-fondées sur les arbres, dont les limites en matière d'extrapolation ont déjà été relevées 
-à la section~3.2.3.
+L'échantillon de test mesure donc la capacité des modèles à interpoler à l'intérieur de la grille des sensibilités réalisées, plutôt que leur capacité à extrapoler vers des configurations réellement inédites. Cette portée doit être gardée à l'esprit lors de la lecture des indicateurs présentés à la section~3.4, en particulier pour les méthodes fondées sur les arbres, dont les limites en matière d'extrapolation ont déjà été relevées.
 
-Cette caractéristique ne remet pas en cause la pertinence de la démarche. L'objectif de 
-l'étude consiste à reproduire et à expliquer le comportement de SALLTO sur le domaine 
-couvert par les sensibilités, conformément au positionnement en métamodèle défini à la 
-section~3.1.3, et non à prédire des configurations situées hors de ce domaine. Elle 
-justifie néanmoins le recours à la validation externe présentée plus loin dans cette 
-section, seule à même d'évaluer la robustesse des modèles au-delà du domaine 
-d'apprentissage.
+Cette caractéristique ne remet pas en cause la pertinence de la démarche. L'objectif de l'étude consiste à reproduire et à expliquer le comportement de SALLTO sur le domaine couvert par les sensibilités, conformément au positionnement en métamodèle, et non à prédire des configurations situées hors de ce domaine. Elle justifie néanmoins le recours à la validation externe présentée plus loin dans cette section, seule à même d'évaluer la robustesse des modèles au-delà du domaine d'apprentissage.
 
 \subsubsection{Répétition de la séparation}
 
-La partition définie à l'équation~(\ref{eq:partition-base}) dépend du tirage aléatoire 
-ayant présidé à sa construction. Une répartition particulière peut ainsi se révéler 
-légèrement plus favorable à l'un des modèles, et les indicateurs de performance obtenus 
-comportent de ce fait une part de variabilité qui ne reflète pas la qualité intrinsèque 
-des modèles comparés.
+La partition définie à l'équation~(\ref{eq:partition-base}) dépend du tirage aléatoire ayant présidé à sa construction. Une répartition particulière peut ainsi se révéler légèrement plus favorable à l'un des modèles, et les indicateurs de performance obtenus comportent de ce fait une part de variabilité qui ne reflète pas la qualité intrinsèque des modèles comparés.
 
-La séparation n'est donc pas figée sur un tirage unique. L'opération est répétée à 
-plusieurs reprises, chaque nouvelle répartition donnant lieu à un réentraînement complet 
-des trois modèles et au calcul des indicateurs de performance correspondants.
+La séparation n'est donc pas figée sur un tirage unique. L'opération est répétée à plusieurs reprises, chaque nouvelle répartition donnant lieu à un réentraînement complet des trois modèles et au calcul des indicateurs de performance correspondants.
 
-En notant $\hat{f}^{(s)}$ le modèle estimé à partir de la $s$-ième répartition et 
-$M\big(\hat{f}^{(s)}\big)$ l'indicateur de performance associé, la comparaison porte 
-alors sur la moyenne obtenue sur l'ensemble des $S$ répétitions :
+En notant $\hat{f}^{(s)}$ le modèle estimé à partir de la $s$-ième répartition et $M\big(\hat{f}^{(s)}\big)$ l'indicateur de performance associé, la comparaison porte alors sur la moyenne obtenue sur l'ensemble des $S$ répétitions :
 
 \begin{equation}
 \bar{M} = \frac{1}{S} \sum_{s=1}^{S} M\big(\hat{f}^{(s)}\big),
@@ -652,34 +574,17 @@ ainsi que sur la dispersion de ces valeurs :
 \label{eq:dispersion-repetitions}
 \end{equation}
 
-Cette démarche poursuit deux objectifs. Elle fournit d'une part une estimation plus 
-fiable de la performance de chaque modèle, moins dépendante d'une répartition 
-particulière. Elle permet d'autre part d'apprécier la stabilité des résultats : une 
-dispersion faible indique que les performances observées ne résultent pas des 
-circonstances d'un tirage donné, tandis qu'une dispersion importante conduirait à nuancer 
-toute conclusion tirée de la comparaison des modèles.
+Cette démarche poursuit deux objectifs. Elle fournit d'une part une estimation plus fiable de la performance de chaque modèle, moins dépendante d'une répartition particulière. Elle permet d'autre part d'apprécier la stabilité des résultats : une dispersion faible indique que les performances observées ne résultent pas des circonstances d'un tirage donné, tandis qu'une dispersion importante conduirait à nuancer toute conclusion tirée de la comparaison des modèles.
 
-Ce point présente un intérêt particulier au regard de l'objectif de l'étude. La 
-comparaison entre le GLM et les méthodes non linéaires vise à déterminer si la complexité 
-supplémentaire de ces dernières est justifiée (cf. section~3.1.3). Un écart de 
-performance dont l'amplitude resterait comparable à la variabilité induite par le seul 
-choix de la répartition ne permettrait pas de conclure en ce sens.
+Ce point présente un intérêt particulier au regard de l'objectif de l'étude. La comparaison entre le GLM et les méthodes non linéaires vise à déterminer si la complexité supplémentaire de ces dernières est justifiée. Un écart de performance dont l'amplitude resterait comparable à la variabilité induite par le seul choix de la répartition ne permettrait pas de conclure en ce sens.
 
 \subsubsection{Validation croisée au sein de l'échantillon d'apprentissage}
 
-La détermination des hyperparamètres décrite à la section~3.3.2 nécessite de comparer 
-plusieurs configurations de chaque modèle. Cette comparaison suppose de disposer d'une 
-mesure de performance calculée sur des observations non utilisées pour l'estimation, sans 
-pour autant mobiliser l'échantillon de test.
+La détermination des hyperparamètres décrite à la section~3.3.2 nécessite de comparer plusieurs configurations de chaque modèle. Cette comparaison suppose de disposer d'unemesure de performance calculée sur des observations non utilisées pour l'estimation, sans pour autant mobiliser l'échantillon de test.
 
-Recourir à ce dernier pour sélectionner les hyperparamètres reviendrait en effet à 
-l'intégrer indirectement au processus de construction des modèles. Les valeurs retenues 
-seraient celles produisant les meilleurs résultats sur cet échantillon précis, et la 
-performance finale mesurée sur les mêmes observations perdrait son caractère hors 
-échantillon.
+Recourir à ce dernier pour sélectionner les hyperparamètres reviendrait en effet à l'intégrer indirectement au processus de construction des modèles. Les valeurs retenues seraient celles produisant les meilleurs résultats sur cet échantillon précis, et la performance finale mesurée sur les mêmes observations perdrait son caractère hors échantillon.
 
-Une validation croisée à $k$ blocs est donc mise en œuvre à l'intérieur du seul échantillon 
-d'apprentissage. Celui-ci est divisé en $k$ sous-ensembles de taille comparable :
+Une validation croisée à $k$ blocs est donc mise en œuvre à l'intérieur du seul échantillon d'apprentissage. Celui-ci est divisé en $k$ sous-ensembles de taille comparable :
 
 \begin{equation}
 \mathcal{D}_{\text{train}} = \bigcup_{m=1}^{k} \mathcal{D}_m, 
@@ -689,9 +594,7 @@ d'apprentissage. Celui-ci est divisé en $k$ sous-ensembles de taille comparable
 \label{eq:blocs-validation-croisee}
 \end{equation}
 
-Le modèle est ensuite estimé $k$ fois. À chaque itération $m$, l'apprentissage est réalisé 
-sur les $k-1$ blocs restants et l'évaluation sur le bloc $\mathcal{D}_m$ laissé de côté. 
-L'erreur de validation croisée correspond à la moyenne des erreurs ainsi obtenues :
+Le modèle est ensuite estimé $k$ fois. À chaque itération $m$, l'apprentissage est réalisé sur les $k-1$ blocs restants et l'évaluation sur le bloc $\mathcal{D}_m$ laissé de côté. L'erreur de validation croisée correspond à la moyenne des erreurs ainsi obtenues :
 
 \begin{equation}
 \text{Err}_{\text{CV}} = \frac{1}{k} \sum_{m=1}^{k} 
@@ -702,51 +605,23 @@ L\left(y_i, \hat{f}^{(-m)}(x_i)\right),
 
 où $\hat{f}^{(-m)}$ désigne le modèle estimé sans le bloc $\mathcal{D}_m$.
 
-Chaque observation de l'échantillon d'apprentissage contribue ainsi une fois à 
-l'évaluation et $k-1$ fois à l'estimation. Cette organisation permet d'exploiter 
-l'intégralité des données disponibles pour la calibration tout en préservant le caractère 
-hors échantillon de la mesure utilisée pour comparer les configurations.
+Chaque observation de l'échantillon d'apprentissage contribue ainsi une fois à l'évaluation et $k-1$ fois à l'estimation. Cette organisation permet d'exploiter l'intégralité des données disponibles pour la calibration tout en préservant le caractère hors échantillon de la mesure utilisée pour comparer les configurations.
 
-La configuration d'hyperparamètres retenue est celle minimisant 
-$\text{Err}_{\text{CV}}$. Le modèle final est ensuite réestimé sur l'intégralité de 
-l'échantillon d'apprentissage à partir de ces valeurs, puis évalué sur l'échantillon de 
-test.
+La configuration d'hyperparamètres retenue est celle minimisant $\text{Err}_{\text{CV}}$. Le modèle final est ensuite réestimé sur l'intégralité de l'échantillon d'apprentissage à partir de ces valeurs, puis évalué sur l'échantillon de test.
 
 \subsubsection{Validation externe sur un second portefeuille central}
 
-Les dispositifs précédents partagent une limite commune. L'échantillon de test comme les 
-blocs de validation croisée sont issus de la même grille de configurations, construite à 
-partir d'un unique portefeuille central. Ils permettent d'évaluer la capacité des modèles 
-à généraliser à l'intérieur de ce domaine, mais ne renseignent pas sur leur comportement 
-en dehors de celui-ci.
+Les dispositifs précédents partagent une limite commune. L'échantillon de test comme les blocs de validation croisée sont issus de la même grille de configurations, construite à partir d'un unique portefeuille central. Ils permettent d'évaluer la capacité des modèles à généraliser à l'intérieur de ce domaine, mais ne renseignent pas sur leur comportement en dehors de celui-ci.
 
-Cette limite correspond directement à la question du domaine de validité soulevée à la 
-section~3.2.3. Les relations apprises par les modèles décrivent le comportement de 
-SALLTO compte tenu du portefeuille, du générateur de scénarios économiques et des règles 
-de gestion retenus dans cette étude. Rien ne garantit a priori qu'elles demeurent 
-pertinentes pour un portefeuille présentant une structure différente.
+Cette limite correspond directement à la question du domaine de validité. Les relations apprises par les modèles décrivent le comportement de SALLTO compte tenu du portefeuille, du générateur de scénarios économiques et des règles de gestion retenus dans cette étude. Rien ne garantit a priori qu'elles demeurent pertinentes pour un portefeuille présentant une structure différente.
 
-Un dispositif de validation supplémentaire est donc mis en place. Une seconde base de 
-données est construite selon la même démarche que celle décrite au chapitre~2, mais à 
-partir d'un portefeuille central distinct de celui ayant servi à l'apprentissage. Les 
-mêmes variables explicatives et les mêmes modalités de sensibilité y sont appliquées, de 
-sorte que les deux bases demeurent comparables dans leur structure.
+Un dispositif de validation supplémentaire est donc mis en place. Une seconde base de données est construite selon la même démarche que celle décrite au chapitre~2, mais à partir d'un portefeuille central distinct de celui ayant servi à l'apprentissage. Les mêmes variables explicatives et les mêmes modalités de sensibilité y sont appliquées, de sorte que les deux bases demeurent comparables dans leur structure.
 
-Les modèles entraînés sur la première base sont appliqués à ces nouvelles configurations 
-sans aucune réestimation. Aucun paramètre n'est ajusté et aucun hyperparamètre n'est 
-recalibré : les modèles sont utilisés exactement tels qu'ils ont été construits.
+Les modèles entraînés sur la première base sont appliqués à ces nouvelles configurations sans aucune réestimation. Aucun paramètre n'est ajusté et aucun hyperparamètre n'est recalibré : les modèles sont utilisés exactement tels qu'ils ont été construits.
 
-Cette validation externe constitue le test de généralisation le plus exigeant de l'étude. 
-Elle permet d'apprécier si les relations identifiées entre les caractéristiques du 
-portefeuille et l'écart de valorisation possèdent une portée dépassant le seul 
-portefeuille central initial, ou si elles demeurent étroitement dépendantes de ses 
-caractéristiques propres.
+Cette validation externe constitue le test de généralisation le plus exigeant de l'étude. Elle permet d'apprécier si les relations identifiées entre les caractéristiques du portefeuille et l'écart de valorisation possèdent une portée dépassant le seul portefeuille central initial, ou si elles demeurent étroitement dépendantes de ses caractéristiques propres.
 
-L'enjeu dépasse la seule vérification technique. Un métamodèle dont les conclusions ne 
-seraient valables que pour un portefeuille donné présenterait un intérêt opérationnel 
-limité, tandis que la stabilité des facteurs explicatifs identifiés d'un portefeuille à 
-l'autre renforcerait leur interprétation actuarielle. Les résultats de cette validation 
-sont présentés au chapitre~4.
+L'enjeu dépasse la seule vérification technique. Un métamodèle dont les conclusions ne seraient valables que pour un portefeuille donné présenterait un intérêt opérationnel limité, tandis que la stabilité des facteurs explicatifs identifiés d'un portefeuille à l'autre renforcerait leur interprétation actuarielle. Les résultats de cette validation sont présentés au chapitre~4.
 
 \begin{table}[H]
 \centering
@@ -784,52 +659,23 @@ Base construite à partir d'un second portefeuille central &
 \subsection{Contrôle de la complexité et choix des hyperparamètres}
 \label{subsec:hyperparametres}
 
-L'estimation d'un modèle statistique fait intervenir deux catégories de quantités. Les 
-paramètres sont déterminés par l'algorithme lui-même à partir des données 
-d'apprentissage : il s'agit par exemple des coefficients $\beta_j$ du GLM ou des seuils 
-de division des arbres de décision. Les hyperparamètres sont au contraire fixés avant 
-l'apprentissage et définissent la manière dont celui-ci est conduit.
+L'estimation d'un modèle statistique fait intervenir deux catégories de quantités. Les paramètres sont déterminés par l'algorithme lui-même à partir des données d'apprentissage : il s'agit par exemple des coefficients $\beta_j$ du GLM ou des seuils de division des arbres de décision. Les hyperparamètres sont au contraire fixés avant l'apprentissage et définissent la manière dont celui-ci est conduit.
 
-Ces hyperparamètres déterminent principalement la flexibilité du modèle, c'est-à-dire 
-l'étendue de la famille de fonctions $\mathcal{F}$ dans laquelle la solution est 
-recherchée, conformément à la formulation de l'équation~(3.6). Leur calibration constitue 
-donc le principal levier de contrôle du surapprentissage.
+Ces hyperparamètres déterminent principalement la flexibilité du modèle, c'est-à-dire l'étendue de la famille de fonctions $\mathcal{F}$ dans laquelle la solution est recherchée, conformément à la formulation de l'équation~(3.6). Leur calibration constitue donc le principal levier de contrôle du surapprentissage.
 
 \subsubsection{Nature du risque de surapprentissage dans le cadre de l'étude}
 
-Le surapprentissage désigne la situation dans laquelle un modèle reproduit fidèlement les 
-observations ayant servi à son apprentissage, mais perd une partie de sa capacité à 
-prédire correctement de nouvelles observations. Le modèle n'apprend alors plus uniquement 
-la relation systématique reliant les variables explicatives à la cible : il apprend 
-également les fluctuations propres à l'échantillon utilisé.
+Le surapprentissage désigne la situation dans laquelle un modèle reproduit fidèlement les observations ayant servi à son apprentissage, mais perd une partie de sa capacité à prédire correctement de nouvelles observations. Le modèle n'apprend alors plus uniquement la relation systématique reliant les variables explicatives à la cible : il apprend également les fluctuations propres à l'échantillon utilisé.
 
-La nature de ce risque doit être précisée dans le cadre de cette étude. Les observations 
-de la base ne proviennent pas de mesures empiriques bruitées au sens habituel, mais des 
-projections réalisées avec SALLTO. Pour une configuration donnée des neuf variables 
-explicatives, le Best Estimate déterministe est entièrement déterminé par les hypothèses 
-retenues : une même configuration relancée dans le modèle produit exactement le même 
-résultat.
+La nature de ce risque doit être précisée dans le cadre de cette étude. Les observations de la base ne proviennent pas de mesures empiriques bruitées au sens habituel, mais des projections réalisées avec SALLTO. Pour une configuration donnée des neuf variables explicatives, le Best Estimate déterministe est entièrement déterminé par les hypothèses retenues : une même configuration relancée dans le modèle produit exactement le même résultat.
 
-Il n'en va pas de même pour le Best Estimate stochastique. Celui-ci est obtenu en 
-moyennant les flux actualisés sur les $1\,000$ simulations issues du générateur de 
-scénarios économiques (cf. section~2.2.3). Il constitue donc une estimation par 
-simulation, entachée d'une erreur d'échantillonnage de Monte-Carlo. Un même jeu 
-d'hypothèses relancé avec un autre tirage de scénarios conduirait à une valeur légèrement 
-différente.
+Il n'en va pas de même pour le Best Estimate stochastique. Celui-ci est obtenu en moyennant les flux actualisés sur les $1\,000$ simulations issues du générateur de scénarios économiques. Il constitue donc une estimation par simulation, entachée d'une erreur d'échantillonnage de Monte-Carlo. Un même jeu d'hypothèses relancé avec un autre tirage de scénarios conduirait à une valeur légèrement différente.
 
-Cette erreur d'estimation se répercute directement sur la variable cible, puisque 
-$\text{BE}_{\text{sto}}$ intervient au numérateur de l'équation~(3.1). Elle correspond 
-ainsi à une partie du terme $\varepsilon_i$ introduit à l'équation~(3.3), qui représente 
-la composante de l'écart non expliquée par les variables explicatives retenues.
+Cette erreur d'estimation se répercute directement sur la variable cible, puisque $\text{BE}_{\text{sto}}$ intervient au numérateur de l'équation~(3.1). Elle correspond ainsi à une partie du terme $\varepsilon_i$ introduit à l'équation~(3.3), qui représente la composante de l'écart non expliquée par les variables explicatives retenues.
 
-Un modèle suffisamment flexible peut chercher à reproduire ces fluctuations plutôt que la 
-relation sous-jacente. Il ajusterait alors des variations qui ne se reproduiraient pas 
-sur un nouveau tirage de scénarios économiques. Le risque de surapprentissage demeure 
-donc réel, malgré le caractère contrôlé de la base de données.
+Un modèle suffisamment flexible peut chercher à reproduire ces fluctuations plutôt que la relation sous-jacente. Il ajusterait alors des variations qui ne se reproduiraient pas sur un nouveau tirage de scénarios économiques. Le risque de surapprentissage demeure donc réel, malgré le caractère contrôlé de la base de données.
 
-Ce phénomène s'inscrit dans le compromis classique entre biais et variance. Pour une 
-configuration $x$ donnée, l'erreur quadratique moyenne attendue d'un modèle $\hat{f}$ 
-peut se décomposer sous la forme :
+Ce phénomène s'inscrit dans le compromis classique entre biais et variance. Pour une configuration $x$ donnée, l'erreur quadratique moyenne attendue d'un modèle $\hat{f}$ peut se décomposer sous la forme :
 
 \begin{equation}
 \mathbb{E}\left[\left(Y - \hat{f}(x)\right)^2\right]
@@ -839,71 +685,55 @@ peut se décomposer sous la forme :
 \label{eq:biais-variance}
 \end{equation}
 
-Un modèle trop contraint présente un biais élevé : il ne parvient pas à représenter la 
-véritable relation $f$. Un modèle trop flexible présente au contraire une variance 
-élevée : ses prédictions dépendent fortement de l'échantillon particulier ayant servi à 
-son apprentissage. Le terme $\sigma^2$ correspond à la part d'incertitude qu'aucun modèle 
-ne peut expliquer, et qui recouvre ici l'erreur de simulation évoquée précédemment.
+Un modèle trop contraint présente un biais élevé : il ne parvient pas à représenter la véritable relation $f$. Un modèle trop flexible présente au contraire une varianceélevée : ses prédictions dépendent fortement de l'échantillon particulier ayant servi à son apprentissage. Le terme $\sigma^2$ correspond à la part d'incertitude qu'aucun modèle ne peut expliquer, et qui recouvre ici l'erreur de simulation évoquée précédemment.
 
-Le choix des hyperparamètres revient donc à positionner chaque modèle au meilleur 
-compromis entre ces deux sources d'erreur. Les sections suivantes présentent, pour chacun 
-des trois modèles, les hyperparamètres retenus, leur rôle dans le contrôle de la 
-complexité et les valeurs finalement adoptées.
+Le choix des hyperparamètres revient donc à positionner chaque modèle au meilleur compromis entre ces deux sources d'erreur. Les sections suivantes présentent, pour chacun des trois modèles, les hyperparamètres retenus, leur rôle dans le contrôle de la complexité et les valeurs finalement adoptées.
 
 \subsubsection{Le GLM}
 
-Le GLM constitue le modèle le moins exposé au surapprentissage parmi les trois retenus. 
-La base comporte $51\,840$ observations pour seulement neuf variables explicatives, soit 
-un rapport entre le nombre d'observations et le nombre de paramètres très largement 
-favorable. La famille de fonctions $\mathcal{F}$ dans laquelle le modèle est recherché 
-est par ailleurs fortement contrainte, comme indiqué à la section~3.1.1 : elle se limite 
-aux combinaisons linéaires des variables explicatives.
+Le GLM constitue le modèle le moins exposé au surapprentissage parmi les trois retenus. La base comporte $51\,840$ observations pour seulement neuf variables explicatives, soit un rapport entre le nombre d'observations et le nombre de paramètres très largement favorable. La famille de fonctions $\mathcal{F}$ dans laquelle le modèle est recherché est par ailleurs fortement contrainte : elle se limite aux combinaisons linéaires des variables explicatives.
 
-Le modèle ne comporte de ce fait aucun hyperparamètre à calibrer. Les coefficients 
-$\beta_j$ sont directement estimés par maximum de vraisemblance à partir de l'échantillon 
-d'apprentissage.
+Le modèle ne comporte de ce fait aucun hyperparamètre à calibrer. Les coefficients $\beta_j$ sont directement estimés par maximum de vraisemblance à partir de l'échantillon d'apprentissage.
 
-Le principal risque associé à ce modèle ne concerne donc pas sa capacité de 
-généralisation, mais la stabilité de ses coefficients. En présence d'une corrélation 
-importante entre plusieurs variables explicatives, les estimateurs $\hat{\beta}_j$ 
-peuvent présenter une variance élevée. Leur amplitude, voire leur signe, devient alors 
-sensible à de faibles variations de l'échantillon. Le modèle conserve dans ce cas une 
-qualité d'ajustement globale satisfaisante, mais l'interprétation individuelle de chaque 
-coefficient perd sa fiabilité.
+Le principal risque associé à ce modèle ne concerne donc pas sa capacité de généralisation, mais la stabilité de ses coefficients. En présence d'une corrélation importante entre plusieurs variables explicatives, les estimateurs $\hat{\beta}_j$ peuvent présenter une variance élevée. Leur amplitude, voire leur signe, devient alors sensible à de faibles variations de l'échantillon. Le modèle conserve dans ce cas une qualité d'ajustement globale satisfaisante, mais l'interprétation individuelle de chaque coefficient perd sa fiabilité.
 
-Cette question est déterminante ici, puisque l'intérêt principal du GLM dans cette étude 
-réside précisément dans la lecture directe de ses coefficients (cf. section~3.2.1).
+Cette question est déterminante ici, puisque l'intérêt principal du GLM dans cette étude réside précisément dans la lecture directe de ses coefficients.
 
-Un facteur d'inflation de la variance, ou VIF (\textit{Variance Inflation Factor}), a 
-donc été calculé pour chacune des neuf variables. Cet indicateur mesure dans quelle 
-proportion la variance d'un coefficient estimé se trouve augmentée par la corrélation de 
-la variable concernée avec les autres variables du modèle. Il s'écrit :
+Un facteur d'inflation de la variance, ou VIF (\textit{Variance Inflation Factor}), a donc été calculé pour chacune des neuf variables. Cet indicateur mesure dans quelle proportion la variance d'un coefficient estimé se trouve augmentée par la corrélation de la variable concernée avec les autres variables du modèle. Il s'écrit :
 
 \begin{equation}
 \text{VIF}_j = \frac{1}{1 - R_j^2},
 \label{eq:vif}
 \end{equation}
 
-où $R_j^2$ désigne le coefficient de détermination obtenu en régressant la variable $X_j$ 
-sur l'ensemble des autres variables explicatives. Une valeur proche de $1$ traduit une 
-variable pratiquement indépendante des autres. Les seuils de $5$ et $10$ sont 
-habituellement retenus comme indicateurs d'une colinéarité respectivement modérée et 
-préoccupante.
+où $R_j^2$ désigne le coefficient de détermination obtenu en régressant la variable $X_j$ sur l'ensemble des autres variables explicatives. Une valeur proche de $1$ traduit une variable pratiquement indépendante des autres. Les seuils de $5$ et $10$ sont habituellement retenus comme indicateurs d'une colinéarité respectivement modérée et préoccupante.
 
-La structure de la base rend ce diagnostic largement prévisible. Les observations 
-résultent du croisement complet des modalités retenues pour les neuf variables 
-(cf. section~2.3.8). Chaque modalité d'une variable est donc associée au même nombre 
-d'observations pour chacune des modalités des autres variables. Ce plan factoriel complet 
-assure par construction une quasi-orthogonalité entre les variables explicatives, 
-contrairement à des données observées dans lesquelles les facteurs économiques 
-apparaissent naturellement corrélés.
+La structure de la base rend ce diagnostic largement prévisible. Les observations résultent du croisement complet des modalités retenues pour les neuf variables. Chaque modalité d'une variable est donc associée au même nombre d'observations pour chacune des modalités des autres variables. Ce plan factoriel complet assure par construction une quasi-orthogonalité entre les variables explicatives, contrairement à des données observées dans lesquelles les facteurs économiques apparaissent naturellement corrélés.
 
-\textcolor{gray}{[Insérer ici les valeurs de VIF obtenues pour les neuf variables et le 
-commentaire associé.]}
+\begin{table}[H]
+\centering
+\caption{Facteur d'inflation de la variance des neuf variables explicatives}
+\begin{tabular}{lcl}
+\filetHaut
+\rowcolor{ForsidesRose}
+\enTete{Variable} & \enTete{VIF} & \enTete{Lecture} \\
+\filetMilieu
+Courbe des taux         & 1,00 & Absence de colinéarité \\
+Spread                  & 1,00 & Absence de colinéarité \\
+Volatilité des taux     & 1,00 & Absence de colinéarité \\
+Volatilité des actions  & 1,00 & Absence de colinéarité \\
+Garantie de taux        & 1,00 & Absence de colinéarité \\
+PMVL actions            & 1,00 & Absence de colinéarité \\
+Rachats conjoncturels   & 1,00 & Absence de colinéarité \\
+Duration du passif      & 1,00 & Absence de colinéarité \\
+TMG                     & 1,00 & Absence de colinéarité \\
+\filetBas
+\end{tabular}
+\end{table}
 
-Une version pénalisée du GLM, de type Ridge ou Lasso, n'a pas été retenue. Ces méthodes 
-consistent à ajouter à la fonction de perte un terme pénalisant l'amplitude des 
-coefficients, par exemple :
+Les neuf variables présentent un VIF égal à 1,00, très en deçà des seuils de 5 et de 10. Ce résultat confirme l'orthogonalité attendue du plan factoriel complet : aucune variable explicative n'est reconstituée, même partiellement, par les huit autres. Les coefficients estimés peuvent donc être interprétés individuellement, et le recours à une pénalisation de type Ridge ou Lasso n'apporterait aucun gain de stabilité.
+
+Une version pénalisée du GLM, de type Ridge ou Lasso, n'a donc pas été retenue. Ces méthodes consistent à ajouter à la fonction de perte un terme pénalisant l'amplitude des coefficients, par exemple :
 
 \begin{equation}
 \hat{\beta}^{\text{ridge}} = \arg\min_{\beta} 
@@ -932,8 +762,7 @@ Trois raisons justifient de ne pas recourir à ces méthodes dans le cadre de ce
 
 La sélection de variables opérée par une pénalisation de type Lasso présenterait par 
 ailleurs un intérêt limité. Les neuf variables retenues résultent déjà d'une sélection 
-préalable, conduite à partir des deux études de sensibilité présentées à la 
-section~2.3.6.
+préalable, conduite à partir des deux études de sensibilité.
 
 \subsubsection{Le Random Forest}
 
@@ -941,7 +770,7 @@ Le Random Forest repose sur l'agrégation d'arbres de décision, dont le mécani
 construction a été décrit à la section~3.2.2.1. Quatre hyperparamètres principaux 
 interviennent dans sa calibration.
 
-\paragraph{Profondeur maximale des arbres.}
+\paragraph{Profondeur maximale des arbres}
 En l'absence de contrainte, un arbre de décision poursuit la division récursive de 
 l'espace des variables explicatives jusqu'à ce que les régions obtenues deviennent 
 homogènes. Les feuilles terminales peuvent alors ne contenir qu'un très petit nombre 
@@ -960,9 +789,14 @@ l'équation~(\ref{eq:biais-variance}). Une contrainte trop forte conduirait tout
 modèle excessivement rigide, incapable de représenter les non-linéarités que la méthode a 
 précisément pour objet de capter.
 
-\textcolor{gray}{[Plage testée et valeur retenue.]}
+Quatre modalités ont été retenues pour ce paramètre : des profondeurs
+maximales de 8, 12 et 16 divisions, ainsi que l'absence de contrainte. La
+configuration finalement adoptée correspond à cette dernière modalité, la
+limitation de la profondeur dégradant systématiquement l'erreur de validation
+croisée, de façon marginale à partir de seize niveaux et très sensible en
+deçà de douze.
 
-\paragraph{Taille minimale des feuilles.}
+\paragraph{Taille minimale des feuilles}
 Ce paramètre impose qu'une division ne soit acceptée que si chacune des deux régions 
 issues de la séparation contient au moins un nombre minimal d'observations. Il complète 
 la limitation de la profondeur en agissant à un niveau plus local : la profondeur 
@@ -975,9 +809,11 @@ suffisant. Elle limite ainsi la possibilité pour le modèle d'isoler des config
 particulières dont le comportement s'écarterait de la tendance d'ensemble uniquement du 
 fait de l'erreur de simulation.
 
-\textcolor{gray}{[Plage testée et valeur retenue.]}
+Les valeurs 1, 5, 20 et 50 ont été testées. La valeur retenue est de une
+observation par feuille, toute contrainte plus forte se traduisant par une
+dégradation de l'erreur de validation croisée.
 
-\paragraph{Nombre de variables candidates à chaque division.}
+\paragraph{Nombre de variables candidates à chaque division}
 Le mécanisme de sélection aléatoire des variables décrit à la section~3.2.2.1 est 
 gouverné par un hyperparamètre déterminant le nombre de variables proposées à chaque 
 nœud. Une valeur faible accroît la diversité entre les arbres et réduit leur corrélation, 
@@ -987,13 +823,26 @@ individuelle de chacun d'eux.
 
 Ce compromis mérite une attention particulière dans le cadre de cette étude. Le modèle ne 
 comporte que neuf variables explicatives, toutes retenues pour leur contribution 
-significative à la variable cible (cf. section~2.3.6). L'espace des variables est donc 
+significative à la variable cible. L'espace des variables est donc 
 réduit et ne contient aucune variable négligeable dont l'exclusion serait sans 
 conséquence.
 
-\textcolor{gray}{[Plage testée et valeur retenue.]}
+Les valeurs 3, 5, 7 et 9 ont été testées. La configuration retenue rend
+l'intégralité des neuf variables disponibles à chaque division.
 
-\paragraph{Nombre d'arbres.}
+Ce résultat appelle une précision. En fixant le nombre de variables
+candidates à la totalité des variables disponibles, la sélection aléatoire
+décrite à la section~3.2.2.1 devient inopérante : le modèle retenu correspond
+alors à un \emph{bagging} d'arbres de décision plutôt qu'à un Random Forest
+au sens strict. Cette configuration s'explique par la structure de la base.
+Les neuf variables résultent d'une sélection préalable et aucune n'est
+négligeable ; la décorrélation obtenue en restreignant le nombre de variables
+candidates prive donc les arbres d'une information utile sans contrepartie.
+L'écart entre sept et neuf variables candidates reste toutefois limité, de
+l'ordre de 2~\%, ce qui indique que le mécanisme de diversification joue ici
+un rôle secondaire par rapport au tirage bootstrap.
+
+\paragraph{Nombre d'arbres}
 Il convient de préciser que le nombre d'arbres $B$ ne constitue pas un paramètre de 
 surapprentissage. La prédiction finale du modèle correspond en effet à une moyenne des 
 prédictions individuelles, conformément à l'équation~(3.15). Augmenter $B$ revient à 
@@ -1006,8 +855,41 @@ entre stabilité des résultats et temps de calcul, et non d'un arbitrage entre 
 variance. Cette propriété distingue nettement le Random Forest des méthodes de boosting, 
 pour lesquelles le nombre d'arbres joue au contraire un rôle central.
 
-\textcolor{gray}{[Valeur retenue et justification, éventuellement appuyée sur la 
-stabilisation de l'erreur \textit{Out of Bag} présentée à la section~3.3.3.]}
+Les valeurs 25, 50, 100, 150, 200, 300, 400 et 500 ont été examinées. Le
+nombre de 300 arbres a été retenu au vu de la stabilisation de l'erreur
+\emph{Out of Bag} présentée à la section~3.3.3.2.
+
+\begin{table}[H]
+\centering
+\caption{Erreur de validation croisée du Random Forest selon les
+hyperparamètres testés (points de PM, 300 arbres)}
+\label{tab:grillerf}
+\begin{tabular}{lcc}
+\filetHaut
+\rowcolor{ForsidesRose}
+\enTete{Valeur testée} & \enTete{ErrCV} & \enTete{Écart-type} \\
+\filetMilieu
+\multicolumn{3}{l}{\sousTitre{Profondeur maximale (feuilles d'une observation, neuf variables candidates)}} \\
+\ligneRetenue \vRetenue{Aucune limite} & \vRetenue{1,710} & \vRetenue{0,040} \\
+16 & 1,738 & 0,040 \\
+12 & 2,110 & 0,036 \\
+8  & 2,856 & 0,036 \\
+\addlinespace
+\multicolumn{3}{l}{\sousTitre{Taille minimale des feuilles (profondeur non contrainte, neuf variables)}} \\
+\ligneRetenue \vRetenue{1} & \vRetenue{1,710} & \vRetenue{0,040} \\
+5  & 2,070 & 0,040 \\
+20 & 2,567 & 0,044 \\
+50 & 2,890 & 0,050 \\
+\addlinespace
+\multicolumn{3}{l}{\sousTitre{Variables candidates par division (profondeur non contrainte, feuilles d'une observation)}} \\
+\ligneRetenue \vRetenue{9} & \vRetenue{1,710} & \vRetenue{0,040} \\
+7 & 1,751 & 0,036 \\
+5 & 1,872 & 0,036 \\
+3 & 2,162 & 0,038 \\
+\filetBas
+\end{tabular}
+\end{table}
+
 
 \subsubsection{Le XGBoost}
 
@@ -1027,7 +909,8 @@ Une valeur faible de $\eta$ ralentit la convergence et nécessite un nombre d'ar
 important, mais chaque correction devient plus progressive et le modèle final dépend 
 moins fortement d'observations particulières.
 
-\textcolor{gray}{[Plage testée et valeur retenue.]}
+Les valeurs \(0{,}01\), \(0{,}02\), \(0{,}05\) et \(0{,}1\) ont été testées.
+La valeur retenue est \(\eta = 0{,}02\).
 
 \paragraph{Nombre d'arbres et arrêt anticipé.}
 Le nombre d'arbres n'est pas fixé a priori mais déterminé à partir des données, au moyen 
@@ -1055,12 +938,16 @@ L'échantillon de validation mobilisé à cette fin est prélevé au sein de l'�
 d'apprentissage, conformément au protocole défini à la section~3.3.1. L'échantillon de 
 test n'intervient à aucun moment dans la détermination du nombre d'arbres.
 
-Ce mécanisme interagit directement avec le \textit{learning rate} : plus $\eta$ est 
+Ce mécanisme interagit directement avec le learning rate : plus $\eta$ est 
 faible, plus les itérations successives apportent des modifications limitées, et plus la 
 détermination du nombre optimal d'arbres devient précise.
 
-\textcolor{gray}{[Nombre maximal d'itérations autorisé, patience retenue et nombre 
-d'arbres finalement conservé.]}
+Le nombre maximal d'itérations a été fixé à \(K_{\max} = 15\,000\) et la
+patience à 50 itérations. L'arrêt anticipé s'est déclenché à
+\(t^{\star} = 12\,516\) arbres, soit avant la borne autorisée. Cette dernière
+n'a donc pas contraint la sélection, et le nombre d'arbres retenu résulte
+effectivement du minimum de l'erreur de validation et non d'une limite fixée
+a priori.
 
 \paragraph{Profondeur maximale des arbres.}
 La profondeur maximale est contrainte selon le même principe que pour le Random Forest. 
@@ -1076,10 +963,15 @@ de $3$ des interactions entre trois variables, et ainsi de suite.
 Ce paramètre doit par conséquent être calibré avec attention. Une profondeur trop faible 
 priverait le modèle de la capacité à représenter les interactions entre variables, alors 
 que l'existence de telles interactions constitue précisément l'une des hypothèses 
-motivant le recours aux méthodes non linéaires (cf. section~3.1.2). Une profondeur trop 
+motivant le recours aux méthodes non linéaires. Une profondeur trop 
 élevée exposerait à l'inverse le modèle au surapprentissage.
 
-\textcolor{gray}{[Plage testée et valeur retenue.]}
+Les profondeurs 2, 3, 4, 5, 6 et 8 ont été testées, et la valeur de 6 a été
+retenue. L'erreur de validation croisée décroît de façon monotone jusqu'à
+cette profondeur, ce qui constitue un premier élément en faveur de
+l'existence d'interactions d'ordre supérieur à deux dans les résultats
+produits par SALLTO. Ce point sera repris à la section~4.3 à partir de
+l'analyse des valeurs de Shapley.
 
 \paragraph{Sous-échantillonnage des observations et des variables.}
 Un sous-échantillonnage aléatoire est appliqué lors de la construction de chaque arbre, 
@@ -1097,7 +989,10 @@ particulières.
 Comme pour le Random Forest, le sous-échantillonnage des variables doit rester modéré 
 compte tenu du nombre restreint de variables explicatives retenues.
 
-\textcolor{gray}{[Plages testées et valeurs retenues pour les deux fractions.]}
+Les fractions \(0{,}6\), \(0{,}8\) et \(1{,}0\) ont été testées pour chacune
+des deux dimensions. La valeur de \(0{,}8\) a été retenue dans les deux cas,
+soit un sous-échantillonnage modéré conforme à la remarque formulée plus haut
+sur le nombre restreint de variables explicatives.
 
 \paragraph{Paramètres de régularisation.}
 Les paramètres $\gamma$ et $\lambda$ introduits à l'équation~(3.19) complètent ces 
@@ -1110,7 +1005,44 @@ Ces deux paramètres opèrent au niveau de chaque arbre pris individuellement, t
 l'arrêt anticipé agit au niveau du nombre total d'arbres composant le modèle. Ils sont 
 donc complémentaires.
 
-\textcolor{gray}{[Plages testées et valeurs retenues.]}
+Les valeurs \(0{,}0\), \(0{,}1\) et \(1{,}0\) ont été testées pour \(\gamma\),
+et les valeurs \(0{,}5\), \(1{,}0\), \(5{,}0\) et \(10{,}0\) pour \(\lambda\).
+La configuration retenue associe \(\gamma = 0\) et \(\lambda = 5\).
+
+Le paramètre \(\gamma\) constitue de loin l'hyperparamètre le plus
+discriminant de la recherche. Toutes les configurations construites avec
+\(\gamma = 1\) atteignent une erreur de validation croisée voisine de celle du
+GLM : la pénalisation du gain minimal exigé pour accepter une division bloque
+alors la construction des arbres et prive le modèle de sa flexibilité. La
+régularisation opère ici par le sous-échantillonnage et par la contrainte
+\(\lambda\) sur l'amplitude des valeurs de feuilles, non par la limitation du
+nombre de divisions.
+
+\begin{table}[H]
+\centering
+\caption{Erreur de validation croisée du XGBoost selon les hyperparamètres
+testés (points de PM, 40 configurations évaluées)}
+\label{tab:grillexgb}
+\begin{tabular}{lccc}
+\filetHaut
+\rowcolor{ForsidesRose}
+\enTete{Valeur testée} & \enTete{ErrCV minimale} & \enTete{ErrCV médiane} & \enTete{Configurations} \\
+\filetMilieu
+\multicolumn{4}{l}{\sousTitre{Paramètre $\gamma$}} \\
+\ligneRetenue \vRetenue{0,0} & \vRetenue{2,124} & \vRetenue{2,443} & \vRetenue{11} \\
+0,1 & 3,292 & 3,457 & 15 \\
+1,0 & 3,887 & 3,938 & 14 \\
+\addlinespace
+\multicolumn{4}{l}{\sousTitre{Profondeur maximale (configurations à $\gamma = 0$)}} \\
+2 & 3,206 & --- & 2 \\
+3 & 2,703 & --- & 2 \\
+4 & 2,438 & --- & 3 \\
+5 & 2,418 & --- & 1 \\
+\ligneRetenue \vRetenue{6} & \vRetenue{2,124} & --- & \vRetenue{3} \\
+\filetBas
+\end{tabular}
+\end{table}
+
 
 \subsubsection{Méthode de recherche retenue}
 
@@ -1124,46 +1056,72 @@ cette erreur.
 Le modèle correspondant est ensuite réestimé sur l'intégralité de l'échantillon 
 d'apprentissage à partir de ces valeurs, puis évalué sur l'échantillon de test.
 
-\textcolor{gray}{[Préciser la méthode d'exploration retenue : recherche exhaustive 
-(\textit{grid search}) ou recherche aléatoire (\textit{random search}), nombre de 
-configurations évaluées, nombre de blocs $k$ de la validation croisée et critère 
-d'optimisation retenu.]}
+La méthode d'exploration diffère selon le modèle. L'espace des
+hyperparamètres du Random Forest se réduit à trois dimensions discrètes, ce
+qui rend praticable une recherche exhaustive : les 64 combinaisons issues du
+croisement des quatre profondeurs, des quatre tailles minimales de feuilles
+et des quatre nombres de variables candidates ont toutes été évaluées.
+
+L'espace du XGBoost en comporte sept, soit plusieurs milliers de combinaisons
+pour les plages retenues. Une recherche aléatoire portant sur 40
+configurations tirées au sein de ces plages a donc été privilégiée, cette
+approche couvrant l'espace de façon plus efficace qu'une grille de même
+budget de calcul.
+
+Dans les deux cas, la validation croisée comporte \(k = 5\) blocs et le
+critère d'optimisation est la RMSE, conformément au choix formulé à la
+section~3.4.2. Le tableau~\ref{tab:recherche} récapitule ce dispositif et le
+tableau~\ref{tab:hyperparametres} les valeurs finalement adoptées.
 
 Le tableau~\ref{tab:hyperparametres-retenus} synthétise les valeurs finalement adoptées 
 pour chacun des modèles.
 
 \begin{table}[H]
 \centering
-\caption{Hyperparamètres retenus pour chaque modèle}
-\label{tab:hyperparametres-retenus}
-\renewcommand{\arraystretch}{1.3}
-\begin{tabular}{p{2.6cm} p{4.6cm} p{3.2cm} p{3.2cm}}
-\toprule
-\rowcolor{rougeEntreprise}
-\textcolor{white}{\textbf{Modèle}} &
-\textcolor{white}{\textbf{Hyperparamètre}} &
-\textcolor{white}{\textbf{Plage testée}} &
-\textcolor{white}{\textbf{Valeur retenue}} \\
-\midrule
-GLM & Aucun & \textit{Sans objet} & \textit{Sans objet} \\
+\caption{Dispositif de recherche des hyperparamètres}
+\label{tab:recherche}
+\begin{tabular}{lcc}
+\filetHaut
+\rowcolor{ForsidesRose}
+\enTete{Élément} & \enTete{Random Forest} & \enTete{XGBoost} \\
+\filetMilieu
+Méthode d'exploration            & Recherche exhaustive & Recherche aléatoire \\
+Configurations évaluées          & 64  & 40 \\
+Blocs de validation croisée      & 5   & 5 \\
+Critère d'optimisation           & RMSE & RMSE \\
 \addlinespace
-\rowcolor{rosePale}
-Random Forest & Nombre d'arbres & \textcolor{gray}{[...]} & \textcolor{gray}{[...]} \\
-\rowcolor{rosePale}
- & Profondeur maximale & \textcolor{gray}{[...]} & \textcolor{gray}{[...]} \\
-\rowcolor{rosePale}
- & Taille minimale des feuilles & \textcolor{gray}{[...]} & \textcolor{gray}{[...]} \\
-\rowcolor{rosePale}
- & Variables par division & \textcolor{gray}{[...]} & \textcolor{gray}{[...]} \\
+Meilleure ErrCV (points de PM)   & \vRetenue{1,710} & \vRetenue{2,124} \\
+ErrCV la plus élevée de la grille & 3,238 & 3,971 \\
+\filetBas
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Hyperparamètres testés et valeurs retenues pour chacun des modèles}
+\label{tab:hyperparametres}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llp{5.4cm}l}
+\filetHaut
+\rowcolor{ForsidesRose}
+\enTete{Modèle} & \enTete{Hyperparamètre} & \enTete{Plage testée} & \enTete{Valeur retenue} \\
+\filetMilieu
+GLM & Aucun & Sans objet & Sans objet \\
 \addlinespace
-XGBoost & \textit{Learning rate} $\eta$ & \textcolor{gray}{[...]} & \textcolor{gray}{[...]} \\
- & Nombre d'arbres & \textit{Arrêt anticipé} & \textcolor{gray}{[...]} \\
- & Profondeur maximale & \textcolor{gray}{[...]} & \textcolor{gray}{[...]} \\
- & Fraction d'observations & \textcolor{gray}{[...]} & \textcolor{gray}{[...]} \\
- & Fraction de variables & \textcolor{gray}{[...]} & \textcolor{gray}{[...]} \\
- & $\gamma$ & \textcolor{gray}{[...]} & \textcolor{gray}{[...]} \\
- & $\lambda$ & \textcolor{gray}{[...]} & \textcolor{gray}{[...]} \\
-\bottomrule
+Random Forest & Nombre d'arbres              & 25 ; 50 ; 100 ; 150 ; 200 ; 300 ; 400 ; 500 & \vRetenue{300} \\
+              & Profondeur maximale          & 8 ; 12 ; 16 ; aucune limite                 & \vRetenue{Aucune limite} \\
+              & Taille minimale des feuilles & 1 ; 5 ; 20 ; 50                             & \vRetenue{1} \\
+              & Variables par division       & 3 ; 5 ; 7 ; 9                               & \vRetenue{9} \\
+\addlinespace
+XGBoost & Learning rate $\eta$        & 0,01 ; 0,02 ; 0,05 ; 0,1                  & \vRetenue{0,02} \\
+        & Nombre d'arbres             & Arrêt anticipé ($K_{\max} = 15\,000$, patience 50) & \vRetenue{12\,516} \\
+        & Profondeur maximale         & 2 ; 3 ; 4 ; 5 ; 6 ; 8                     & \vRetenue{6} \\
+        & Fraction d'observations     & 0,6 ; 0,8 ; 1,0                           & \vRetenue{0,8} \\
+        & Fraction de variables       & 0,6 ; 0,8 ; 1,0                           & \vRetenue{0,8} \\
+        & $\gamma$                    & 0,0 ; 0,1 ; 1,0                           & \vRetenue{0,0} \\
+        & $\lambda$                   & 0,5 ; 1,0 ; 5,0 ; 10,0                    & \vRetenue{5,0} \\
+\filetBas
 \end{tabular}
 \end{table}
 
@@ -1205,7 +1163,21 @@ augmente, puisque ce paramètre ne constitue pas un levier de surapprentissage. 
 de validation doit y décroître puis se stabiliser, ce qui permet de vérifier que le 
 nombre d'arbres retenu est suffisant.
 
-\textcolor{gray}{[Insérer les courbes d'apprentissage obtenues et leur commentaire.]}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]
+    {images/2_chapitres/chapitre3/fig_courbes_apprentissage.png}
+    \caption{Courbes d'apprentissage pour le Random Forest et XGBoost}
+\end{figure}
+
+La lecture des courbes obtenues confirme les comportements attendus. Pour le
+XGBoost, le minimum de l'erreur de validation est atteint à
+\(t^{\star} = 12\,516\) itérations, la RMSE passant de \(1{,}678\) point de PM
+en apprentissage à \(2{,}074\) points sur l'échantillon de test. Pour le
+Random Forest, aucune divergence entre les deux trajectoires n'apparaît à
+mesure que le nombre d'arbres augmente : l'erreur de validation décroît puis
+se stabilise, conformément à la propriété rappelée à la section~3.3.2.3.
+
 
 \subsubsection{Erreur \textit{Out of Bag}}
 
@@ -1222,7 +1194,7 @@ bootstrap vaut :
 \end{equation}
 
 Environ $37\,\%$ des observations se trouvent donc exclues de la construction de chaque 
-arbre. Ces observations, dites \textit{Out of Bag} (OOB), constituent pour cet arbre un 
+arbre. Ces observations, dites \textit{Out of Bag}, constituent pour cet arbre un 
 échantillon non utilisé lors de l'apprentissage.
 
 En notant $\mathcal{B}_i$ l'ensemble des arbres pour lesquels l'observation $i$ est 
@@ -1252,8 +1224,40 @@ Ce diagnostic demeure propre au Random Forest. Les arbres de XGBoost étant cons
 séquentiellement sur l'ensemble des observations disponibles, aucun échantillon 
 \textit{Out of Bag} équivalent n'y est défini.
 
-\textcolor{gray}{[Insérer l'erreur \textit{Out of Bag} obtenue et son évolution en 
-fonction du nombre d'arbres.]}
+\begin{table}[H]
+\centering
+\caption{Stabilisation de l'erreur \emph{Out of Bag} du Random Forest
+(RMSE en points de PM)}
+\label{tab:oob}
+\begin{tabular}{cccc}
+\filetHaut
+\rowcolor{ForsidesRose}
+\enTete{Nombre d'arbres $B$} & \enTete{RMSE OOB} & \enTete{$R^2$ OOB} & \enTete{Gain relatif} \\
+\filetMilieu
+25  & 1,707 & 0,832 & ---      \\
+50  & 1,632 & 0,847 & 4,42~\%  \\
+100 & 1,595 & 0,853 & 2,26~\%  \\
+150 & 1,585 & 0,855 & 0,63~\%  \\
+200 & 1,575 & 0,857 & 0,60~\%  \\
+\ligneRetenue \vRetenue{300} & \vRetenue{1,572} & \vRetenue{0,858} & \vRetenue{0,18~\%} \\
+400 & 1,569 & 0,858 & 0,22~\%  \\
+500 & 1,568 & 0,858 & 0,04~\%  \\
+\filetBas
+\end{tabular}
+\end{table}
+
+L'erreur \emph{Out of Bag} décroît fortement jusqu'à une centaine d'arbres,
+puis se stabilise. Le passage de 300 à 500 arbres ne réduit l'erreur que de
+\(0{,}27~\%\), gain sans commune mesure avec le coût de calcul associé. Le
+nombre de 300 arbres retenu à la section~3.3.2.3 se situe donc bien dans la
+zone de stabilisation.
+
+Cette mesure fournit par ailleurs une vérification indépendante de la
+performance du modèle. L'erreur \emph{Out of Bag} obtenue avec 300 arbres
+s'établit à \(1{,}572\) point de PM, contre une RMSE de \(1{,}551\) point
+mesurée sur l'échantillon de test. La concordance de ces deux estimations,
+issues de mécanismes d'évaluation distincts, conforte la validité des
+indicateurs présentés au chapitre~4.
 
 \subsubsection{Comparaison des performances en apprentissage et en test}
 
@@ -1278,6 +1282,46 @@ configurations et du même portefeuille central. Un modèle peut donc présenter
 faible entre apprentissage et test tout en restant fortement dépendant des 
 caractéristiques du portefeuille ayant servi à sa construction, conformément à la limite 
 déjà identifiée à la section~3.2.3.
+
+\begin{table}[htbp]
+\centering
+\caption{Comparaison des performances en apprentissage et en test
+(RMSE en points de PM)}
+\label{tab:apprentest}
+\begin{tabular}{lcccc}
+\filetHaut
+\rowcolor{ForsidesRose}
+\enTete{Modèle} & \enTete{Apprentissage} & \enTete{Test} & \enTete{Écart} & \enTete{Écart relatif} \\
+\filetMilieu
+GLM           & 3,852 & 3,922 & $+$0,071 & $+$1,8~\%   \\
+Random Forest & 0,580 & 1,551 & $+$0,971 & $+$167,3~\% \\
+XGBoost       & 1,678 & 2,074 & $+$0,396 & $+$23,6~\%  \\
+\filetBas
+\end{tabular}
+\end{table}
+
+Le GLM présente, comme attendu, des performances quasi identiques sur les deux
+échantillons, l'écart relatif ne dépassant pas \(1{,}8~\%\). Le XGBoost
+manifeste un écart plus marqué, de l'ordre de \(24~\%\), cohérent avec sa
+flexibilité et avec le mécanisme d'arrêt anticipé qui le contraint.
+
+L'écart mesuré pour le Random Forest, supérieur à \(167~\%\), appelle une
+interprétation plus attentive. Il résulte mécaniquement de la configuration
+retenue à la section~3.3.2.3 : des arbres non élagués dont les feuilles
+peuvent ne contenir qu'une seule observation reproduisent presque exactement
+l'échantillon d'apprentissage. La RMSE de \(0{,}580\) point de PM obtenue sur
+cet échantillon ne mesure donc pas une capacité de généralisation mais une
+capacité de mémorisation, propre à la construction des arbres individuels.
+
+Trois éléments écartent l'hypothèse d'un surapprentissage effectif. La RMSE de
+test du Random Forest est la plus faible des trois modèles. L'erreur
+\emph{Out of Bag}, estimée sans mobiliser l'échantillon de test, s'établit à
+\(1{,}572\) point de PM, soit un niveau très proche de la performance de test.
+La dispersion des performances sur les dix répétitions de tirage, présentée à
+la section~4.2, reste enfin inférieure en valeur absolue à celle du GLM. Le
+modèle apprend donc bien une structure généralisable à l'intérieur du domaine
+des sensibilités, et l'écart observé traduit la nature de la méthode plutôt
+qu'une défaillance de calibration.
 
 \subsubsection{Articulation avec la validation externe}
 
@@ -1329,7 +1373,243 @@ Les trois modèles &
 \end{tabular}
 \end{table}
 
-\section{Critère de performance}
+\section{Critères de performance}
+
+
+Les sections précédentes ont défini la manière dont les modèles sont estimés et validés. Il 
+reste à préciser les indicateurs utilisés pour mesurer leur qualité, ainsi que la façon dont 
+ces mesures seront comparées et interprétées.
+
+Dans l'ensemble de cette section, $n$ désigne le nombre d'observations de l'échantillon 
+considéré, $y_i$ la valeur de la variable cible obtenue avec SALLTO et $\hat{y}_i$ la valeur 
+prédite par le modèle.
+
 \subsection{Indices retenus}
+
+
+Trois indicateurs complémentaires sont retenus. Ils mesurent la même erreur de prédiction, 
+mais en donnent des lectures différentes.
+
+\paragraph{Racine de l'erreur quadratique moyenne (RMSE).}
+La RMSE (\textit{Root Mean Squared Error}) correspond à la racine carrée de la moyenne des 
+erreurs au carré :
+
+\begin{equation}
+\text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} \left( y_i - \hat{y}_i \right)^2}.
+\label{eq:rmse}
+\end{equation}
+
+Elle s'exprime dans la même unité que la variable cible, c'est-à-dire en pourcentage des 
+provisions mathématiques. Cette propriété lui confère une lecture directe : pour le 
+portefeuille central, dont l'écart relatif s'établit à $1{,}89\,\%$ (cf. équation~2.7), une 
+RMSE de $0{,}10$ point de PM représente une erreur de l'ordre de $145$ milliers d'euros sur 
+un portefeuille de $145$ millions d'euros.
+
+L'élévation au carré confère par ailleurs un poids plus important aux erreurs de forte 
+amplitude. La RMSE pénalise donc davantage un modèle commettant quelques erreurs 
+importantes qu'un modèle dont les erreurs sont réparties de manière homogène.
+
+\paragraph{Erreur absolue moyenne (MAE)}
+La MAE (\textit{Mean Absolute Error}) correspond à la moyenne des écarts en valeur absolue :
+
+\begin{equation}
+\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} \left| y_i - \hat{y}_i \right|.
+\label{eq:mae}
+\end{equation}
+
+Elle s'exprime également en pourcentage des provisions mathématiques et traduit l'amplitude 
+moyenne de l'erreur commise, toutes les observations étant pondérées de manière identique.
+
+La comparaison entre les deux indicateurs apporte une information supplémentaire. La RMSE 
+est toujours supérieure ou égale à la MAE, et l'écart entre elles augmente avec la 
+dispersion des erreurs. Deux valeurs proches indiquent des erreurs d'amplitude homogène sur 
+l'ensemble du domaine, tandis qu'un écart marqué signale que l'erreur se concentre sur un 
+nombre restreint de configurations. Cette seconde situation mérite une attention 
+particulière : elle suggère l'existence de zones du domaine que le modèle reproduit mal, 
+par exemple les environnements de taux les plus bas.
+
+\paragraph{Coefficient de détermination}
+Le coefficient de détermination rapporte l'erreur du modèle à la variabilité totale de la 
+variable cible :
+
+\begin{equation}
+R^2 = 1 - \frac{\sum_{i=1}^{n} \left( y_i - \hat{y}_i \right)^2}
+{\sum_{i=1}^{n} \left( y_i - \bar{y} \right)^2},
+\qquad \text{où} \quad \bar{y} = \frac{1}{n}\sum_{i=1}^{n} y_i.
+\label{eq:r2}
+\end{equation}
+
+Il s'interprète comme la part de la variance de la variable cible reproduite par le modèle. 
+Contrairement aux deux indicateurs précédents, il ne possède pas d'unité, ce qui permet de 
+comparer des résultats obtenus sur des bases dont la dispersion diffère. Cette propriété 
+sera utile lors de la validation externe présentée à la section~3.3.2.5, la variabilité de 
+l'écart pouvant différer d'un portefeuille central à l'autre.
+
+Le dénominateur correspond à l'erreur d'un modèle qui prédirait systématiquement la moyenne 
+$\bar{y}$, sans utiliser aucune variable explicative. Le coefficient de détermination 
+compare donc implicitement chaque modèle à cette référence naïve. Une valeur de $0$ traduit 
+une performance équivalente à celle de la moyenne, et une valeur négative, possible sur un 
+échantillon de test, indiquerait un modèle moins performant qu'elle.
+
+\paragraph{Biais moyen}
+Les trois indicateurs précédents mesurent l'amplitude de l'erreur mais pas son sens. Un 
+quatrième indicateur complète donc l'analyse :
+
+\begin{equation}
+\text{Biais} = \frac{1}{n} \sum_{i=1}^{n} \left( \hat{y}_i - y_i \right).
+\label{eq:biais}
+\end{equation}
+
+À la différence de la MAE, les erreurs positives et négatives se compensent ici. Une valeur 
+proche de zéro indique que le modèle ne se trompe pas systématiquement dans le même sens, 
+même si l'amplitude de ses erreurs individuelles peut rester importante. Une valeur 
+nettement différente de zéro signale au contraire une sous-estimation ou une surestimation 
+systématique de l'écart entre les deux valorisations.
+
+Cette vérification présente un intérêt particulier compte tenu de l'usage envisagé pour le 
+métamodèle. Un proxy mobilisé pour des analyses exploratoires (cf. section~3.1.3) pourrait 
+tolérer une dispersion modérée de ses erreurs, mais un biais systématique conduirait à 
+sous-estimer ou surestimer de manière répétée le niveau du Best Estimate stochastique.
+
+\paragraph{Indicateurs écartés}
+Les mesures d'erreur relative, telles que la MAPE (\textit{Mean Absolute Percentage 
+Error}), n'ont pas été retenues. Elles rapportent l'erreur à la valeur observée et 
+deviennent instables lorsque celle-ci s'approche de zéro. Or la variable cible peut prendre 
+des valeurs faibles dans les configurations où les taux d'intérêt sont élevés, le coût des 
+garanties financières se réduisant alors fortement. Ces configurations produiraient des 
+erreurs relatives très importantes sans que cela traduise une réelle dégradation du modèle.
+
+\begin{table}[H]
+\centering
+\caption{Indicateurs de performance retenus}
+\label{tab:indicateurs-performance}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{p{2.4cm} p{2.6cm} p{8.4cm}}
+\toprule
+\rowcolor{rougeEntreprise}
+\textcolor{white}{\textbf{Indicateur}} &
+\textcolor{white}{\textbf{Unité}} &
+\textcolor{white}{\textbf{Lecture}} \\
+\midrule
+RMSE & Point de PM & 
+Amplitude de l'erreur, avec un poids accru pour les erreurs les plus fortes. Critère 
+principal de comparaison \\
+\addlinespace
+\rowcolor{rosePale}
+MAE & Point de PM & 
+Amplitude moyenne de l'erreur, toutes observations pondérées de façon identique \\
+\addlinespace
+$R^2$ & Sans unité & 
+Part de la variance reproduite, par rapport à un modèle prédisant la moyenne \\
+\addlinespace
+\rowcolor{rosePale}
+Biais & Point de PM & 
+Sens de l'erreur, permettant de détecter une sous-estimation ou une surestimation 
+systématique \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{Comparaison des modèles}
+\label{subsec:comparaison-modeles}
+
+Les trois modèles sont estimés dans des conditions identiques. Ils s'appuient sur la même 
+répartition de la base, sur les mêmes répétitions de tirage et sur les mêmes échantillons 
+pour le calcul des indicateurs, conformément au protocole défini à la section~3.3.1. Cette 
+homogénéité est nécessaire pour que les différences observées reflètent les propriétés des 
+modèles et non les conditions de leur estimation.
+
+La RMSE constitue le critère principal de comparaison. C'est également elle qui sert de 
+critère d'optimisation lors de la recherche des hyperparamètres décrite à la 
+section~3.3.3.5 : la configuration retenue pour chaque modèle est celle minimisant l'erreur 
+de validation croisée $\text{Err}_{\text{CV}}$ de l'équation~(3.25), calculée à partir de 
+cet indicateur. Les autres mesures interviennent en complément, afin de préciser la nature 
+des erreurs commises plutôt que de départager les modèles.
+
+La comparaison ne porte pas sur la recherche du modèle le plus performant dans l'absolu. 
+Elle vise à déterminer si la complexité supplémentaire introduite par les méthodes non 
+linéaires apporte un gain réel par rapport au modèle de référence, conformément au rôle de 
+\textit{benchmark} attribué au GLM à la section~3.1.3. Le gain relatif apporté par un 
+modèle $m$ peut ainsi s'écrire :
+
+\begin{equation}
+\Delta_m = \frac{\text{RMSE}_{\text{GLM}} - \text{RMSE}_m}{\text{RMSE}_{\text{GLM}}}.
+\label{eq:gain-relatif}
+\end{equation}
+
+Cette formulation exprime directement la réduction d'erreur obtenue par rapport à une 
+modélisation linéaire et additive de l'écart.
+
+Un tel gain ne peut toutefois être considéré comme significatif que s'il dépasse la 
+variabilité induite par le seul choix de la répartition des données. La dispersion 
+$\hat{\sigma}_M$ définie à l'équation~(3.23) fournit précisément cette échelle de 
+référence : un écart de performance dont l'amplitude resterait comparable à cette 
+dispersion ne permettrait pas de conclure en faveur des méthodes non linéaires.
+
+Les indicateurs sont enfin calculés à chacun des niveaux de validation présentés au 
+tableau~3.2, à savoir l'échantillon d'apprentissage, l'échantillon de test, l'ensemble des 
+répétitions et la base construite à partir du second portefeuille central. La comparaison 
+des modèles s'appuie donc sur quatre lectures distinctes, dont l'articulation est précisée 
+ci-après.
+
 \subsection{Lecture des performances}
+\label{subsec:lecture-performances}
+
+Un indicateur de performance ne possède pas de signification en lui-même. Sa lecture 
+suppose de disposer de points de comparaison, et trois références sont mobilisées dans 
+cette étude.
+
+\paragraph{Le modèle naïf}
+La première référence correspond à un modèle prédisant systématiquement la moyenne de la 
+variable cible. Elle est directement intégrée au coefficient de détermination de 
+l'équation~(\ref{eq:r2}) et constitue le seuil minimal en deçà duquel un modèle n'apporte 
+aucune information.
+
+\paragraph{Le GLM}
+La deuxième référence est le modèle linéaire généralisé. L'écart entre ses performances et 
+celles des méthodes non linéaires renseigne sur la nature de la relation apprise. Un gain 
+faible indiquerait que l'écart entre les deux valorisations est essentiellement gouverné 
+par des effets additifs, tandis qu'un gain marqué apporterait des éléments en faveur de 
+l'existence de non-linéarités et d'interactions dans les résultats produits par SALLTO.
+
+Cette lecture prolonge directement la question posée à la section~3.1.3 et constitue l'un 
+des résultats attendus du chapitre suivant.
+
+\paragraph{Le bruit irréductible}
+La troisième référence tient à la nature même des données. Le Best Estimate stochastique 
+étant estimé à partir de $1\,000$ simulations, la variable cible comporte une composante 
+d'erreur de Monte-Carlo qu'aucun modèle ne peut reproduire, correspondant au terme 
+$\sigma^2$ de l'équation~(3.26).
+
+Il en résulte qu'un coefficient de détermination égal à $1$ n'est pas atteignable, et ne 
+constitue pas non plus un objectif souhaitable. Un modèle qui s'en approcherait trop 
+reproduirait vraisemblablement les fluctuations de simulation plutôt que la relation 
+sous-jacente, ce qui traduirait un surapprentissage au sens de la section~3.3.3.1. Un 
+modèle dont l'erreur se rapproche du niveau de bruit sans le franchir peut au contraire 
+être considéré comme ayant appris l'essentiel de l'information disponible.
+
+\paragraph{Portée des résultats obtenus sur l'échantillon de test}
+Les performances mesurées sur l'échantillon de test doivent être interprétées à la lumière 
+des modalités de tirage décrites à la section~3.3.2.2. Ce dernier étant constitué par 
+tirage aléatoire au sein d'une grille factorielle complète, les configurations qu'il 
+contient possèdent des voisines directes dans l'échantillon d'apprentissage. Les 
+indicateurs obtenus mesurent donc une capacité d'interpolation à l'intérieur du domaine des 
+sensibilités.
+
+Une dégradation des performances lors de la validation externe est par conséquent attendue, 
+puisque celle-ci porte sur un portefeuille central différent. Son ampleur constitue 
+l'information recherchée : une dégradation limitée suggérerait que les relations apprises 
+dépassent le seul portefeuille d'apprentissage, tandis qu'une dégradation marquée 
+confirmerait la dépendance du métamodèle à ses conditions de construction.
+
+\paragraph{Performance et explication}
+Ces indicateurs ne mesurent enfin qu'une seule des deux dimensions retenues à la 
+section~3.1.2. Un modèle peut reproduire fidèlement la variable cible sans pour autant 
+permettre de comprendre les mécanismes à l'origine des écarts, et la comparaison des 
+performances ne suffit donc pas à départager les modèles au regard de l'objectif du 
+mémoire.
+
+L'analyse conduite au chapitre suivant associe pour cette raison ces mesures à l'examen des 
+coefficients du GLM et aux contributions obtenues par la méthode SHAP, afin de déterminer 
+si une éventuelle amélioration de la performance prédictive s'accompagne également d'une 
+meilleure compréhension des facteurs explicatifs.

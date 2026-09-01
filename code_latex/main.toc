@@ -4,89 +4,137 @@
 \contentsline {chapter}{Remerciements}{6}{chapter*.4}%
 \contentsline {chapter}{Synthèse}{7}{chapter*.5}%
 \contentsline {chapter}{Synthesis}{8}{chapter*.6}%
-\contentsline {chapter}{Introduction}{1}{chapter*.7}%
+\contentsline {chapter}{Déclaration d'utilisation de l'intelligence artificielle}{9}{chapter*.7}%
+\contentsline {chapter}{Statement on the Use of Artificial Intelligence}{10}{chapter*.8}%
+\contentsline {chapter}{Liste des acronymes}{11}{chapter*.9}%
+\contentsline {chapter}{Introduction}{1}{chapter*.10}%
 \contentsline {chapter}{\numberline {1}Cadre prudentiel et réglementaire de la valorisation du Best Estimate}{3}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Solvabilité II : principes, objectifs et architecture}{3}{section.1.1}%
 \contentsline {subsection}{\numberline {1.1.1}Une architecture en trois piliers}{3}{subsection.1.1.1}%
-\contentsline {subsection}{\numberline {1.1.2}Le ratio de solvabilité et la place du Best Estimate}{3}{subsection.1.1.2}%
-\contentsline {section}{\numberline {1.2}La valorisation des provisions techniques}{4}{section.1.2}%
-\contentsline {subsection}{\numberline {1.2.1}Une valorisation économique des engagements}{4}{subsection.1.2.1}%
-\contentsline {subsection}{\numberline {1.2.2}Définition réglementaire du Best Estimate}{4}{subsection.1.2.2}%
-\contentsline {subsection}{\numberline {1.2.3}Flux projetés et hypothèses de calcul}{5}{subsection.1.2.3}%
-\contentsline {section}{\numberline {1.3}Approches déterministe et stochastique}{6}{section.1.3}%
-\contentsline {subsection}{\numberline {1.3.1}Deux méthodes au service d'un même objectif prudentiel}{6}{subsection.1.3.1}%
-\contentsline {subsection}{\numberline {1.3.2}Le Best Estimate déterministe}{6}{subsection.1.3.2}%
-\contentsline {subsection}{\numberline {1.3.3}Le Best Estimate stochastique}{7}{subsection.1.3.3}%
-\contentsline {subsection}{\numberline {1.3.4}Options, garanties et valeur temps}{7}{subsection.1.3.4}%
-\contentsline {chapter}{\numberline {2}Modèle ALM interne et construction de la base de données}{9}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Le modèle ALM interne}{9}{section.2.1}%
-\contentsline {subsection}{\numberline {2.1.1}Le générateur de scénarios économiques}{10}{subsection.2.1.1}%
-\contentsline {subsection}{\numberline {2.1.2}Fonctionnement de SALLTO}{12}{subsection.2.1.2}%
-\contentsline {section}{\numberline {2.2}Description du portefeuille étudié}{13}{section.2.2}%
-\contentsline {subsection}{\numberline {2.2.1}Portefeuille d'actifs}{13}{subsection.2.2.1}%
-\contentsline {subsection}{\numberline {2.2.2}Portefeuille de passifs}{14}{subsection.2.2.2}%
-\contentsline {subsection}{\numberline {2.2.3}Autres hypothèses retenues}{16}{subsection.2.2.3}%
-\contentsline {paragraph}{Best Estimate du portefeuille central}{17}{table.2.4}%
-\contentsline {section}{\numberline {2.3}Méthodologie de construction de la base de données}{18}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Objectif de la base de données}{18}{subsection.2.3.1}%
-\contentsline {subsection}{\numberline {2.3.2}Définition de la variable cible}{18}{subsection.2.3.2}%
-\contentsline {subsection}{\numberline {2.3.3}Principe de construction des observations}{19}{subsection.2.3.3}%
-\contentsline {subsection}{\numberline {2.3.4}Études préliminaires de sensibilité}{20}{subsection.2.3.4}%
-\contentsline {subsection}{\numberline {2.3.5}Construction de la variable de duration}{22}{subsection.2.3.5}%
-\contentsline {subsection}{\numberline {2.3.6}Sélection des variables définitives}{22}{subsection.2.3.6}%
-\contentsline {subsection}{\numberline {2.3.7}Amplitude des sensibilités retenues}{23}{subsection.2.3.7}%
-\contentsline {subsection}{\numberline {2.3.8}Taille de la base de données}{23}{subsection.2.3.8}%
-\contentsline {subsection}{\numberline {2.3.9}Lancement automatisé de SALLTO}{24}{subsection.2.3.9}%
-\contentsline {chapter}{\numberline {3}Apports du machine learning pour la rationalisation des écarts}{25}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Problématique de régression dans le cadre du Best Estimate}{26}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}Formulation du problème}{26}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.1.2}Pourquoi le machine learning est adapté à ce contexte}{27}{subsection.3.1.2}%
-\contentsline {subsection}{\numberline {3.1.3}Positionnement par rapport aux approches traditionnelles}{29}{subsection.3.1.3}%
-\contentsline {section}{\numberline {3.2}Présentation des modèles de machine learning utilisés}{31}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Modèles de référence}{31}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}Modèles non linéaires}{32}{subsection.3.2.2}%
-\contentsline {subsubsection}{\numberline {3.2.2.1}Le Random Forest}{32}{subsubsection.3.2.2.1}%
-\contentsline {subsubsection}{\numberline {3.2.2.2}Le XGBoost}{33}{subsubsection.3.2.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}Avantages et limites de chaque modèle dans le cadre d'étude}{34}{subsection.3.2.3}%
-\contentsline {section}{\numberline {3.3}Méthodologie d'apprentissage}{36}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Séparation des données}{36}{subsection.3.3.1}%
-\contentsline {subsubsection}{\numberline {3.3.1.1}Répartition retenue}{37}{subsubsection.3.3.1.1}%
-\contentsline {subsubsection}{\numberline {3.3.1.2}Modalités du tirage}{37}{subsubsection.3.3.1.2}%
-\contentsline {subsubsection}{\numberline {3.3.1.3}Répétition de la séparation}{38}{subsubsection.3.3.1.3}%
-\contentsline {subsubsection}{\numberline {3.3.1.4}Validation croisée au sein de l'échantillon d'apprentissage}{38}{subsubsection.3.3.1.4}%
-\contentsline {subsubsection}{\numberline {3.3.1.5}Validation externe sur un second portefeuille central}{39}{subsubsection.3.3.1.5}%
-\contentsline {subsection}{\numberline {3.3.2}Contrôle de la complexité et choix des hyperparamètres}{40}{subsection.3.3.2}%
-\contentsline {subsubsection}{\numberline {3.3.2.1}Nature du risque de surapprentissage dans le cadre de l'étude}{40}{subsubsection.3.3.2.1}%
-\contentsline {subsubsection}{\numberline {3.3.2.2}Le GLM}{41}{subsubsection.3.3.2.2}%
-\contentsline {subsubsection}{\numberline {3.3.2.3}Le Random Forest}{43}{subsubsection.3.3.2.3}%
-\contentsline {paragraph}{Profondeur maximale des arbres.}{43}{subsubsection.3.3.2.3}%
-\contentsline {paragraph}{Taille minimale des feuilles.}{43}{subsubsection.3.3.2.3}%
-\contentsline {paragraph}{Nombre de variables candidates à chaque division.}{43}{subsubsection.3.3.2.3}%
-\contentsline {paragraph}{Nombre d'arbres.}{44}{subsubsection.3.3.2.3}%
-\contentsline {subsubsection}{\numberline {3.3.2.4}Le XGBoost}{44}{subsubsection.3.3.2.4}%
-\contentsline {paragraph}{\textit {Learning rate}.}{44}{subsubsection.3.3.2.4}%
-\contentsline {paragraph}{Nombre d'arbres et arrêt anticipé.}{44}{subsubsection.3.3.2.4}%
-\contentsline {paragraph}{Profondeur maximale des arbres.}{45}{equation.3.29}%
-\contentsline {paragraph}{Sous-échantillonnage des observations et des variables.}{45}{equation.3.29}%
-\contentsline {paragraph}{Paramètres de régularisation.}{46}{equation.3.29}%
-\contentsline {subsubsection}{\numberline {3.3.2.5}Méthode de recherche retenue}{46}{subsubsection.3.3.2.5}%
-\contentsline {subsection}{\numberline {3.3.3}Diagnostics et validation de l'apprentissage}{47}{subsection.3.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.3.1}Courbes d'apprentissage}{47}{subsubsection.3.3.3.1}%
-\contentsline {subsubsection}{\numberline {3.3.3.2}Erreur \textit {Out of Bag}}{48}{subsubsection.3.3.3.2}%
-\contentsline {subsubsection}{\numberline {3.3.3.3}Comparaison des performances en apprentissage et en test}{49}{subsubsection.3.3.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.3.4}Articulation avec la validation externe}{49}{subsubsection.3.3.3.4}%
-\contentsline {section}{\numberline {3.4}Critère de performance}{50}{section.3.4}%
-\contentsline {subsection}{\numberline {3.4.1}Indices retenus}{50}{subsection.3.4.1}%
-\contentsline {subsection}{\numberline {3.4.2}Comparaison des modèles}{50}{subsection.3.4.2}%
-\contentsline {subsection}{\numberline {3.4.3}Lecture des performances}{50}{subsection.3.4.3}%
-\contentsline {chapter}{\numberline {4}Analyse des résultats et rationnalisation des écarts}{51}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Performance des modèles (test, comparaison GLM / RF / XGBoost, stabilité sur les répétitions)}{51}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Explicabilité et hiérarchisation des facteurs d'écart (coefficients du GLM, importances, SHAP, effets non linéaires et interactions)}{51}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Validation externe sur le second portefeuille central}{51}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Analyse de variation entre deux dates de valorisation}{51}{section.4.4}%
-\contentsline {chapter}{\numberline {5}Limites, apports et perspectives}{52}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Apports opérationnels et réglementaires}{52}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Limites de l'approche}{52}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Perspectives d'amélioration}{52}{section.5.3}%
-\contentsline {chapter}{\numberline {6}Conclusion}{53}{chapter.6}%
-\contentsline {chapter}{Annexes}{54}{chapter*.8}%
+\contentsline {subsection}{\numberline {1.1.2}Le ratio de solvabilité et la place du Best Estimate}{4}{subsection.1.1.2}%
+\contentsline {section}{\numberline {1.2}La valorisation des provisions techniques}{5}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Une valorisation économique des engagements}{5}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Définition réglementaire du Best Estimate}{5}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}Flux projetés et hypothèses de calcul}{6}{subsection.1.2.3}%
+\contentsline {section}{\numberline {1.3}Approches déterministe et stochastique}{7}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}Deux méthodes au service d'un même objectif prudentiel}{7}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}Le Best Estimate déterministe}{7}{subsection.1.3.2}%
+\contentsline {subsection}{\numberline {1.3.3}Le Best Estimate stochastique}{8}{subsection.1.3.3}%
+\contentsline {subsection}{\numberline {1.3.4}Options, garanties et valeur temps}{8}{subsection.1.3.4}%
+\contentsline {chapter}{\numberline {2}Modèle ALM interne et construction de la base de données}{10}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Le modèle ALM interne}{10}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Le générateur de scénarios économiques}{11}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Fonctionnement de SALLTO}{13}{subsection.2.1.2}%
+\contentsline {section}{\numberline {2.2}Description du portefeuille étudié}{14}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Portefeuille d'actifs}{15}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Portefeuille de passifs}{16}{subsection.2.2.2}%
+\contentsline {paragraph}{La loi de rachat conjoncturel.}{18}{figure.2.4}%
+\contentsline {subsection}{\numberline {2.2.3}Autres hypothèses retenues}{20}{subsection.2.2.3}%
+\contentsline {paragraph}{Best Estimate du portefeuille central}{21}{figure.2.6}%
+\contentsline {section}{\numberline {2.3}Méthodologie de construction de la base de données}{22}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Objectif de la base de données}{22}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Définition de la variable cible}{22}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Principe de construction des observations}{23}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}Études préliminaires de sensibilité}{23}{subsection.2.3.4}%
+\contentsline {subsection}{\numberline {2.3.5}Construction de la variable de duration}{26}{subsection.2.3.5}%
+\contentsline {subsection}{\numberline {2.3.6}Sélection des variables définitives}{26}{subsection.2.3.6}%
+\contentsline {subsection}{\numberline {2.3.7}Amplitude des sensibilités retenues}{26}{subsection.2.3.7}%
+\contentsline {subsection}{\numberline {2.3.8}Taille de la base de données}{27}{subsection.2.3.8}%
+\contentsline {subsection}{\numberline {2.3.9}Lancement automatisé de SALLTO}{27}{subsection.2.3.9}%
+\contentsline {chapter}{\numberline {3}Apports du machine learning pour la rationalisation des écarts}{29}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Problématique de régression dans le cadre du Best Estimate}{30}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Formulation du problème}{30}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Pourquoi le machine learning est adapté à ce contexte}{31}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Positionnement par rapport aux approches traditionnelles}{33}{subsection.3.1.3}%
+\contentsline {section}{\numberline {3.2}Présentation des modèles de machine learning utilisés}{34}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Modèles de référence}{35}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Modèles non linéaires}{36}{subsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.2.1}Le Random Forest}{36}{subsubsection.3.2.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2.2}Le XGBoost}{37}{subsubsection.3.2.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Avantages et limites de chaque modèle dans le cadre d'étude}{39}{subsection.3.2.3}%
+\contentsline {section}{\numberline {3.3}Méthodologie d'apprentissage}{41}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Séparation des données}{41}{subsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.1.1}Répartition retenue}{41}{subsubsection.3.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.3.1.2}Modalités du tirage}{42}{subsubsection.3.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.3.1.3}Répétition de la séparation}{42}{subsubsection.3.3.1.3}%
+\contentsline {subsubsection}{\numberline {3.3.1.4}Validation croisée au sein de l'échantillon d'apprentissage}{43}{subsubsection.3.3.1.4}%
+\contentsline {subsubsection}{\numberline {3.3.1.5}Validation externe sur un second portefeuille central}{44}{subsubsection.3.3.1.5}%
+\contentsline {subsection}{\numberline {3.3.2}Contrôle de la complexité et choix des hyperparamètres}{45}{subsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.2.1}Nature du risque de surapprentissage dans le cadre de l'étude}{45}{subsubsection.3.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.3.2.2}Le GLM}{46}{subsubsection.3.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.3.2.3}Le Random Forest}{48}{subsubsection.3.3.2.3}%
+\contentsline {paragraph}{Profondeur maximale des arbres}{48}{subsubsection.3.3.2.3}%
+\contentsline {paragraph}{Taille minimale des feuilles}{48}{subsubsection.3.3.2.3}%
+\contentsline {paragraph}{Nombre de variables candidates à chaque division}{48}{subsubsection.3.3.2.3}%
+\contentsline {paragraph}{Nombre d'arbres}{49}{subsubsection.3.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.3.2.4}Le XGBoost}{50}{subsubsection.3.3.2.4}%
+\contentsline {paragraph}{\textit {Learning rate}.}{50}{subsubsection.3.3.2.4}%
+\contentsline {paragraph}{Nombre d'arbres et arrêt anticipé.}{50}{subsubsection.3.3.2.4}%
+\contentsline {paragraph}{Profondeur maximale des arbres.}{51}{equation.3.28}%
+\contentsline {paragraph}{Sous-échantillonnage des observations et des variables.}{51}{equation.3.28}%
+\contentsline {paragraph}{Paramètres de régularisation.}{51}{equation.3.28}%
+\contentsline {subsubsection}{\numberline {3.3.2.5}Méthode de recherche retenue}{52}{subsubsection.3.3.2.5}%
+\contentsline {subsection}{\numberline {3.3.3}Diagnostics et validation de l'apprentissage}{53}{subsection.3.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.3.1}Courbes d'apprentissage}{53}{subsubsection.3.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.3.2}Erreur \textit {Out of Bag}}{54}{subsubsection.3.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3.3}Comparaison des performances en apprentissage et en test}{55}{subsubsection.3.3.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.3.4}Articulation avec la validation externe}{56}{subsubsection.3.3.3.4}%
+\contentsline {section}{\numberline {3.4}Critères de performance}{57}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Indices retenus}{57}{subsection.3.4.1}%
+\contentsline {paragraph}{Racine de l'erreur quadratique moyenne (RMSE).}{57}{subsection.3.4.1}%
+\contentsline {paragraph}{Erreur absolue moyenne (MAE)}{58}{equation.3.32}%
+\contentsline {paragraph}{Coefficient de détermination}{58}{equation.3.33}%
+\contentsline {paragraph}{Biais moyen}{58}{equation.3.34}%
+\contentsline {paragraph}{Indicateurs écartés}{59}{equation.3.35}%
+\contentsline {subsection}{\numberline {3.4.2}Comparaison des modèles}{59}{subsection.3.4.2}%
+\contentsline {subsection}{\numberline {3.4.3}Lecture des performances}{60}{subsection.3.4.3}%
+\contentsline {paragraph}{Le modèle naïf}{60}{subsection.3.4.3}%
+\contentsline {paragraph}{Le GLM}{60}{subsection.3.4.3}%
+\contentsline {paragraph}{Le bruit irréductible}{60}{subsection.3.4.3}%
+\contentsline {paragraph}{Portée des résultats obtenus sur l'échantillon de test}{61}{subsection.3.4.3}%
+\contentsline {paragraph}{Performance et explication}{61}{subsection.3.4.3}%
+\contentsline {chapter}{\numberline {4}Analyse des résultats et rationnalisation des écarts}{62}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Statistiques descriptives des données}{62}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Statistiques descriptives de la variable cible}{62}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Statistiques descriptives des variables explicatives}{63}{subsection.4.1.2}%
+\contentsline {section}{\numberline {4.2}Performance des modèles (test, comparaison GLM / RF / XGBoost, stabilité sur les répétitions)}{65}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Stabilité sur les 10 répétitions}{66}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Significativité du gain}{67}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Lecture des indicateurs}{67}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Sensibilité au mode de découpage}{68}{subsection.4.2.4}%
+\contentsline {section}{\numberline {4.3}Explicabilité et hiérarchisation des facteurs d'écart (coefficients du GLM, importances, SHAP, effets non linéaires et interactions)}{69}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Importance SHAP}{71}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Interactions SHAP}{71}{subsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.3.3}Hiérarchie consolidée des facteurs d'écart}{72}{subsection.4.3.3}%
+\contentsline {section}{\numberline {4.4}Validation externe sur le second portefeuille central}{72}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Analyse de variation entre deux dates de valorisation}{72}{section.4.5}%
+\contentsline {chapter}{\numberline {5}Limites, apports et perspectives}{73}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Apports opérationnels et réglementaires}{73}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Une lecture explicite du passage du Best Estimate déterministe au Best Estimate stochastique}{73}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Une hiérarchisation des facteurs d'écart confrontée à la lecture actuarielle}{74}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}Un métamodèle mobilisable comme outil exploratoire}{74}{subsection.5.1.3}%
+\contentsline {subsection}{\numberline {5.1.4}Un cadre méthodologique reproductible}{75}{subsection.5.1.4}%
+\contentsline {section}{\numberline {5.2}Limites de l'approche}{75}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Limites tenant à la construction de la base de données}{76}{subsection.5.2.1}%
+\contentsline {paragraph}{Un portefeuille central unique et fictif.}{76}{subsection.5.2.1}%
+\contentsline {paragraph}{Une base construite par croisement de modalités, non par échantillonnage.}{76}{subsection.5.2.1}%
+\contentsline {paragraph}{Un ensemble d'hypothèses maintenues constantes.}{76}{subsection.5.2.1}%
+\contentsline {paragraph}{Une variable de duration agrégée.}{77}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Limites tenant au modèle ALM sous-jacent}{77}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Limites tenant aux modèles statistiques retenus}{78}{subsection.5.2.3}%
+\contentsline {paragraph}{Une capacité d'extrapolation limitée.}{78}{subsection.5.2.3}%
+\contentsline {paragraph}{Une stabilité des coefficients conditionnée à l'absence de colinéarité.}{78}{subsection.5.2.3}%
+\contentsline {paragraph}{Des mesures d'explicabilité qui reposent sur des hypothèses.}{78}{subsection.5.2.3}%
+\contentsline {subsection}{\numberline {5.2.4}Limites d'interprétation}{78}{subsection.5.2.4}%
+\contentsline {paragraph}{Un raisonnement \emph {ceteris paribus}.}{78}{subsection.5.2.4}%
+\contentsline {paragraph}{Importance statistique et causalité.}{79}{subsection.5.2.4}%
+\contentsline {subsection}{\numberline {5.2.5}Limites d'usage et enjeux de gouvernance}{79}{subsection.5.2.5}%
+\contentsline {section}{\numberline {5.3}Perspectives d'amélioration}{79}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Faire évoluer le plan d'expérience}{79}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Réduire le bruit de simulation}{81}{subsection.5.3.2}%
+\contentsline {subsection}{\numberline {5.3.3}Élargir la famille de métamodèles}{81}{subsection.5.3.3}%
+\contentsline {subsection}{\numberline {5.3.4}Approfondir l'analyse explicative}{82}{subsection.5.3.4}%
+\contentsline {subsection}{\numberline {5.3.5}Étendre le périmètre d'application}{82}{subsection.5.3.5}%
+\contentsline {subsection}{\numberline {5.3.6}Vers une industrialisation encadrée}{83}{subsection.5.3.6}%
+\contentsline {chapter}{\numberline {6}Conclusion}{84}{chapter.6}%
+\contentsline {chapter}{Annexes}{85}{chapter*.11}%

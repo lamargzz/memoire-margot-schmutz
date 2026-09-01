@@ -1,5 +1,29 @@
 \chapter{Modèle ALM interne et construction de la base de données}
 
+Le chapitre précédent a montré que l'écart entre le \textit{Best Estimate}
+déterministe et le \textit{Best Estimate} stochastique traduit la valeur temps
+des options et garanties contenues dans les contrats. Cet écart n'est pas une
+caractéristique fixe du portefeuille : il dépend de l'environnement financier,
+des hypothèses contractuelles et des règles de gestion appliquées par
+l'assureur.
+
+L'objectif est désormais de mesurer cet écart de manière systématique. Cela
+suppose de disposer d'un outil de projection capable de reproduire le
+fonctionnement d'un portefeuille d'épargne dans ses deux modes de valorisation,
+puis de faire varier de façon contrôlée les hypothèses susceptibles
+d'influencer le résultat.
+
+La démarche retenue repose sur un modèle ALM interne. Un portefeuille central
+est d'abord défini et projeté selon les deux approches, fournissant un niveau
+de référence. Différentes sensibilités sont ensuite appliquées à ce
+portefeuille, chaque configuration donnant lieu à un calcul complet du
+\textit{Best Estimate} déterministe et du \textit{Best Estimate} stochastique.
+
+Ce chapitre présente successivement le modèle utilisé et son générateur de
+scénarios économiques, les caractéristiques du portefeuille central, puis la
+sélection des variables et la construction de la base de données exploitée au
+chapitre suivant.
+
 \section{Le modèle ALM interne}
 
 Dans le cadre de cette étude, les différentes valorisations du \textit{Best Estimate} sont obtenues à l'aide du modèle ALM interne de Forsides, appelé SALLTO (\textit{Solvency Assets Liabilities Life TOol}). Développé en interne en C\#, cet outil permet de projeter dans le temps l'évolution d'une compagnie d'assurance vie en modélisant conjointement son actif et son passif ainsi que les interactions entre ces deux composantes.
@@ -138,27 +162,17 @@ Ce portefeuille constitue le point de départ de l'ensemble des projections réa
 
 \subsection{Portefeuille d'actifs}
 
-Le portefeuille d'actifs présenté dans cette section correspond aux actifs en représentation du fonds euro. Sa valeur nette comptable totale s'élève à 116 millions d'euros au 31 décembre 2025, tandis que sa valeur de marché atteint 113,39 millions d'euros.
+Le portefeuille décrit dans cette section correspond aux actifs en représentation des engagements du fonds euro. Les supports en unités de compte n'y figurent pas : le risque financier étant supporté par l'assuré, ils sont adossés directement aux actifs correspondants et ne relèvent pas de la politique d'allocation de l'assureur. Sa valeur nette comptable (VNC) totale s'élève à 116 millions d'euros au 31 décembre 2025, tandis que sa valeur de marché atteint 113,39 millions d'euros.
 
-L'allocation a été définie de manière à reproduire la structure d'un portefeuille d'actifs représentatif d'un assureur vie. En valeur nette comptable, elle se compose de 80\,\% d'obligations à taux fixe, 10\,\% d'actions globales non long terme, 7\,\% d'immobilier et 3\,\% d'actifs monétaires.
+L'allocation a été définie de manière à reproduire la structure d'un portefeuille d'actifs représentatif d'un assureur vie. En VNC, elle se compose de 80\,\% d'obligations à taux fixe, 10\,\% d'actions globales non long terme, 7\,\% d'immobilier et 3\,\% d'actifs monétaires.
 
-\begin{table}[H]
+\begin{figure}[H]
     \centering
-    \caption{Allocation du portefeuille d'actifs central}
-    \label{tab:allocation_actif_central}
-    \begin{tabular}{lcc}
-        \hline
-        \textbf{Classe d'actifs} & \textbf{Allocation en VNC} & \textbf{PMVL} \\
-        \hline
-        Monétaire & 3\,\% & 0\,\% \\
-        Actions globales non long terme & 10\,\% & +30\,\% \\
-        Immobilier & 7\,\% & +10\,\% \\
-        Obligations à taux fixe & 80\,\% & -7\,\% \\
-        \hline
-        \textbf{Total} & \textbf{100\,\%} & \textbf{$\approx -2\,\%$} \\
-        \hline
-    \end{tabular}
-\end{table}
+    \includegraphics[width=0.90\textwidth]
+    {images/2_chapitres/chapitre2/allocation_pmvl.png}
+    \caption{Allocation d'actif}
+    \label{fig:allocation_actif}
+\end{figure}
 
 Les différentes classes d'actifs présentent des niveaux de plus ou moins-values latentes distincts. Les actions présentent ainsi une plus-value latente de 30\,\% et l'immobilier de 10\,\%, tandis que la poche obligataire présente une moins-value latente de 7\,\%. Compte tenu du poids prépondérant des obligations dans l'allocation, le portefeuille présente globalement une légère moins-value latente, de l'ordre de 2\,\%.
 
@@ -166,25 +180,13 @@ La poche obligataire représente 80\,\% de la VNC totale du portefeuille d'actif
 
 Le spread moyen du portefeuille central est de 0,85\,\%, tandis que la duration moyenne de l'actif s'établit à 6,75. Ces caractéristiques permettent de définir l'exposition initiale du portefeuille aux principaux facteurs de risque de marché, avant application des différentes sensibilités considérées dans la suite de l'étude.
 
-\begin{table}[H]
+\begin{figure}[H]
     \centering
-    \caption{Principales caractéristiques du portefeuille d'actifs central}
-    \label{tab:caracteristiques_actif_central}
-    \begin{tabular}{lc}
-        \hline
-        \textbf{Caractéristique} & \textbf{Valeur} \\
-        \hline
-        Valeur nette comptable & 116 M\euro \\
-        Valeur de marché & 113,39 M\euro \\
-        Part d'obligations souveraines & 60\,\% de la poche obligataire \\
-        Part d'obligations corporate & 40\,\% de la poche obligataire \\
-        Rating obligataire moyen & A \\
-        Spread moyen & 0,85\,\% \\
-        Duration moyenne de l'actif & 6,75 \\
-        Plus-value latente globale & $\approx -2\,\%$ \\
-        \hline
-    \end{tabular}
-\end{table}
+    \includegraphics[width=0.90\textwidth]
+    {images/2_chapitres/chapitre2/fiche_portefeuille_actifs_central.png}
+    \caption{Détail de la partie actif du portefeuille central}
+    \label{fig:fiche_actif_central}
+\end{figure}
 
 
 \subsection{Portefeuille de passifs}
@@ -193,49 +195,169 @@ Le portefeuille de passifs a également été construit afin de reproduire les p
 
 Afin de limiter les temps de calcul liés aux projections stochastiques, une hypothèse simplificatrice a été retenue concernant la segmentation du portefeuille. Le passif est représenté par seulement 10 model points, dont 5 associés au fonds euro et 5 aux UC. Cette réduction du nombre de model points permet d'alléger significativement les calculs tout en conservant une segmentation du portefeuille adaptée aux objectifs de l'étude.
 
-L'âge moyen des assurés du portefeuille central est de 63 ans. Les frais de gestion sur encours sont fixés à 0,40\,\% et le taux de chargement à 0,80\,\%. Ces hypothèses sont identiques pour l'ensemble des model points.
+L'âge moyen (pondéré à la PM) des assurés du portefeuille central est de 63 ans. Les frais de gestion sur encours sont fixés à 0,40\,\% et le taux de chargement à 0,80\,\%. Ces hypothèses sont identiques pour l'ensemble des model points.
 
 Le Taux Minimum Garanti (TMG) varie en revanche selon les model points du fonds euro. Le TMG moyen, pondéré par les PM du fonds euro, s'établit à 0,29\,\%. Les contrats en UC ne présentent quant à eux aucun TMG. Les caractéristiques détaillées des différents model points, et notamment les niveaux de TMG associés, sont présentées dans le tableau ci-dessous.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.60\textwidth]
-    {images/2_chapitres/chapitre2/model_point.jpg}
+    \includegraphics[width=0.90\textwidth]
+    {images/2_chapitres/chapitre2/detail_model_points_portefeuille_central.png}
     \caption{Détail des model points du portefeuille central}
     \label{fig:model_point}
 \end{figure}
 
 Le taux servi retenu pour le portefeuille central est de 2,40\,\%. Le taux de participation aux bénéfices (PB) est fixé à 85\,\%.
 
-Les rachats des assurés sont décomposés en rachats structurels et en rachats conjoncturels. Les rachats structurels correspondent à un taux de 5\,\%, réparti entre 2\,\% de rachats totaux et 3\,\% de rachats partiels. Les rachats conjoncturels, qui permettent de prendre en compte l'évolution du comportement des assurés en fonction de l'environnement économique, sont paramétrés selon le niveau \og dynamique moyenne \fg{} de SALLTO.
+Les rachats des assurés sont décomposés en rachats structurels et en rachats conjoncturels, ou rachats dynamiques. Les rachats structurels correspondent à un taux de 5\,\%, réparti entre 2\,\% de rachats totaux et 3\,\% de rachats partiels. Les rachats conjoncturels, qui permettent de prendre en compte l'évolution du comportement des assurés en fonction de l'environnement économique, sont paramétrés selon le niveau \og dynamique moyenne \fg{} de SALLTO.
 
 Enfin, la mortalité du portefeuille est modélisée à partir de la table TH0002 et la duration du passif du portefeuille central s'établit à 10,20.
 
-\begin{table}[H]
+\begin{figure}[H]
     \centering
-    \caption{Principales caractéristiques du portefeuille de passifs central}
-    \label{tab:caracteristiques_passif_central}
-    \begin{tabular}{lc}
-        \hline
-        \textbf{Caractéristique} & \textbf{Valeur} \\
-        \hline
-        Provisions mathématiques totales & 145 M\euro \\
-        PM fonds euro & 100 M\euro \ (69\,\%) \\
-        PM unités de compte & 45 M\euro \ (31\,\%) \\
-        Nombre de Model Points & 10 \\
-        Âge moyen des assurés & 63 ans \\
-        TMG moyen sur les PM euro & 0,29\,\% \\
-        Taux servi & 2,40\,\% \\
-        Frais de gestion sur encours & 0,40\,\% \\
-        Taux de chargement & 0,80\,\% \\
-        Rachats structurels totaux & 2\,\% \\
-        Rachats structurels partiels & 3\,\% \\
-        Rachats conjoncturels & Dynamique moyenne \\
-        Duration du passif & 10,20 \\
-        \hline
-    \end{tabular}
+    \includegraphics[width=0.90\textwidth]
+    {images/2_chapitres/chapitre2/fiche_passif_uniforme.png}
+    \caption{Détail du passif du portefeuille central}
+    \label{fig:fiche_passif_central}
+\end{figure}
+
+\paragraph{La loi de rachat conjoncturel.}
+Les rachats conjoncturels ne portent pas sur le niveau absolu des rachats, mais sur un
+supplément — ou une réduction — appliqué au taux de rachat structurel en fonction de
+l'insatisfaction de l'assuré. SALLTO retient la forme fonctionnelle issue des Orientations
+Nationales Complémentaires accompagnant l'exercice QIS5, devenue une référence de place.
+
+Soit $R$ le taux servi au titre de l'exercice et $TA$ le taux attendu par l'assuré,
+approximé par un taux de marché de référence. L'écart $x = R - TA$ constitue la variable
+d'entrée de la loi. Le taux de rachat conjoncturel s'écrit comme une fonction affine par
+morceaux :
+
+\begin{equation}
+RC(x)=
+\begin{cases}
+RC_{\max} & \text{si } x < \alpha,\\[4pt]
+RC_{\max}\,\dfrac{x-\beta}{\alpha-\beta} & \text{si } \alpha \leq x < \beta,\\[8pt]
+0 & \text{si } \beta \leq x \leq \gamma,\\[4pt]
+RC_{\min}\,\dfrac{x-\gamma}{\delta-\gamma} & \text{si } \gamma < x \leq \delta,\\[8pt]
+RC_{\min} & \text{si } x > \delta.
+\end{cases}
+\label{eq:loi-rachat-conjoncturel}
+\end{equation}
+
+Le taux de rachat total appliqué au \textit{model point} vaut alors
+$\min\big(\max(RS + RC(x),\,0),\,1\big)$, où $RS$ désigne le taux de rachat structurel.
+
+Les paramètres s'interprètent de la manière suivante :
+\begin{itemize}
+  \item $\beta$ et $\gamma$ délimitent une zone d'indifférence : tant que l'écart de taux
+        y demeure, le comportement de l'assuré n'est pas modifié et seuls les rachats
+        structurels s'appliquent ;
+  \item $\alpha$ constitue le seuil de saturation à la baisse. En deçà, la rémunération est
+        jugée durablement insuffisante et le supplément de rachat atteint son maximum
+        $RC_{\max}$ ;
+  \item $\delta$ constitue le seuil de saturation à la hausse. Au-delà, la rémunération est
+        jugée suffisamment attractive pour que la réduction des rachats atteigne son plancher
+        $RC_{\min}$, valeur négative traduisant une fidélisation de l'assuré ;
+  \item entre ces seuils, la transition est linéaire.
+\end{itemize}
+
+Les Orientations Nationales Complémentaires ne prescrivent pas un jeu de paramètres unique,
+mais un intervalle de valeurs plausibles à l'intérieur duquel l'organisme doit justifier sa
+calibration. Les trois niveaux disponibles dans SALLTO en constituent les bornes et le point
+médian ; ils sont représentés à la figure~\ref{fig:loi-rachat-conjoncturel} et reportés au
+tableau~\ref{tab:loi-rachat-conjoncturel}\footnote{Les qualificatifs « minimale » et
+« maximale » désignent les bornes de l'intervalle plausible paramètre par paramètre, et non
+un ordre uniforme sur l'intensité de la réaction. La calibration minimale présente ainsi un
+$RC_{\max}$ plus faible, mais également un $RC_{\min}$ plus négatif, et réduit donc davantage
+les rachats en cas de sur-rémunération.}.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+      width=0.88\textwidth, height=7.5cm,
+      xmin=-12, xmax=12, ymin=-10, ymax=45,
+      xtick={-12,-9,-6,-3,0,3,6,9,12},
+      ytick={-10,0,10,20,30,40},
+      xticklabel={\pgfmathprintnumber{\tick}\,\%},
+      yticklabel={\pgfmathprintnumber{\tick}\,\%},
+      xlabel={Écart de taux $x = R - TA$},
+      ylabel={Taux de rachat conjoncturel $RC(x)$},
+      axis lines=left,
+      axis line style={gray!60},
+      tick style={gray!60},
+      label style={font=\small},
+      tick label style={font=\footnotesize},
+      legend style={
+        font=\footnotesize, at={(0.97,0.96)}, anchor=north east,
+        draw=gray!40, fill=white, cells={anchor=west}, row sep=2pt
+      },
+      clip=false
+    ]
+
+      % Zone d'indifférence de la calibration centrale
+      \fill[rosePale, opacity=0.7] (axis cs:-1,-10) rectangle (axis cs:1,45);
+
+      % Axes de référence
+      \addplot[gray!45, thin, forget plot] coordinates {(-12,0) (12,0)};
+      \addplot[gray!45, thin, forget plot] coordinates {(0,-10) (0,45)};
+
+      % Dynamique minimale
+      \addplot[color=gray!70, thick, dashed]
+        coordinates {(-12,20) (-6,20) (-2,0) (1,0) (2,-6) (12,-6)};
+      \addlegendentry{Dynamique minimale}
+
+      % Dynamique moyenne (portefeuille central)
+      \addplot[color=rougeEnt, very thick]
+        coordinates {(-12,30) (-5,30) (-1,0) (1,0) (3,-5) (12,-5)};
+      \addlegendentry{Dynamique moyenne (portefeuille central)}
+
+      % Dynamique maximale
+      \addplot[color=gray!95, thick, dash pattern=on 5pt off 2pt on 1pt off 2pt]
+        coordinates {(-12,40) (-4,40) (0,0) (1,0) (4,-4) (12,-4)};
+      \addlegendentry{Dynamique maximale}
+
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Loi de rachat conjoncturel selon les trois calibrations retenues}
+  \label{fig:loi-rachat-conjoncturel}
+\end{figure}
+
+\begin{table}[H]
+  \centering
+  \small
+  \renewcommand{\arraystretch}{1.3}
+  \setlength{\tabcolsep}{9pt}
+  \begin{tabular}{lcccccc}
+    \toprule
+    \rowcolor{rougeEnt}
+    \textcolor{white}{\textbf{Calibration}} &
+    \textcolor{white}{\textbf{$\alpha$}} &
+    \textcolor{white}{\textbf{$\beta$}} &
+    \textcolor{white}{\textbf{$\gamma$}} &
+    \textcolor{white}{\textbf{$\delta$}} &
+    \textcolor{white}{\textbf{$RC_{\min}$}} &
+    \textcolor{white}{\textbf{$RC_{\max}$}} \\
+    \midrule
+    Dynamique minimale & $-6$~\% & $-2$~\% & $1$~\% & $2$~\% & $-6$~\% & $20$~\% \\
+    \rowcolor{grisClair}
+    Dynamique moyenne  & $-5$~\% & $-1$~\% & $1$~\% & $3$~\% & $-5$~\% & $30$~\% \\
+    Dynamique maximale & $-4$~\% & $0$~\%  & $1$~\% & $4$~\% & $-4$~\% & $40$~\% \\
+    \bottomrule
+  \end{tabular}
+  \caption{Paramètres des trois calibrations de la loi de rachat conjoncturel}
+  \label{tab:loi-rachat-conjoncturel}
 \end{table}
 
+L'asymétrie de la loi confère à l'option de rachat une valeur temps : elle se déclenche dans
+les scénarios défavorables sans que l'assureur bénéficie d'un gain symétrique dans les
+scénarios favorables. L'écart entre les trois calibrations est par ailleurs considérable.
+Pour un écart de taux de $-5$~\%, le supplément de rachat s'établit à 15~\% sous la
+calibration minimale, 30~\% sous la calibration moyenne et 40~\% sous la calibration
+maximale : rapporté au taux de rachat structurel de 5~\% du portefeuille central, le taux de
+rachat total passe de 20~\% à 45~\% selon le seul choix de la calibration. Le portefeuille
+central retient la calibration moyenne, les deux bornes constituant les modalités de
+sensibilité associées à cette variable.
 
 \subsection{Autres hypothèses retenues}
 
@@ -243,7 +365,7 @@ En complément des caractéristiques propres à l'actif et au passif, différent
 
 Les projections sont réalisées sous une hypothèse de run-off, c'est-à-dire sans prise en compte d'affaires nouvelles sur l'horizon de projection. Cette hypothèse est conservée aussi bien pour le portefeuille central que pour l'ensemble des sensibilités étudiées par la suite.
 
-Le Best Estimate stochastique est calculé sur un horizon de 60 ans à partir de 1\,000 simulations issues du GSE. Pour le scénario central, la volatilité des actions est fixée à 14,65\,\% et la volatilité des taux à 0,60\,\%.
+Le Best Estimate stochastique est calculé sur un horizon de 60 ans à partir de 1\,000 simulations issues du GSE. Pour le scénario central, la volatilité des actions est fixée à 14,65\,\% et la volatilité moyenne pondéréedes taux à 0,60\,\%.
 
 La courbe des taux sans risque ainsi que la VA utilisées correspondent aux données du 31 décembre 2025. De la même manière, l'ajustement symétrique appliqué au choc actions, appelé dampener, est celui observé au 31 décembre 2025 et s'élève à 7,9\,\%.
 
@@ -253,24 +375,12 @@ Le bilan initial comporte par ailleurs une Provision pour Participation aux Exc�
 
 Dans le cadre de l'étude, 60\,\% de la PPE est considérée comme admissible en fonds propres. En intégrant cette composante, le taux de couverture atteint environ 208\,\%.
 
-\begin{table}[H]
+\begin{figure}[H]
     \centering
-    \caption{Principaux indicateurs du portefeuille central}
-    \label{tab:indicateurs_central}
-    \begin{tabular}{lc}
-        \hline
-        \textbf{Indicateur} & \textbf{Valeur} \\
-        \hline
-        NAV & 13,54 M\euro \\
-        Risk Margin & 1,72 M\euro \\
-        SCR & 7,95 M\euro \\
-        PPE & 5,00 M\euro \\
-        Part admissible de la PPE & 60\,\% \\
-        Taux de couverture hors PPE & 170\,\% \\
-        Taux de couverture avec PPE admissible & 208\,\% \\
-        \hline
-    \end{tabular}
-\end{table}
+    \includegraphics[width=0.90\textwidth]
+    {images/2_chapitres/chapitre2/bilan_s2_schematique_v3.png}
+    \caption{Bilan Solvabilité II du portefeuille central}
+\end{figure}
 
 
 \paragraph{Best Estimate du portefeuille central}
@@ -320,8 +430,7 @@ Pour répondre à cette problématique, une base de données a été construite 
 
 La base de données est composée de neuf variables explicatives :
 
-\begin{itemize}
-    \renewcommand{\labelitemi}{\textbullet}
+\begin{itemize}[label=\textemdash, nosep, leftmargin=2.5em]
     \item la courbe des taux ;
     \item le spread ;
     \item la volatilité des taux ;
@@ -361,13 +470,13 @@ L'objectif est de générer un ensemble d'observations structurées permettant d
 
 Chaque observation de la base correspond donc à une configuration donnée des hypothèses du modèle. Cette configuration est définie par une combinaison de valeurs prises par les neuf variables explicatives.
 
-Les sensibilités sont réalisées à une date de valorisation donnée et sur un périmètre de passif constant. En dehors des variables explicitement soumises à sensibilité, l'ensemble des autres hypothèses est maintenu identique au cours des calculs.
+Les sensibilités sont toutes réalisées à la date de valorisation du 31 décembre 2025, à partir du même portefeuille central et sous hypothèse de run-off. Le volume des provisions mathématiques, leur répartition entre supports euro et unités de compte ainsi que la segmentation en model points demeurent donc identiques d'une configuration à l'autre. Les variations portent exclusivement sur les hypothèses économiques, contractuelles et comportementales retenues pour la projection. En dehors des neuf variables explicatives, l'ensemble des autres hypothèses est maintenu inchangé, de sorte que les écarts observés puissent être rattachés aux seules variables soumises à sensibilité.
 
 Cette démarche permet de limiter les effets extérieurs aux paramètres étudiés. Les variations observées dans les résultats peuvent ainsi être principalement rattachées aux variables soumises à sensibilité.
 
 Pour chaque configuration testée, SALLTO permet de calculer :
 
-\begin{itemize}
+\begin{itemize}[label=\textemdash, nosep, leftmargin=2.5em]
     \item un Best Estimate déterministe ;
     \item un Best Estimate stochastique ;
     \item la variable cible définie par l'équation~\eqref{eq:variable_cible}.
@@ -386,8 +495,7 @@ L'objectif de ces études était d'identifier les variables ayant le plus d'impa
 
 Les variables initialement testées étaient les suivantes :
 
-\begin{itemize}
-    \renewcommand{\labelitemi}{\textbullet}
+\begin{itemize}[label=\textemdash, nosep, leftmargin=2.5em]
     \item la volatilité des taux ;
     \item la volatilité des actions ;
     \item les rachats conjoncturels ;
@@ -409,8 +517,7 @@ La courbe du 31 décembre 2021 a été retenue car elle correspond à un environ
 
 Afin de couvrir plusieurs environnements économiques, cinq courbes de taux sont finalement utilisées :
 
-\begin{itemize}
-    \renewcommand{\labelitemi}{\textbullet}
+\begin{itemize}[label=\textemdash, nosep, leftmargin=2.5em]
     \item la courbe au 31 décembre 2024 ;
     \item la courbe au 31 décembre 2023 ;
     \item la courbe au 31 décembre 2025 ;
@@ -420,38 +527,25 @@ Afin de couvrir plusieurs environnements économiques, cinq courbes de taux sont
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]
+    \includegraphics[width=0.6\textwidth]
     {images/2_chapitres/chapitre2/courbe_des_taux_utilisés.png}
     \caption{Courbes de taux retenues pour la construction de la base de données}
     \label{fig:courbes_taux}
 \end{figure}
 
+Ce choix permet de couvrir à la fois un environnement de taux bas, avec la courbe au 31 décembre 2021, et un environnement de taux élevés, avec la courbe au 31 décembre 2025 relevée de 2,5 %. Les courbes au 31 décembre 2023, 2024 et 2025 présentent quant à elles des niveaux de taux comparables mais des pentes différentes. La variable ainsi construite ne se réduit donc pas à un effet de niveau : elle permet également d'observer l'incidence de la pentification de la courbe sur l'écart entre les deux valorisations.
+
  Ces tableaux permettent de comparer l'impact des différentes sensibilités au 31/12/2025 sur les différentes variables testées.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.95\textwidth]
-    {images/2_chapitres/chapitre2/tableau_sensi_2025_1.png}
-    \caption{Résultats de l'étude préliminaire de sensibilité -- première partie}
+    \includegraphics[width=0.90\textwidth]
+    {images/2_chapitres/chapitre2/synthese_sensibilites_tvog_2025.png}
+    \caption{Résultats de l'étude préliminaire de sensibilité réalisée avec la courbe des taux au 31 décembre 2025}
     \label{fig:sensi_1}
 \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.95\textwidth]
-    {images/2_chapitres/chapitre2/tableau_sensi_2025_2.png}
-    \caption{Résultats de l'étude préliminaire de sensibilité -- deuxième partie}
-    \label{fig:sensi_2}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.95\textwidth]
-    {images/2_chapitres/chapitre2/tableau_sensi_2025_3.png}
-    \caption{Résultats de l'étude préliminaire de sensibilité -- troisième partie}
-    \label{fig:sensi_3}
-\end{figure}
-
+Le graphique précédent synthétise les résultats de la première étude préliminaire, réalisée avec la courbe des taux au 31 décembre 2025. Chaque barre correspond à une hypothèse soumise à sensibilité et reporte les valeurs extrêmes atteintes, sur l'ensemble des modalités testées, par la variation de l'écart entre les deux valorisations rapportée à son niveau dans la configuration centrale. Les variables sont classées par amplitude décroissante, la couleur distinguant celles qui sont retenues dans la base de données définitive de celles qui sont écartées. Cette figure ne constitue pas un résultat en soi : elle sert de support à la sélection des variables présentée à la section 2.3.6, en distinguant les hypothèses dont la variation modifie sensiblement l'écart entre les deux valorisations de celles dont l'effet demeure marginal. Le détail des valorisations obtenues pour chaque modalité est reporté en annexe. La seconde étude, conduite dans l'environnement de taux du 31 décembre 2021, conduit à la même hiérarchie des variables et n'est donc pas reproduite ici. Elle confirme que les conclusions retenues ne dépendent pas du seul environnement de taux observé au 31 décembre 2025.
 
 \subsection{Construction de la variable de duration}
 
@@ -468,8 +562,7 @@ La variable de duration permet donc de résumer une partie de l'information port
 
 Les neuf variables retenues sont :
 
-\begin{enumerate}
-    \renewcommand{\labelitemi}{\textbullet}
+\begin{itemize}[label=\textemdash, nosep, leftmargin=2.5em]
     \item la courbe des taux ;
     \item le spread ;
     \item la volatilité des taux ;
@@ -479,7 +572,7 @@ Les neuf variables retenues sont :
     \item les rachats conjoncturels ;
     \item la duration du passif ;
     \item le TMG.
-\end{enumerate}
+\end{itemize}
 
 Ces variables permettent de représenter à la fois l'environnement économique, les caractéristiques des contrats, la structure du passif et le comportement des assurés.
 
@@ -513,7 +606,7 @@ Le nombre total de configurations est donc égal à :
 
 La base de données finale contient ainsi \(51\,840\) lignes. Chaque ligne correspond à une configuration particulière du portefeuille et contient :
 
-\begin{itemize}
+\begin{itemize}[label=\textemdash, nosep, leftmargin=2.5em]
     \item les valeurs prises par les neuf variables explicatives ;
     \item le Best Estimate déterministe ;
     \item le Best Estimate stochastique ;
@@ -539,26 +632,10 @@ Pour chacun de ces jeux de scénarios, les autres variables ont ensuite été co
 
 \subsection{Lancement automatisé de SALLTO}
 
-Le lancement manuel de \(51\,840\) projections n'était pas envisageable compte tenu du volume de calculs nécessaire. Une procédure d'automatisation a donc été mise en place afin de lancer successivement les différentes configurations dans SALLTO.
+Le lancement manuel de 51 840 projections n'était pas envisageable compte tenu du volume de calculs nécessaire. Une chaîne de traitement automatisée a donc été développée en Python, articulée autour de trois programmes successifs.
 
-Cette automatisation poursuit plusieurs objectifs :
+Le premier génère les fichiers d'entrée de SALLTO à partir de la grille des modalités. Chaque fichier regroupe 20 portefeuilles, ce qui conduit à 2 592 fichiers d'entrée pour couvrir l'ensemble des configurations. Le second pilote l'exécution : il lance la projection, choisi le nombre de coeurs disponibles pour le calcul et attend sa fin avant de passer au lancement suivant. Le troisième consolide la base finale en rapprochant les fichiers de sortie d'un fichier de correspondance recensant, pour chaque projection, les valeurs prises par les neuf variables explicatives.
 
-\begin{itemize}
-    \item modifier les hypothèses du fichier d'entrée ;
-    \item sélectionner le jeu de scénarios économiques correspondant ;
-    \item lancer automatiquement SALLTO ;
-    \item attendre la fin de chaque projection ;
-    \item récupérer et enregistrer les fichiers de sortie ;
-    \item associer chaque résultat à la configuration correspondante ;
-    \item regrouper les résultats dans une base de données unique.
-\end{itemize}
+Le format de sortie de SALLTO a par ailleurs été modifié pour les besoins de l'étude. Seuls le Best Estimate déterministe et le Best Estimate stochastique sont conservés, dans un fichier au format CSV, les sorties détaillées habituellement produites par le modèle étant inutiles à ce stade et coûteuses à stocker sur un tel volume de projections. Afin de conserver néanmoins une capacité de contrôle, une sortie complète est générée toutes les 30 exécutions, soit 87 projections documentées dans leur intégralité sur les 2 592 effectués. Ces sorties permettent de vérifier le bon déroulement des projections et la cohérence des résultats agrégés avec le détail des flux projetés.
 
-% À compléter avec la description précise de ton programme :
-% - langage utilisé ;
-% - utilisation éventuelle de pywinauto ;
-% - organisation des boucles ;
-% - nommage des outputs ;
-% - contrôle de la fin du calcul ;
-% - extraction du BE déterministe et du BE stochastique ;
-% - temps total de lancement ;
-% - gestion des erreurs.
+Cette automatisation ne constitue pas seulement une réponse à une contrainte de volume. Elle garantit que l'ensemble des configurations est traité selon un processus identique, sans intervention manuelle susceptible d'introduire une erreur de paramétrage, et rend la construction de la base entièrement reproductible. 

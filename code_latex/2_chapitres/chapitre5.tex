@@ -1,7 +1,250 @@
 \chapter{Limites, apports et perspectives}
 
+Les chapitres précédents ont conduit à construire une base de simulations à partir du modèle ALM interne, puis à ajuster trois familles de modèles afin de reproduire et d'expliquer l'écart entre le Best Estimate déterministe et le Best Estimate stochastique. Les résultats obtenus ont été présentés au chapitre~4.
+
+Ce dernier chapitre prend du recul par rapport à ces résultats. Il précise d'abord ce que la démarche apporte concrètement, sur le plan opérationnel comme au regard des exigences prudentielles. Il expose ensuite les limites qui en encadrent la portée, en distinguant celles qui tiennent aux données, au modèle ALM sous-jacent, aux méthodes statistiques retenues et enfin à l'usage qui peut être fait des résultats. Il propose enfin plusieurs pistes d'approfondissement, chacune répondant à l'une des limites identifiées.
+
+Plusieurs de ces limites ont déjà été signalées au fil du mémoire, notamment la question du domaine de validité du métamodèle (cf. section~3.1.3), les difficultés d'extrapolation des méthodes fondées sur les arbres (cf. section~3.2.3) et la présence d'une erreur de simulation irréductible dans la variable cible (cf. section~3.3.2.1). Elles sont reprises ici de manière consolidée, afin de disposer d'une vue d'ensemble de la portée réelle des conclusions.
+
+% ==========================================================================
 \section{Apports opérationnels et réglementaires}
+% ==========================================================================
 
+\subsection{Une lecture explicite du passage du Best Estimate déterministe au Best Estimate stochastique}
+
+La problématique posée en introduction ne portait pas sur le choix entre les deux méthodes de valorisation, mais sur la compréhension de l'écart qui les sépare. Cet écart, égal à \([\,\ldots\,]\)~\% des provisions mathématiques pour le portefeuille central, est fréquemment constaté en pratique sans faire l'objet d'une décomposition formalisée. Il est alors interprété globalement comme le coût des options et garanties du portefeuille, sans que la contribution respective de chacune de ses composantes soit quantifiée.
+
+La démarche développée dans ce mémoire apporte précisément cette décomposition. Les contributions obtenues par la méthode SHAP permettent d'attribuer à chaque caractéristique du portefeuille une part de l'écart observé, et ce pour une configuration donnée. L'écart cesse ainsi d'être une grandeur agrégée pour devenir une somme de contributions individuellement identifiables.
+
+Cet apport présente un intérêt direct dans le cadre prudentiel. La directive Solvabilité~II impose aux organismes d'assurance de disposer d'un système de gouvernance permettant une gestion saine et prudente de leur activité, et confie à la fonction actuarielle la responsabilité d'apprécier la fiabilité et le caractère adéquat du calcul des provisions techniques. Cette appréciation suppose de pouvoir expliquer les résultats produits, et non seulement de les produire. Une décomposition documentée de l'écart entre les deux modes de valorisation constitue à cet égard un élément de justification mobilisable dans le rapport de la fonction actuarielle, dans les échanges avec l'autorité de contrôle ou lors des travaux de validation interne.
+
+\subsection{Une hiérarchisation des facteurs d'écart confrontée à la lecture actuarielle}
+
+Au-delà de la décomposition configuration par configuration, l'analyse conduite au chapitre~4 aboutit à une hiérarchisation d'ensemble des neuf variables explicatives retenues. Cette hiérarchisation présente un double intérêt.
+
+Elle constitue d'abord un test de cohérence. La théorie actuarielle conduit à attendre un rôle prépondérant des variables gouvernant le coût des garanties financières, en particulier le niveau de la courbe des taux, le taux minimum garanti et la garantie de taux, ainsi que des variables déterminant la richesse mobilisable par l'assureur et la dispersion des trajectoires, telles que le taux de plus-values latentes et les volatilités. La confrontation de cette attente aux résultats obtenus permet d'apprécier si le modèle ALM se comporte conformément aux mécanismes qu'il est censé représenter. \([\,\text{Rappeler ici le classement obtenu et indiquer s'il confirme ou nuance cette lecture.}\,]\)
+
+Elle apporte ensuite une information quantitative que l'intuition métier seule ne fournit pas. L'ordre des facteurs est en effet rarement contesté~; leur poids relatif l'est davantage. Disposer d'une mesure de l'écart d'importance entre deux variables, et non seulement de leur classement, permet d'orienter les travaux d'analyse vers les hypothèses réellement structurantes.
+
+Un troisième élément mérite d'être souligné. La comparaison entre le GLM et les méthodes non linéaires, présentée à la section~4.1, ne constitue pas seulement un exercice de sélection de modèle. Elle renseigne sur la nature même de la relation apprise. Un gain de performance marqué des méthodes non linéaires indiquerait que l'écart entre les deux valorisations ne se réduit pas à une somme d'effets additifs et que des interactions entre variables interviennent de manière significative, conformément à l'hypothèse formulée à la section~3.1.2. \([\,\text{Conclure au regard des résultats obtenus.}\,]\)
+
+\subsection{Un métamodèle mobilisable comme outil exploratoire}
+
+Le positionnement retenu à la section~3.1.3 assimile le modèle appris à un métamodèle : il approche une sortie du modèle ALM à partir d'un nombre réduit de caractéristiques du portefeuille. Une fois entraîné, il fournit une estimation de l'écart en un temps négligeable, là où la projection stochastique correspondante requiert la répétition de la mécanique ALM sur l'ensemble des trajectoires issues du générateur de scénarios économiques.
+
+Ce différentiel de coût calculatoire ouvre plusieurs usages opérationnels, sous réserve des limites exposées à la section~5.2 :
+
+\begin{itemize}
+  \item \textbf{le pré-cadrage des travaux de sensibilité}, en permettant de balayer un grand nombre de configurations afin d'identifier celles qui méritent un lancement complet du modèle ALM~;
+  \item \textbf{l'appui aux analyses de mouvement}, en apportant une décomposition des facteurs expliquant l'évolution de l'écart entre deux dates de valorisation, dans le prolongement des travaux présentés à la section~4.4~;
+  \item \textbf{le contrôle de premier niveau}, un écart constaté en clôture s'écartant sensiblement de la prédiction du métamodèle constituant un signal justifiant une investigation, sans que cet écart présume d'une anomalie~;
+  \item \textbf{l'appui pédagogique}, la restitution des contributions facilitant l'échange avec des interlocuteurs non spécialistes de la modélisation ALM.
+\end{itemize}
+
+\subsection{Un cadre méthodologique reproductible}
+
+L'apport de la démarche ne se limite pas aux résultats obtenus sur le portefeuille étudié. La chaîne mise en place, décrite par la relation~(3.10), constitue en elle-même un livrable transposable : définition d'un portefeuille central, sélection des variables à partir d'études préliminaires de sensibilité, construction d'un plan d'expérience, lancement automatisé des projections, apprentissage supervisé et analyse explicative.
+
+Chacune de ces étapes a été documentée et repose sur des choix explicités : critères de sélection des variables (cf. section~2.3.6), amplitude des sensibilités (cf. section~2.3.7), protocole de séparation des données (cf. section~3.3.1), calibration des hyperparamètres (cf. section~3.3.2) et critères d'évaluation (cf. section~3.4). Cette traçabilité répond aux attentes en matière de documentation des modèles et permet de reproduire la démarche sur un autre portefeuille ou à une autre date d'arrêté sans reconstruire la méthodologie.
+
+L'automatisation du lancement de SALLTO (cf. section~2.3.9) mérite d'être mentionnée à ce titre. Elle a rendu possible la production des 51~840~configurations de la base, volume hors de portée d'un lancement manuel, et constitue un actif réutilisable indépendamment de la question traitée dans ce mémoire.
+
+% ==========================================================================
 \section{Limites de l'approche}
+% ==========================================================================
 
+Les apports décrits ci-dessus sont encadrés par un ensemble de limites qu'il convient d'exposer avec précision. Elles sont présentées ci-après selon leur origine, depuis la construction des données jusqu'à l'usage des résultats.
+
+\subsection{Limites tenant à la construction de la base de données}
+
+\paragraph{Un portefeuille central unique et fictif.} L'ensemble des observations de la base d'apprentissage provient de sensibilités appliquées à un portefeuille central unique, construit à partir d'hypothèses représentatives des pratiques de marché mais ne correspondant à aucun assureur en particulier (cf. section~2.2). Les relations identifiées entre les caractéristiques du portefeuille et l'écart de valorisation demeurent donc conditionnées à la structure de ce portefeuille : allocation d'actifs, composition du passif, niveau des provisions pour participation aux bénéfices et rapport entre engagements garantis et richesse disponible.
+
+La validation externe conduite sur un second portefeuille central (cf. section~4.3) apporte un premier élément de réponse à cette limite, mais ne la lève pas. Deux portefeuilles ne suffisent pas à établir la portée générale des relations mises en évidence, et l'ampleur de la dégradation observée \([\,\ldots\,]\) fournit une indication sur la sensibilité du métamodèle à ses conditions de construction plutôt qu'une mesure de sa validité sur l'ensemble des portefeuilles d'assurance vie.
+
+\paragraph{Une base construite par croisement de modalités, non par échantillonnage.} La base résulte du croisement complet des modalités retenues pour les neuf variables explicatives (cf. section~2.3.8). Elle ne constitue donc pas un échantillon aléatoire représentatif : chaque configuration y possède le même poids, indépendamment de sa vraisemblance économique. Des combinaisons peu plausibles, associant par exemple un environnement de taux élevés à un taux de plus-values latentes très faible, y sont représentées au même titre que des configurations courantes.
+
+Cette construction est cohérente avec l'objectif poursuivi, qui consiste à explorer le comportement du modèle ALM sur un domaine défini plutôt qu'à reproduire une distribution de portefeuilles observés. Elle interdit en revanche toute lecture probabiliste des résultats : les importances obtenues mesurent l'influence d'une variable sur le domaine exploré, et non son influence attendue dans les conditions effectivement rencontrées par un assureur.
+
+Cette même construction explique par ailleurs la portée limitée de l'échantillon de test. Le tirage étant réalisé ligne à ligne au sein d'une grille factorielle complète, chaque observation de test possède des configurations directement voisines dans l'échantillon d'apprentissage. Les indicateurs présentés à la section~4.1 mesurent donc une capacité d'interpolation à l'intérieur du domaine des sensibilités, non une capacité d'extrapolation (cf. section~3.4.3).
+
+\paragraph{Un ensemble d'hypothèses maintenues constantes.} Neuf variables ont été retenues à l'issue des études préliminaires de sensibilité (cf. section~2.3.6). L'ensemble des autres hypothèses du modèle a été maintenu à sa valeur centrale : tables de mortalité, chargements et frais, politique de participation aux bénéfices, règles de dotation et de reprise de la provision pour participation aux excédents, allocation d'actifs cible et décisions de gestion.
+
+Ces hypothèses ne sont pas neutres sur l'écart étudié. La politique de participation aux bénéfices et les règles de gestion des actifs déterminent directement la capacité de l'assureur à absorber les scénarios défavorables, donc le coût des garanties financières. Le métamodèle décrit ainsi le comportement de l'écart \emph{à politique de gestion donnée}, et ses conclusions ne peuvent être transposées à un assureur dont les décisions de gestion différeraient sensiblement.
+
+La sélection elle-même appelle une réserve. Les études préliminaires ont apprécié l'impact des variables candidates en les faisant varier séparément. Une variable dont l'effet propre est modeste mais qui interagit fortement avec une autre a donc pu être écartée à tort. L'inflation et la participation aux bénéfices, testées puis non retenues, appartiennent à cette catégorie de facteurs dont l'effet est susceptible de se manifester principalement en combinaison avec le niveau des taux.
+
+\paragraph{Une variable de duration agrégée.} L'âge des assurés et les rachats structurels ont été résumés par une unique variable de duration du passif (cf. section~2.3.5). Ce regroupement se justifie par le fait que ces deux facteurs agissent dans le même sens sur la durée de détention des contrats, mais il entraîne une perte d'information. Deux portefeuilles présentant une duration identique peuvent en effet correspondre à des structures très différentes, l'une reposant sur une population âgée à faible taux de rachat, l'autre sur une population jeune à taux de rachat élevé. Leur sensibilité aux scénarios de taux, et donc leur exposition aux rachats conjoncturels, n'est pas nécessairement comparable.
+
+\subsection{Limites tenant au modèle ALM sous-jacent}
+
+Une limite structurelle mérite d'être clairement énoncée : \textbf{le métamodèle apprend le comportement de SALLTO, et non la réalité économique sous-jacente}. La variable cible n'est pas une grandeur observée mais une sortie de modèle. Toute approximation, simplification ou erreur de calibration présente dans le modèle ALM est donc reproduite fidèlement par le métamodèle, qui n'offre à cet égard aucune capacité de détection.
+
+Trois éléments de la chaîne de projection appellent une attention particulière.
+
+Le \textbf{générateur de scénarios économiques} détermine la distribution des trajectoires alimentant la projection stochastique. Le coût des garanties financières dépend directement de cette distribution, en particulier de la dispersion des taux courts et de la structure de corrélation entre classes d'actifs. Les conclusions relatives au rôle des volatilités demeurent donc conditionnées à la calibration du générateur retenue au 31~décembre~2025.
+
+La \textbf{loi de rachat conjoncturel} traduit une hypothèse comportementale dont la calibration repose sur des données historiques limitées, les épisodes de forte tension sur les taux étant peu nombreux. L'importance attribuée à cette variable reflète donc pour partie la forme fonctionnelle retenue dans le modèle plutôt qu'un comportement établi.
+
+Les \textbf{décisions de gestion} modélisées, qu'il s'agisse de la politique de réalisation de plus-values ou des règles de dotation à la provision pour participation aux excédents, exercent une influence directe sur l'écart entre les deux valorisations. Elles constituent une représentation simplifiée d'arbitrages en pratique discrétionnaires.
+
+Enfin, le Best Estimate stochastique est estimé à partir de 1\,000~simulations et comporte à ce titre une erreur d'échantillonnage de Monte-Carlo, formalisée par le terme~\(\sigma^2\) de l'équation~(3.26). Cette erreur affecte directement la variable cible et fixe un plancher à la performance atteignable. Elle introduit également un risque spécifique : un modèle suffisamment flexible peut reproduire ces fluctuations de simulation plutôt que la relation sous-jacente, ce que les mécanismes de régularisation décrits à la section~3.3.2 visent précisément à contenir.
+
+\subsection{Limites tenant aux modèles statistiques retenus}
+
+\paragraph{Une capacité d'extrapolation limitée.} Les méthodes fondées sur les arbres prédisent, pour toute configuration située au-delà du domaine d'apprentissage, la valeur associée à la feuille terminale la plus proche. Leur prédiction devient donc constante hors du domaine couvert, quelle que soit l'ampleur du dépassement (cf. section~3.2.3). Un environnement de taux plus défavorable que la plus basse des cinq courbes retenues, ou un taux minimum garanti supérieur à la modalité maximale de la base, ne serait pas correctement traité. Cette limite est d'autant plus contraignante que les configurations extrêmes sont précisément celles où le coût des garanties financières devient le plus significatif.
+
+\paragraph{Une stabilité des coefficients conditionnée à l'absence de colinéarité.} L'interprétation des coefficients du GLM suppose que les variables explicatives ne soient pas fortement corrélées entre elles. La construction factorielle de la base garantit l'orthogonalité des neuf variables soumises à sensibilité, ce qui constitue une situation favorable. Cette propriété disparaîtrait toutefois si la démarche était appliquée à des données issues d'un portefeuille réel, dans lesquelles le niveau des taux, le taux de plus-values latentes et la duration du passif entretiennent des liens étroits.
+
+\paragraph{Des mesures d'explicabilité qui reposent sur des hypothèses.} Les valeurs SHAP décomposent additivement une prédiction en contributions individuelles. Cette décomposition constitue une approximation locale du comportement du modèle et non une mesure d'effet causal. Deux réserves méritent d'être formulées. D'une part, la contribution attribuée à une variable dépend de la manière dont les variables absentes sont marginalisées, ce qui peut conduire à évaluer le modèle sur des combinaisons de valeurs peu vraisemblables. D'autre part, en présence d'interactions, la répartition d'un effet conjoint entre les variables concernées relève d'une convention d'imputation, et non d'une propriété du phénomène étudié.
+
+\subsection{Limites d'interprétation}
+
+\paragraph{Un raisonnement \emph{ceteris paribus}.} Chaque observation de la base résulte de la modification d'une ou plusieurs hypothèses, toutes les autres étant maintenues constantes. Les effets identifiés sont donc des effets marginaux au sens strict, alors que les variables évoluent conjointement dans la réalité. Une hausse des taux d'intérêt s'accompagne ainsi mécaniquement d'une baisse des plus-values latentes obligataires et d'une pression accrue sur les rachats conjoncturels. L'effet observé lors d'un changement d'environnement économique résulte de la composition de ces mouvements, et ne correspond donc pas à la seule contribution attribuée à la courbe des taux.
+
+Cette précision est essentielle pour la lecture des résultats du chapitre~4 : les contributions obtenues décrivent la structure du modèle, non l'évolution attendue de l'écart d'un arrêté à l'autre.
+
+\paragraph{Importance statistique et causalité.} Une variable identifiée comme importante contribue fortement à la reproduction de la variable cible par le modèle. Il ne s'ensuit pas qu'elle constitue le mécanisme causal à l'origine de l'écart. Une variable fortement liée à un facteur non intégré à la base peut en capter l'effet et voir son importance surestimée. L'interprétation actuarielle des résultats demeure donc nécessaire et ne peut être déduite des seules mesures d'importance.
+
+\subsection{Limites d'usage et enjeux de gouvernance}
+
+Le métamodèle ne saurait se substituer au calcul du Best Estimate réglementaire. Les provisions techniques doivent être évaluées selon les principes fixés par la directive, et une approximation apprise sur un domaine restreint ne satisfait pas aux exigences applicables à une valorisation prudentielle. L'usage envisagé demeure exploratoire, analytique et pédagogique, conformément au positionnement défini à la section~3.1.3.
+
+Cette restriction emporte une conséquence pratique. Si le métamodèle venait à être mobilisé de manière récurrente dans les processus de l'organisme, il relèverait alors du dispositif de gouvernance des modèles : documentation, revue périodique, contrôle des données d'entrée, définition d'un domaine d'emploi et suivi de la performance dans le temps. La légèreté d'utilisation du proxy ne doit pas conduire à un usage non encadré, d'autant que sa rapidité d'exécution en facilite précisément la diffusion.
+
+Une dernière limite tient à la stabilité temporelle. Le métamodèle a été appris à partir de projections réalisées au 31~décembre~2025, avec la calibration du générateur de scénarios économiques et les hypothèses en vigueur à cette date. Une évolution du modèle ALM, de ses hypothèses ou de la calibration du générateur invaliderait progressivement les relations apprises, sans que cette dérive soit nécessairement détectable à la seule lecture des prédictions.
+
+% --------------------------------------------------------------------------
+% Tableau 5.1 — Synthèse des limites
+% --------------------------------------------------------------------------
+\begin{table}[htbp]
+\centering
+\caption{Synthèse des principales limites de l'étude}
+\label{tab:synthese_limites}
+\renewcommand{\arraystretch}{1.35}
+\setlength{\arrayrulewidth}{0.4pt}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{4.4cm}}
+\arrayrulecolor{rougeCorp}\toprule
+\rowcolor{rougeCorp}
+\textcolor{white}{\textbf{Origine}} & \textcolor{white}{\textbf{Limite}} & \textcolor{white}{\textbf{Portée sur les conclusions}} \\
+\midrule
+\rowcolor{rosePale}
+Données & Portefeuille central unique et fictif & Résultats conditionnés à la structure du portefeuille retenu \\
+\rowcolor{white}
+Données & Grille factorielle complète, sans représentativité statistique & Aucune lecture probabiliste des importances obtenues \\
+\rowcolor{rosePale}
+Données & Hypothèses de gestion et de frais maintenues constantes & Conclusions valables à politique de gestion donnée \\
+\rowcolor{white}
+Données & Sélection des variables sur sensibilités univariées & Risque d'omission de facteurs à effet d'interaction \\
+\rowcolor{rosePale}
+Modèle ALM & Le proxy reproduit SALLTO, non la réalité économique & Les approximations du modèle ALM sont héritées \\
+\rowcolor{white}
+Modèle ALM & Erreur de Monte-Carlo sur 1\,000 simulations & Plancher de performance et risque de surapprentissage \\
+\rowcolor{rosePale}
+Modèles ML & Extrapolation limitée hors du domaine appris & Prédictions non fiables sur les configurations extrêmes \\
+\rowcolor{white}
+Modèles ML & Hypothèses sous-jacentes aux valeurs SHAP & Contributions à interpréter comme locales et conventionnelles \\
+\rowcolor{rosePale}
+Interprétation & Construction \emph{ceteris paribus} des sensibilités & Effets marginaux non transposables à une variation réelle \\
+\rowcolor{white}
+Usage & Absence de valeur réglementaire du proxy & Usage exploratoire et analytique uniquement \\
+\bottomrule
+\arrayrulecolor{black}
+\end{tabularx}
+\end{table}
+
+% ==========================================================================
 \section{Perspectives d'amélioration}
+% ==========================================================================
+
+Les limites exposées ci-dessus ouvrent plusieurs axes de prolongement. Ils sont présentés en suivant la chaîne méthodologique, depuis la construction des données jusqu'à l'usage opérationnel des résultats.
+
+\subsection{Faire évoluer le plan d'expérience}
+
+La construction factorielle complète retenue présente l'avantage de la simplicité et garantit l'orthogonalité des variables. Son coût croît toutefois de manière multiplicative avec le nombre de variables et de modalités : les 51~840~configurations de la base résultent du croisement de neuf variables ne comportant que deux à cinq modalités chacune. Ajouter une dixième variable à trois modalités porterait ce total à plus de 150~000~projections.
+
+Les plans à remplissage d'espace constituent une alternative usuelle en métamodélisation. L'hypercube latin ou les suites à faible discrépance, telles que les suites de Sobol, permettent de couvrir un domaine de dimension élevée avec un nombre de points nettement inférieur, tout en évitant la concentration des observations sur un réseau régulier. À budget de calcul constant, une telle approche autoriserait soit l'intégration de variables supplémentaires, notamment l'inflation et les paramètres de la politique de participation aux bénéfices écartés à la section~2.3.6, soit un élargissement du domaine exploré vers les configurations extrêmes.
+
+Ces plans présentent un second avantage : les variables y prennent des valeurs continues plutôt que des modalités discrètes, ce qui permet d'estimer des effets sur l'ensemble d'un intervalle et non aux seuls points de la grille. La question de l'extrapolation, identifiée à la section~5.2.3, s'en trouverait sensiblement atténuée.
+
+\subsection{Réduire le bruit de simulation}
+
+Le terme~\(\sigma^2\) de l'équation~(3.26) fixe un plancher à la performance atteignable et complique la distinction entre relation sous-jacente et fluctuation de simulation. Deux voies permettraient de le réduire.
+
+La première consiste à augmenter le nombre de scénarios économiques, l'erreur d'estimation décroissant en \(1/\sqrt{N}\). Son coût est toutefois proportionnel au nombre de projections, ce qui la rend difficilement compatible avec la taille de la base.
+
+La seconde repose sur les techniques de réduction de variance. L'emploi de variables antithétiques ou d'un jeu de scénarios communs à l'ensemble des configurations permettrait de diminuer la composante d'erreur sans multiplier le nombre de simulations. L'utilisation d'un jeu commun présenterait un intérêt spécifique dans le cadre de cette étude : les erreurs de simulation deviendraient corrélées entre configurations voisines, de sorte que les écarts observés entre deux configurations traduiraient plus fidèlement l'effet de la variable modifiée.
+
+Une troisième voie, moins coûteuse, consisterait à quantifier ce bruit plutôt qu'à le réduire, en relançant un sous-ensemble de configurations avec plusieurs tirages de scénarios. L'ordre de grandeur de \(\sigma^2\) ainsi estimé fournirait une référence explicite pour la lecture des indicateurs de performance, en cohérence avec l'analyse proposée à la section~3.4.3.
+
+\subsection{Élargir la famille de métamodèles}
+
+Les trois modèles retenus couvrent un spectre allant du modèle linéaire au boosting. Plusieurs autres familles mériteraient d'être examinées.
+
+Les modèles additifs généralisés et les GLM enrichis de fonctions splines permettraient de représenter des effets non linéaires tout en conservant une structure additive lisible. Ils occuperaient une position intermédiaire entre le GLM et les méthodes fondées sur les arbres, en offrant davantage de flexibilité sans renoncer à l'interprétabilité directe des effets.
+
+Le krigeage, ou régression par processus gaussiens, constitue l'approche de référence en métamodélisation de codes de calcul déterministes. Son intérêt principal dans le contexte de cette étude tient à ce qu'il fournit, en plus d'une prédiction, une mesure de l'incertitude associée. Cette incertitude croît naturellement à mesure que l'on s'éloigne des points d'apprentissage, ce qui apporte une réponse directe à la limite du domaine de validité exposée à la section~5.2.3 : le métamodèle signalerait lui-même les configurations sur lesquelles sa prédiction ne peut être considérée comme fiable. Cette propriété présenterait une valeur particulière dans une perspective d'usage encadré.
+
+Les méthodes de type Least Squares Monte Carlo, développées pour l'accélération des valorisations stochastiques en assurance vie, constituent enfin un point de comparaison naturel. Leur logique diffère de celle retenue ici, puisqu'elles régressent des flux simulés plutôt qu'une sortie agrégée, mais leur confrontation permettrait de situer la démarche par rapport aux pratiques de place.
+
+\subsection{Approfondir l'analyse explicative}
+
+Plusieurs outils compléteraient utilement l'analyse conduite au chapitre~4.
+
+Les valeurs d'interaction SHAP permettent de distinguer, au sein de la contribution attribuée à une variable, la part relevant de son effet propre et celle résultant de sa combinaison avec d'autres variables. Elles apporteraient une réponse quantitative à la question des interactions, centrale dans le choix des méthodes non linéaires.
+
+Les courbes d'effets locaux accumulés, ou courbes ALE, offrent une représentation des effets marginaux plus robuste que les courbes de dépendance partielle lorsque les variables explicatives sont corrélées. Elles présenteraient un intérêt particulier si la démarche était étendue à des données issues de portefeuilles réels.
+
+L'analyse de sensibilité globale, au moyen des indices de Sobol, décomposerait la variance de l'écart en contributions attribuables à chaque variable et à leurs interactions. Cette approche s'articulerait naturellement avec l'évolution du plan d'expérience proposée à la section~5.3.1 et fournirait une hiérarchisation des facteurs fondée sur la décomposition de la variance plutôt que sur le comportement d'un modèle appris.
+
+\subsection{Étendre le périmètre d'application}
+
+La perspective la plus directe consiste à multiplier les portefeuilles centraux. La validation externe conduite sur un second portefeuille (cf. section~4.3) constitue un premier pas, mais une base construite à partir de plusieurs portefeuilles, dont les caractéristiques structurelles seraient elles-mêmes intégrées comme variables explicatives, permettrait au métamodèle d'apprendre l'effet de la structure du portefeuille et non plus seulement celui des sensibilités appliquées à une structure donnée.
+
+D'autres extensions peuvent être envisagées :
+
+\begin{itemize}
+  \item l'intégration des supports en unités de compte, dont la dynamique et l'exposition aux garanties diffèrent sensiblement de celles du fonds en euros~;
+  \item l'application de la démarche aux chocs du SCR, la valorisation des scénarios choqués reposant sur la même mécanique de projection~;
+  \item l'extension à la Risk Margin, dont le calcul mobilise des projections répétées du SCR et constitue à ce titre un candidat naturel à la métamodélisation~;
+  \item l'application aux projections pluriannuelles de l'ORSA, où la répétition des valorisations sur plusieurs exercices rend le gain calculatoire particulièrement significatif.
+\end{itemize}
+
+\subsection{Vers une industrialisation encadrée}
+
+Une utilisation régulière du métamodèle supposerait enfin de traiter la question de son maintien dans le temps. Trois éléments paraissent nécessaires.
+
+Un \textbf{domaine d'emploi explicite} devrait être défini, précisant les bornes de chaque variable au-delà desquelles la prédiction n'est plus considérée comme valide, ainsi que les contrôles associés lors de son utilisation.
+
+Un \textbf{suivi de performance} devrait être mis en place, comparant à chaque arrêté la prédiction du métamodèle au résultat effectivement produit par le modèle ALM. Une dérive de cet écart signalerait une évolution du modèle sous-jacent ou de ses hypothèses appelant un réapprentissage.
+
+Un \textbf{réapprentissage périodique} devrait être organisé, dont la fréquence serait déterminée par le rythme d'évolution du modèle ALM et de la calibration du générateur de scénarios économiques. L'automatisation développée dans le cadre de ce mémoire (cf. section~2.3.9) rend cette opération réalisable à un coût maîtrisé.
+
+% --------------------------------------------------------------------------
+% Tableau 5.2 — Articulation limites / perspectives
+% --------------------------------------------------------------------------
+\begin{table}[htbp]
+\centering
+\caption{Articulation entre limites identifiées et perspectives proposées}
+\label{tab:limites_perspectives}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.4cm}}
+\arrayrulecolor{rougeCorp}\toprule
+\rowcolor{rougeCorp}
+\textcolor{white}{\textbf{Limite}} & \textcolor{white}{\textbf{Perspective associée}} & \textcolor{white}{\textbf{Effort de mise en œuvre}} \\
+\midrule
+\rowcolor{rosePale}
+Domaine d'apprentissage restreint & Plan à remplissage d'espace, élargissement des bornes & Élevé \\
+\rowcolor{white}
+Extrapolation non maîtrisée & Krigeage avec intervalle de prédiction & Modéré \\
+\rowcolor{rosePale}
+Bruit de Monte-Carlo & Réduction de variance ou estimation de \(\sigma^2\) & Modéré \\
+\rowcolor{white}
+Dépendance au portefeuille central & Base multi-portefeuilles avec variables de structure & Élevé \\
+\rowcolor{rosePale}
+Interactions insuffisamment quantifiées & Valeurs d'interaction SHAP, indices de Sobol & Faible \\
+\rowcolor{white}
+Dérive du modèle dans le temps & Suivi de performance et réapprentissage périodique & Faible \\
+\bottomrule
+\arrayrulecolor{black}
+\end{tabularx}
+\end{table}

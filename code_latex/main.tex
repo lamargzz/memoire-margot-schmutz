@@ -22,12 +22,18 @@
 \usepackage{titlesec}
 \usepackage{parskip}
 \usepackage{tabularx}
+\usepackage{array}
 \usepackage{booktabs}
 \usepackage{enumitem}
 \usepackage[table]{xcolor}
 \definecolor{forsides}{HTML}{A100FF}
 \definecolor{rougeEntreprise}{HTML}{C00000}
+\definecolor{rougeCorp}{HTML}{C00000}
+\definecolor{rougeEnt}{HTML}{C00000}
 \definecolor{rosePale}{HTML}{F7E4E4}
+\definecolor{rougeClair}{HTML}{E8A0A0}
+\definecolor{grisTab}{HTML}{F2F2F2}
+\definecolor{grisClair}{HTML}{F2F2F2}
 \usetikzlibrary{positioning, shapes.geometric, arrows.meta, shapes.misc, backgrounds, fit, shadows}
 \usetikzlibrary{shapes, arrows, positioning}
 \setlist[itemize]{itemsep=8pt, topsep=2pt} % Applique ces réglages à toutes les listes itemize
@@ -42,10 +48,10 @@
 % --- 1. Apparence des titres (police, taille, gras...) ---
 
 \titleformat{\chapter}[display]
-  {\normalfont\Huge\bfseries} % Apparence générale : gras et centré
-  {\vspace*{50pt}\chaptertitlename\ \thechapter} % Espace au-dessus + Texte "Chapitre X"
-  {25pt} % Espace vertical entre "Chapitre X" et le titre du chapitre
-  {\Huge} % Taille de la police pour le titre du chapitre
+  {\normalfont\huge\bfseries} % Apparence générale : gras et centré
+  {\vspace*{0pt}\chaptertitlename\ \thechapter} % Espace au-dessus + Texte "Chapitre X"
+  {15pt} % Espace vertical entre "Chapitre X" et le titre du chapitre
+  {\huge} % Taille de la police pour le titre du chapitre
 
 \titleformat{\section}
   {\normalfont\LARGE\bfseries} % Police grande et en gras
@@ -140,6 +146,8 @@
 \include{1_preambule/2_remerciements}
 \include{1_preambule/3_synthese}
 \include{1_preambule/4_synthesis}
+\include{1_preambule/declaration_ia}
+\include{1_preambule/acronymes}
 
 
 \clearpage
